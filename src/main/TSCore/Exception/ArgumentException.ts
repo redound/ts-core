@@ -2,6 +2,6 @@
 
 module TSCore.Exception {
 
-    export class ArgumentException extends Exception {
+    export class ArgumentException {
     }
 }

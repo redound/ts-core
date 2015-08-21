@@ -71,7 +71,7 @@ module TSCore.DateTime {
                 return;
             }
 
-            this._internalTimerIsInterval ? clearInterval(this._internalTimer) : clearTimeout(this._internalTimer);
+            (this._internalTimerIsInterval ? clearInterval : clearTimeout)(this._internalTimer);
             this._internalTimer = null;
 
             this._isStarted = false;

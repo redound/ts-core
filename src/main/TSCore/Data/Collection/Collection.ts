@@ -56,7 +56,7 @@ module TSCore.Data.Collection {
         }
 
         public isEmpty(): boolean {
-            return this.count() == 0;
+            return this.count() === 0;
         }
 
         public populate(items) {
