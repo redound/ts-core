@@ -2,7 +2,7 @@ module.exports = function(grunt) {
 
     grunt.initConfig({
         exec: {
-            typescript: { cmd: 'tsc --out dist/tscore.js src/tscore.ts -t ES5'}
+            typescript: { cmd: 'tsc --out dist/tscore.js src/tscore.ts -t ES5 --declaration'}
         },
         uglify: {
             tscore: {
