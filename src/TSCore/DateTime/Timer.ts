@@ -2,14 +2,14 @@
 
 module TSCore.DateTime {
 
-    export interface TickCallback {
+    export interface TimerTickCallback {
         (tickCount: number, timeSinceStart:number):void;
     }
 
     export class Timer {
 
         public timeout:number;
-        public tickCallback:TickCallback;
+        public tickCallback:TimerTickCallback;
         public repeats:boolean;
 
         get tickCount():number { return this._tickCount }
@@ -22,10 +22,10 @@ module TSCore.DateTime {
         private _startDate:Date;
 
         private _internalTimer:number;
-        private _intervalTimerIsInterval:boolean;
+        private _internalTimerIsInterval:boolean;
 
 
-        constructor(timeout:number, tickCallback:TickCallback=null, repeats:boolean=false){
+        constructor(timeout:number, tickCallback:TimerTickCallback=null, repeats:boolean=false){
 
             this.timeout = timeout;
             this.tickCallback = tickCallback;
@@ -51,7 +51,7 @@ module TSCore.DateTime {
             }
 
             this._internalTimer = this.repeats ? setInterval(_.bind(this._timerTick, this), this.timeout) : setTimeout(_.bind(this._timerTick, this), this.timeout);
-            this._intervalTimerIsInterval = this.repeats;
+            this._internalTimerIsInterval = this.repeats;
 
             this._isStarted = true;
         }
@@ -62,7 +62,7 @@ module TSCore.DateTime {
                 return;
             }
 
-            this._intervalTimerIsInterval ? clearInterval(this._internalTimer) : clearTimeout(this._internalTimer);
+            this._internalTimerIsInterval ? clearInterval(this._internalTimer) : clearTimeout(this._internalTimer);
             this._internalTimer = null;
 
             this._isStarted = false;
@@ -90,7 +90,7 @@ module TSCore.DateTime {
         }
 
 
-        public static start(timeout:number, tickCallback:TickCallback=null, repeats:boolean=false) : Timer {
+        public static start(timeout:number, tickCallback:TimerTickCallback=null, repeats:boolean=false) : Timer {
 
             var timer = new Timer(timeout, tickCallback, repeats);
             timer.start();
