@@ -12,5 +12,11 @@ module TSCore.Geometry {
             this.x = x;
             this.y = y;
         }
+
+        public translate(x:number, y:number){
+
+            this.x += x;
+            this.y += y;
+        }
     }
 }

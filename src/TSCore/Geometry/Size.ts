@@ -12,5 +12,13 @@ module TSCore.Geometry {
             this.width = width;
             this.height = height;
         }
+
+        public halfWidth():number {
+            return this.width / 2;
+        }
+
+        public halfHeight():number {
+            return this.height / 2;
+        }
     }
 }
