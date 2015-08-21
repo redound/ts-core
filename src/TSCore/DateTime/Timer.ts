@@ -3,7 +3,7 @@
 module TSCore.DateTime {
 
     export interface TimerTickCallback {
-        (tickCount: number, timeSinceStart:number):void;
+        (tickCount: number, elapsedTime:number):void;
     }
 
     export class Timer {
@@ -12,9 +12,18 @@ module TSCore.DateTime {
         public tickCallback:TimerTickCallback;
         public repeats:boolean;
 
-        get tickCount():number { return this._tickCount }
-        get startDate():Date { return this._startDate }
-        get isStarted():boolean { return this._isStarted }
+        public get tickCount():number { return this._tickCount }
+        public get elapsedTime(): number {
+
+            if(!this._startDate){
+                return null;
+            }
+
+            return new Date().getTime() - this._startDate.getTime();
+        }
+
+        public get startDate():Date { return this._startDate }
+        public get isStarted():boolean { return this._isStarted }
 
 
         private _isStarted:boolean;
@@ -104,7 +113,7 @@ module TSCore.DateTime {
             this._tickCount++;
 
             if(this.tickCallback){
-                this.tickCallback(this._tickCount, new Date().getTime() - this._startDate.getTime());
+                this.tickCallback(this._tickCount, this.elapsedTime);
             }
         }
     }

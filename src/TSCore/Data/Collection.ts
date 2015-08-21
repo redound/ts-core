@@ -4,7 +4,12 @@ module TSCore.Data {
 
     export class Collection<T> {
 
+        public get length():number {
+            return this.count();
+        }
+
         private _data:T[];
+
 
         constructor(data?:T[]){
             this._data = data || [];
@@ -14,7 +19,7 @@ module TSCore.Data {
             this._data.push(item);
         }
 
-        public addAll(items:T[]){
+        public addMany(items:T[]){
             this._data = this._data.concat(items);
         }
 
@@ -22,19 +27,19 @@ module TSCore.Data {
             this._data = _.without(this._data, item);
         }
 
-        public removeAll(items:T[]){
+        public removeMany(items:T[]){
             this._data = _.difference(this._data, items);
         }
 
-        public first():T {
+        public first(): T {
             return _.first(this._data);
         }
 
-        public last():T {
+        public last(): T {
             return _.last(this._data);
         }
 
-        public reset() {
+        public clear() {
             this._data = [];
         }
 
@@ -42,50 +47,59 @@ module TSCore.Data {
             _.each(this._data, iterator)
         }
 
-        public pluck(propertyName:string):any[] {
+        public pluck(propertyName:string) : any[] {
             return _.pluck(this._data, propertyName);
         }
 
-        public count():number {
+        public count(): number {
             return this._data.length;
         }
 
-        get length():number {
-            return this.count();
+        public isEmpty(): boolean {
+            return this.count() == 0;
         }
 
         public populate(items) {
 
             _.each(items, (itemData) => {
 
-                var model = this.createItem(itemData);
+                var model = this._createItem(itemData);
                 if (model) {
                     return this.add(model);
                 }
             });
         }
 
-        public find(iterator:_.ListIterator<T, boolean>):T {
-            return _.find(this._data, iterator);
-        }
-
-        public filter(iterator:_.ListIterator<T, boolean>):T[] {
+        public find(iterator:_.ListIterator<T, boolean>): T[] {
             return _.filter(this._data, iterator);
         }
 
-        public where(properties:{}):T[] {
+        public findFirst(iterator:_.ListIterator<T, boolean>): T {
+            return _.find(this._data, iterator);
+        }
+
+        public where(properties:{}): T[] {
             return _.where(this._data, properties);
         }
 
-        public findWhere(properties:{}):T {
+        public whereFirst(properties:{}): T {
             return _.findWhere(this._data, properties);
+        }
+
+        public indexOf(item:T): number {
+            return _.indexOf(this._data, item);
+        }
+
+        public contains(item:T): boolean {
+            return _.contains(this._data, item);
         }
 
         public toArray():T[] {
             return _.clone(this._data);
         }
 
-        protected createItem(itemData):T {
+
+        protected _createItem(itemData): T {
             return itemData;
         }
     }
