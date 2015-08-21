@@ -4,50 +4,50 @@ module TSCore.Data {
 
     export class Collection<T> {
 
-        private data:T[];
+        private _data:T[];
 
         constructor(data?:T[]){
-            this.data = data || [];
+            this._data = data || [];
         }
 
         public add(item:T) {
-            this.data.push(item);
+            this._data.push(item);
         }
 
         public addAll(items:T[]){
-            this.data = this.data.concat(items);
+            this._data = this._data.concat(items);
         }
 
         public remove(item:T){
-            this.data = _.without(this.data, item);
+            this._data = _.without(this._data, item);
         }
 
         public removeAll(items:T[]){
-            this.data = _.difference(this.data, items);
+            this._data = _.difference(this._data, items);
         }
 
         public first():T {
-            return _.first(this.data);
+            return _.first(this._data);
         }
 
         public last():T {
-            return _.last(this.data);
+            return _.last(this._data);
         }
 
         public reset() {
-            this.data = [];
+            this._data = [];
         }
 
         public each(iterator:_.ListIterator<T, void>){
-            _.each(this.data, iterator)
+            _.each(this._data, iterator)
         }
 
         public pluck(propertyName:string):any[] {
-            return _.pluck(this.data, propertyName);
+            return _.pluck(this._data, propertyName);
         }
 
         public count():number {
-            return this.data.length;
+            return this._data.length;
         }
 
         get length():number {
@@ -66,23 +66,23 @@ module TSCore.Data {
         }
 
         public find(iterator:_.ListIterator<T, boolean>):T {
-            return _.find(this.data, iterator);
+            return _.find(this._data, iterator);
         }
 
         public filter(iterator:_.ListIterator<T, boolean>):T[] {
-            return _.filter(this.data, iterator);
+            return _.filter(this._data, iterator);
         }
 
         public where(properties:{}):T[] {
-            return _.where(this.data, properties);
+            return _.where(this._data, properties);
         }
 
         public findWhere(properties:{}):T {
-            return _.findWhere(this.data, properties);
+            return _.findWhere(this._data, properties);
         }
 
         public toArray():T[] {
-            return _.clone(this.data);
+            return _.clone(this._data);
         }
 
         protected createItem(itemData):T {
