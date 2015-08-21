@@ -13,5 +13,7 @@
 /// <reference path="TSCore/Geometry/Size.ts" />
 /// <reference path="TSCore/Geometry/Rect.ts" />
 
+/** Event **/
+/// <reference path="TSCore/Event/PubSub.ts" />
 
 module TSCore {}
