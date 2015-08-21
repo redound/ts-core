@@ -18,6 +18,7 @@
   "homepage": "https://github.com/olivierandriessen/typescript-data#readme",
   "devDependencies": {
     "grunt-cli": "^0.1.13",
-    "grunt-exec": "^0.4.6",
+    "grunt-contrib-uglify": "^0.9.1",
+    "grunt-exec": "^0.4.6"
   }
 }

@@ -1,7 +1,6 @@
-/// <reference path="../tsdata.d.ts" />
-/// <reference path="Collection.ts" />
+/// <reference path="../../tscore.d.ts" />
 
-module TSData {
+module TSCore.Data {
 
     export class Model {
 

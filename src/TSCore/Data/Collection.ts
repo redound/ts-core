@@ -1,12 +1,12 @@
-/// <reference path="../tsdata.d.ts" />
+/// <reference path="../../tscore.d.ts" />
 
-module TSData {
+module TSCore.Data {
 
     export class Collection<T> {
 
-        private data:[T];
+        private data:T[];
 
-        constructor(data?:[T]){
+        constructor(data?:T[]){
             this.data = data || [];
         }
 
@@ -14,7 +14,7 @@ module TSData {
             this.data.push(item);
         }
 
-        public addAll(items:[T]){
+        public addAll(items:T[]){
             this.data = this.data.concat(items);
         }
 
@@ -22,7 +22,7 @@ module TSData {
             this.data = _.without(this.data, item);
         }
 
-        public removeAll(items:[T]){
+        public removeAll(items:T[]){
             this.data = _.difference(this.data, items);
         }
 
@@ -42,7 +42,7 @@ module TSData {
             _.each(this.data, iterator)
         }
 
-        public pluck(propertyName:string):[any] {
+        public pluck(propertyName:string):any[] {
             return _.pluck(this.data, propertyName);
         }
 
@@ -65,15 +65,15 @@ module TSData {
             });
         }
 
-        public find(iterator:_.ListIterator<T, boolean>):[T] {
+        public find(iterator:_.ListIterator<T, boolean>):T {
             return _.find(this.data, iterator);
         }
 
-        public filter(iterator:_.ListIterator<T, boolean>):[T] {
+        public filter(iterator:_.ListIterator<T, boolean>):T[] {
             return _.filter(this.data, iterator);
         }
 
-        public where(properties:{}):[T] {
+        public where(properties:{}):T[] {
             return _.where(this.data, properties);
         }
 
@@ -81,7 +81,7 @@ module TSData {
             return _.findWhere(this.data, properties);
         }
 
-        public toArray():[T] {
+        public toArray():T[] {
             return _.clone(this.data);
         }
 
