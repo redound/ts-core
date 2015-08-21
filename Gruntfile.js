@@ -1,13 +1,20 @@
 module.exports = function(grunt) {
 
     grunt.initConfig({
+        watch: {
+            scripts: {
+                files: 'src/**/*.ts',
+                tasks: 'compile'
+            }
+        },
         ts: {
-            options: {
-              declaration: true
-            },
-            default: {
-                src: ["**/*.ts", "!node_modules/**/*.ts"],
-                out: "dist/tscore.js"
+            dev: {
+                src: ['**/*.ts', '!node_modules/**/*.ts'],
+                out: 'dist/tscore.js',
+                options: {
+                    declaration: true,
+                    watch: '.'
+                },
             }
         },
         uglify: {
@@ -19,11 +26,16 @@ module.exports = function(grunt) {
         }
     });
 
+    grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-ts');
 
     grunt.registerTask('default', [
-        'ts:default',
+        'watch'
+    ]);
+
+    grunt.registerTask('compile', [
+        'ts:dev',
         'uglify:tscore'
     ]);
 
