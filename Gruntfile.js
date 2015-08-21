@@ -2,6 +2,9 @@ module.exports = function(grunt) {
 
     grunt.initConfig({
         ts: {
+            options: {
+              declaration: true
+            },
             default: {
                 src: ["**/*.ts", "!node_modules/**/*.ts"],
                 out: "dist/tscore.js"
