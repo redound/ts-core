@@ -1,9 +1,9 @@
 /** Data **/
-/// <reference path="TSCore/Data/Collection.ts" />
-/// <reference path="TSCore/Data/SortedCollection.ts" />
+/// <reference path="TSCore/Data/Collection/Collection.ts" />
+/// <reference path="TSCore/Data/Collection/SortedCollection.ts" />
 
 /** Model **/
-/// <reference path="TSCore/Data/Model.ts" />
+/// <reference path="TSCore/Data/Model/Model.ts" />
 
 /** DateTime **/
 /// <reference path="TSCore/DateTime/Timer.ts" />

@@ -1,6 +1,6 @@
-/// <reference path="../../tscore.d.ts" />
+/// <reference path="../../../tscore.d.ts" />
 
-module TSCore.Data {
+module TSCore.Data.Collection {
 
     export class Collection<T> {
 
