@@ -1,8 +1,11 @@
 module.exports = function(grunt) {
 
     grunt.initConfig({
-        exec: {
-            typescript: { cmd: 'tsc --out dist/tscore.js src/tscore.ts -t ES5 --declaration'}
+        ts: {
+            default: {
+                src: ["**/*.ts", "!node_modules/**/*.ts"],
+                out: "dist/tscore.js"
+            }
         },
         uglify: {
             tscore: {
@@ -13,11 +16,11 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.loadNpmTasks('grunt-exec');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-ts');
 
     grunt.registerTask('default', [
-        'exec:typescript',
+        'ts:default',
         'uglify:tscore'
     ]);
 
