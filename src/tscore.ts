@@ -3,6 +3,7 @@
 /// <reference path="TSCore/Data/Collection/SortedCollection.ts" />
 /// <reference path="TSCore/Data/Collection/Dictionary.ts" />
 /// <reference path="TSCore/Data/Collection/Queue.ts" />
+/// <reference path="TSCore/Data/Collection/Grid.ts" />
 
 /** Model **/
 /// <reference path="TSCore/Data/Model/Model.ts" />

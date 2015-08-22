@@ -23,12 +23,37 @@ module TSCore.Data.Collection {
             this._data = this._data.concat(items);
         }
 
+        public prepend(item:T){
+            this.insert(item, 0);
+        }
+
+        public prependMany(items:T[]){
+            this._data = items.concat(this._data);
+        }
+
+        public insert(item:T, index:number){
+            this._data.splice(index, 0, item);
+        }
+
         public remove(item:T){
             this._data = _.without(this._data, item);
         }
 
         public removeMany(items:T[]){
             this._data = _.difference(this._data, items);
+        }
+
+        public replaceItem(source:T, replacement:T){
+            return this.replace(this.indexOf(source), replacement);
+        }
+
+        public replace(index:number, replacement:T): T {
+
+            if(index < 0 || index >= this.count()){
+                return null;
+            }
+
+            this._data[index] = replacement;
         }
 
         public first(): T {
@@ -84,6 +109,10 @@ module TSCore.Data.Collection {
 
         public whereFirst(properties:{}): T {
             return _.findWhere(this._data, properties);
+        }
+
+        public get(index:number): T {
+            return this._data[index];
         }
 
         public indexOf(item:T): number {
