@@ -2,14 +2,14 @@
 
 module TSCore.DateTime {
 
-    export interface TimerTickCallback {
+    export interface ITimerTickCallback {
         (tickCount: number, elapsedTime:number):void;
     }
 
     export class Timer {
 
         public timeout:number;
-        public tickCallback:TimerTickCallback;
+        public tickCallback:ITimerTickCallback;
         public repeats:boolean;
 
         public get tickCount():number { return this._tickCount }
@@ -34,7 +34,7 @@ module TSCore.DateTime {
         private _internalTimerIsInterval:boolean;
 
 
-        constructor(timeout:number, tickCallback:TimerTickCallback=null, repeats:boolean=false){
+        constructor(timeout:number, tickCallback:ITimerTickCallback=null, repeats:boolean=false){
 
             this.timeout = timeout;
             this.tickCallback = tickCallback;
@@ -99,7 +99,7 @@ module TSCore.DateTime {
         }
 
 
-        public static start(timeout:number, tickCallback:TimerTickCallback=null, repeats:boolean=false) : Timer {
+        public static start(timeout:number, tickCallback:ITimerTickCallback=null, repeats:boolean=false) : Timer {
 
             var timer = new Timer(timeout, tickCallback, repeats);
             timer.start();
