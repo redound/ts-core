@@ -1,24 +1,112 @@
 module.exports = function(grunt) {
 
     grunt.initConfig({
-        exec: {
-            typescript: { cmd: 'tsc --out dist/tscore.js src/tscore.ts -t ES5 --declaration'}
+
+        project: {
+            name: 'tscore'
+        },
+
+        dir: {
+            "source": "src",
+            // location where TypeScript source files are located
+            "source_main": "src/main",
+            // location where TypeScript/Jasmine test files are located
+            "source_test": "src/test",
+            // location where all build files shall be placed
+            "dist": "dist",
+            // location to place (compiled) javascript files
+            "dist_main": "dist/main",
+            // location to place (compiles) javascript test files
+            "dist_test": "dist/test",
+        },
+
+        // Watch for changing ts files
+        watch: {
+            dev: {
+                files: ['<%= dir.source_main %>/**/*.ts', '<%= dir.source_test %>/**/*.ts'],
+                tasks: ['default']
+            }
+        },
+
+        // For compiling our TypeScript/JavaScript
+        ts: {
+            compile: {
+                src: ['<%= dir.source_main %>/**/*.ts', '!node_modules/**/*.ts'],
+                out: '<%= dir.dist_main %>/<%= project.name %>.js',
+                options: {
+                    declaration: true,
+                },
+            },
+            compile_tests: {
+                src: ['<%= dir.source_test %>/**/*.ts', '!node_modules/**/*.ts'],
+                out: '<%= dir.dist_test %>/<%= project.name %>.js',
+                options: {
+                    declaration: true,
+                },
+            }
         },
         uglify: {
             tscore: {
                 files: {
-                    'dist/tscore.min.js': ['dist/tscore.js']
+                    '<%= dir.dist_main %>/<%= project.name %>.min.js': ['<%= dir.dist_main %>/<%= project.name %>.js']
+                }
+            }
+        },
+
+        // For testing
+
+        jshint: {
+            all: ['<%= dir.dist %>/**/*.js'],
+            options: {
+                globals: {
+                    _: false,
+                    jasmine: false,
+                    describe: false,
+                    it: false,
+                    expect: false,
+                    beforeEach: false,
+                    afterEach: false,
+                    sinon: false
+                },
+                browser: true,
+                devel: true
+            }
+        },
+
+        testem: {
+            unit: {
+                options: {
+                    framework: 'jasmine2',
+                    launch_in_dev: ['PhantomJS'],
+                    //before_tests: 'grunt jshint',
+                    serve_files: [
+                        'node_modules/underscore/underscore.js',
+                        'node_modules/sinon/pkg/sinon.js',
+                        '<%= dir.dist_main %>/**/*.js',
+                        '<%= dir.dist_test %>/**/*.js',
+                    ],
+                    watch_files: [
+                        '<%= dir.dist_main %>/**/*.js',
+                        '<%= dir.dist_test %>/**/*.js',
+                    ]
                 }
             }
         }
     });
 
-    grunt.loadNpmTasks('grunt-exec');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-testem');
+    grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-ts');
 
     grunt.registerTask('default', [
-        'exec:typescript',
-        'uglify:tscore'
+        'ts:compile',
+        'ts:compile_tests',
     ]);
 
+    grunt.registerTask('build', [
+        'default',
+        'uglify:tscore'
+    ]);
 };

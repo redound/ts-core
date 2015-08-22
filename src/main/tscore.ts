@@ -23,7 +23,7 @@
 /// <reference path="TSCore/Exception/ArgumentException.ts" />
 
 /** Event **/
-/// <reference path="TSCore/Event/PubSub.ts" />
+/// <reference path="TSCore/PubSub.ts" />
 
 /** Utils **/
 /// <reference path="TSCore/Utils/Random.ts" />

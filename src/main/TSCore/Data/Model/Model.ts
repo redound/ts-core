@@ -10,7 +10,7 @@ module TSCore.Data.Model {
 
             _.each(attrs, (value, key) => {
 
-                if (this.defaults[key] != undefined) {
+                if (this.defaults[key] !== undefined) {
                     this[key] = value;
                 }
             });

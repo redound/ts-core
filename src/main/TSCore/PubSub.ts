@@ -1,6 +1,6 @@
-/// <reference path="../../tscore.d.ts" />
+/// <reference path="../tscore.d.ts" />
 
-module TSCore.Event {
+module TSCore {
 
     /** TODO
      * 1. Make use of types
@@ -20,7 +20,7 @@ module TSCore.Event {
      * });
      *
      * pubsub.publish('loaded', ['test123', 'test456']);
-     * 
+     *
      * // Unsubscribe from `loaded` event
      * unsubscribe();
      */
@@ -40,7 +40,7 @@ module TSCore.Event {
          * @param callback      Callback function to execute on event.
          * @returns             Function to remove the handler (unsubscribe).
          */
-        public subscribe(topic, callback) {
+        public subscribe(topic:string, callback) {
 
             // Create array for topic to store callbacks
             this._cache[topic] = this._cache[topic] || [];
@@ -49,18 +49,19 @@ module TSCore.Event {
             this._cache[topic].push(callback);
 
             // Provide function to unsubscribe the callback
-            return function() {
-
-                var index;
+            return () => {
 
                 if (!this._cache[topic]) {
                     return;
                 }
 
-                index = this._cache[topic].indexOf(callback);
+                for (var index in this._cache[topic]) {
 
-                if (index > -1) {
-                    this._cache[topic].splice(0, index);
+                    var fn = this._cache[topic][index];
+
+                    if (fn === callback) {
+                        this._cache[topic] = this._cache[topic].splice(0, index);
+                    }
                 }
             };
         }

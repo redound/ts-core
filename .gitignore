@@ -1,4 +1,5 @@
 .idea
+.tscache
 typings
 node_modules
 dist
