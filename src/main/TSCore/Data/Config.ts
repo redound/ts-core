@@ -1,8 +1,8 @@
-/// <reference path="../../../tscore.d.ts" />
+/// <reference path="../../tscore.d.ts" />
 
 module TSCore.Data {
 
-    export Config {
+    export class Config {
 
 
     }
