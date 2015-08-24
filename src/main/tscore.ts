@@ -1,4 +1,5 @@
 /** Data **/
+/// <reference path="TSCore/Data/Collection/Set.ts" />
 /// <reference path="TSCore/Data/Collection/Collection.ts" />
 /// <reference path="TSCore/Data/Collection/SortedCollection.ts" />
 /// <reference path="TSCore/Data/Collection/Dictionary.ts" />
