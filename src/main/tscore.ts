@@ -31,4 +31,10 @@
 /// <reference path="TSCore/Utils/URL.ts" />
 
 
-module TSCore {}
+module TSCore {
+
+    export interface IKeyValuePair {
+        key:any,
+        value:any
+    }
+}
