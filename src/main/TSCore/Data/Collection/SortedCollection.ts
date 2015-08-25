@@ -5,6 +5,16 @@ module TSCore.Data.Collection {
 
     export class SortedCollection<T> extends Set<T> {
 
+        public static EVENTS = {
+
+            CHANGE: 'change',
+            ADD: 'add',
+            REMOVE: 'remove',
+            REPLACE: 'replace',
+            CLEAR: 'clear',
+            SORT: 'sort'
+        };
+
         protected _sortPredicate;
 
         public get sortPredicate(){
@@ -79,6 +89,9 @@ module TSCore.Data.Collection {
             }
 
             this._data = _.sortBy(this._data, this._sortPredicate);
+
+            this.trigger(SortedCollection.EVENTS.SORT, this);
+            this.trigger(SortedCollection.EVENTS.CHANGE, this);
         }
     }
 }

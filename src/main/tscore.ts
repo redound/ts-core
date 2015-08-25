@@ -24,7 +24,7 @@
 /// <reference path="TSCore/Exception/ArgumentException.ts" />
 
 /** Event **/
-/// <reference path="TSCore/PubSub.ts" />
+/// <reference path="TSCore/Event/EventEmitter.ts" />
 
 /** Text **/
 /// <reference path="TSCore/Text/Format.ts" />

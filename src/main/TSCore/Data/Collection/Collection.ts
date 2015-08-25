@@ -17,11 +17,19 @@ module TSCore.Data.Collection {
         }
 
         public prependMany(items:T[]){
+
             this._data = items.concat(this._data);
+
+            this.trigger(Collection.EVENTS.ADD, [items], this);
+            this.trigger(Collection.EVENTS.CHANGE, this);
         }
 
         public insert(item:T, index:number){
+
             this._data.splice(index, 0, item);
+
+            this.trigger(Collection.EVENTS.ADD, [item], this);
+            this.trigger(Collection.EVENTS.CHANGE, this);
         }
 
         public replaceItem(source:T, replacement:T): T {
@@ -36,6 +44,9 @@ module TSCore.Data.Collection {
 
             var currentItem = this._data[index];
             this._data[index] = replacement;
+
+            this.trigger(Set.EVENTS.REPLACE, currentItem, replacement, this);
+            this.trigger(Set.EVENTS.CHANGE, this);
 
             return currentItem;
         }

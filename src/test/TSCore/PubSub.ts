@@ -2,32 +2,32 @@
 
 declare var describe, it, expect;
 
-describe("TSCore.PubSub", () => {
+describe("TSCore.Events.EventEmitter", () => {
 
-    var topicA = 'topicA'
+    var topicA = 'topicA';
     var topicB = 'topic';
-    var pubsub = new TSCore.PubSub();
+    var emitter = new TSCore.Events.EventEmitter();
 
     it("calls the callbackFn each time publish is called with same topic", () => {
 
         var counter = 0;
-        pubsub.subscribe(topicB, () => {
+        emitter.on(topicB, () => {
 
             counter++;
         });
 
         expect(counter).toBe(0);
 
-        pubsub.publish(topicB, []);
+        emitter.trigger(topicB, []);
         expect(counter).toBe(1);
 
-        pubsub.publish(topicB, []);
+        emitter.trigger(topicB, []);
         expect(counter).toBe(2);
 
-        pubsub.publish(topicB, []);
+        emitter.trigger(topicB, []);
         expect(counter).toBe(3);
 
-        pubsub.publish(topicB, []);
+        emitter.trigger(topicB, []);
         expect(counter).toBe(4);
     });
 
@@ -35,23 +35,22 @@ describe("TSCore.PubSub", () => {
     it("will not call callbackFn after returned function from subscribe is called (unsubscribe)", () => {
 
         var counter = 0;
-        var unsubscribe = pubsub.subscribe(topicA, () => {
+         emitter.on(topicA, () => {
 
             var topic = topicA;
-
             counter++;
         });
 
         expect(counter).toBe(0);
 
-        pubsub.publish(topicA, []);
+        emitter.trigger(topicA, []);
         expect(counter).toBe(1);
-        unsubscribe();
+        emitter.off(topicA);
 
-        pubsub.publish(topicA, []);
+        emitter.trigger(topicA, []);
         expect(counter).toBe(1);
 
-        pubsub.publish(topicA, []);
+        emitter.trigger(topicA, []);
         expect(counter).toBe(1);
     });
 

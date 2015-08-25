@@ -1,4 +1,5 @@
 /// <reference path="../../../tscore.d.ts" />
+/// <reference path="../../Event/EventEmitter.ts" />
 
 module TSCore.Data.Collection {
 
@@ -7,7 +8,15 @@ module TSCore.Data.Collection {
         (key:K, value:V);
     }
 
-    export class Dictionary<K, V> {
+    export class Dictionary<K, V> extends TSCore.Events.EventEmitter {
+
+        public static EVENTS = {
+
+            CHANGE: 'change',
+            SET: 'add',
+            REMOVE: 'remove',
+            CLEAR: 'clear'
+        };
 
         private static _OBJECT_UNIQUE_ID_KEY = '__TSCore_Object_Unique_ID';
         private static _OBJECT_UNIQUE_ID_COUNTER = 1;
@@ -17,6 +26,8 @@ module TSCore.Data.Collection {
 
 
         constructor(data?: IDictionaryData){
+
+            super();
             this._data = data || {};
         }
 
@@ -47,6 +58,9 @@ module TSCore.Data.Collection {
             if(!alreadyExisted){
                 this._itemCount++;
             }
+
+            this.trigger(Dictionary.EVENTS.SET, key, value, this);
+            this.trigger(Dictionary.EVENTS.CHANGE, this);
         }
 
         public remove(key: K): V {
@@ -60,6 +74,9 @@ module TSCore.Data.Collection {
                 removedItem = foundPair.value;
 
                 this._itemCount--;
+
+                this.trigger(Dictionary.EVENTS.REMOVE, key, this);
+                this.trigger(Dictionary.EVENTS.CHANGE, this);
             }
 
             return removedItem;
@@ -112,6 +129,9 @@ module TSCore.Data.Collection {
 
             this._data = {};
             this._itemCount = 0;
+
+            this.trigger(Dictionary.EVENTS.CLEAR, this);
+            this.trigger(Dictionary.EVENTS.CHANGE, this);
         }
 
 

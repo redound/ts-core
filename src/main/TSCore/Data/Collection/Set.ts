@@ -1,8 +1,18 @@
 /// <reference path="../../../tscore.d.ts" />
+/// <reference path="../../Event/EventEmitter.ts" />
 
 module TSCore.Data.Collection {
 
-    export class Set<T> {
+    export class Set<T> extends TSCore.Events.EventEmitter {
+
+        public static EVENTS = {
+
+            CHANGE: 'change',
+            ADD: 'add',
+            REMOVE: 'remove',
+            REPLACE: 'replace',
+            CLEAR: 'clear'
+        };
 
         public get length():number {
             return this.count();
@@ -12,23 +22,45 @@ module TSCore.Data.Collection {
 
 
         constructor(data?:T[]){
+
+            super();
             this._data = data || [];
         }
 
         public add(item:T) {
+
             this._data.push(item);
+
+            this.trigger(Set.EVENTS.ADD, [item], this);
+            this.trigger(Set.EVENTS.CHANGE, this);
         }
 
         public addMany(items:T[]){
+
             this._data = this._data.concat(items);
+
+            this.trigger(Set.EVENTS.ADD, items, this);
+            this.trigger(Set.EVENTS.CHANGE, this);
         }
 
         public remove(item:T){
+
             this._data = _.without(this._data, item);
+
+            this.trigger(Set.EVENTS.REMOVE, [item], this);
+            this.trigger(Set.EVENTS.CHANGE, this);
         }
 
         public removeMany(items:T[]){
+
             this._data = _.difference(this._data, items);
+
+            this.trigger(Set.EVENTS.REMOVE, items, this);
+            this.trigger(Set.EVENTS.CHANGE, this);
+        }
+
+        public removeWhere(properties:{}){
+            this.removeMany(this.where(properties));
         }
 
         public replaceItem(source:T, replacement:T): T {
@@ -42,11 +74,19 @@ module TSCore.Data.Collection {
             var currentItem = this._data[index];
             this._data[index] = replacement;
 
+            this.trigger(Set.EVENTS.REPLACE, source, replacement, this);
+            this.trigger(Set.EVENTS.CHANGE, this);
+
             return currentItem;
         }
 
         public clear() {
+
             this._data = [];
+
+            this.trigger(Set.EVENTS.REMOVE, this.toArray(), this);
+            this.trigger(Set.EVENTS.CLEAR, this);
+            this.trigger(Set.EVENTS.CHANGE, this);
         }
 
         public each(iterator:_.ListIterator<T, void>){
