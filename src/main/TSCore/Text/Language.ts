@@ -1,8 +1,8 @@
 /// <reference path="../../tscore.d.ts" />
 
-module TSCore.Utils {
+module TSCore.Text {
 
-    export class Random {
+    export class Language {
 
     }
 }

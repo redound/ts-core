@@ -2,14 +2,14 @@
 
 declare var describe, it, expect;
 
-describe("TSCore.Utils.URL", () => {
+describe("TSCore.Text.URL", () => {
 
     var host = "www.example.com";
     var basePath = "http://" + host + "/";
     var relativePath = "home/index";
     var path = basePath + relativePath;
 
-    var url = new TSCore.Utils.URL(path);
+    var url = new TSCore.Text.URL(path);
 
     it("should return valid host", () => {
 

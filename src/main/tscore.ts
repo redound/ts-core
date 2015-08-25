@@ -26,9 +26,11 @@
 /** Event **/
 /// <reference path="TSCore/PubSub.ts" />
 
-/** Utils **/
-/// <reference path="TSCore/Utils/Random.ts" />
-/// <reference path="TSCore/Utils/URL.ts" />
+/** Text **/
+/// <reference path="TSCore/Text/Format.ts" />
+/// <reference path="TSCore/Text/Language.ts" />
+/// <reference path="TSCore/Text/Random.ts" />
+/// <reference path="TSCore/Text/URL.ts" />
 
 
 module TSCore {
