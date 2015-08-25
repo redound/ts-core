@@ -4,7 +4,7 @@ module TSCore.Text {
 
     export class Format {
 
-        private static HtmlEntityMap:{
+        private static HtmlEntityMap = {
             "&": "&amp;",
             "<": "&lt;",
             ">": "&gt;",
@@ -22,7 +22,7 @@ module TSCore.Text {
             });
         }
 
-        public static truncate(input:string, maxLength:number, suffix?:string = '...'):string {
+        public static truncate(input:string, maxLength:number, suffix:string = '...'):string {
 
             if (input.length <= length) {
                 return input;
@@ -31,7 +31,7 @@ module TSCore.Text {
             return input.substring(0, length) + suffix;
         }
 
-        public static concatenate(parts:any[], seperator?:string = ', ', lastSeparator?:string = seperator):string {
+        public static concatenate(parts:any[], seperator:string = ', ', lastSeparator:string = seperator):string {
 
             var result = '';
 
@@ -53,7 +53,7 @@ module TSCore.Text {
             return result;
         }
 
-        public static zeroPad(input:string, width:number, zero?:string = '0'):string {
+        public static zeroPad(input:string, width:number, zero:string = '0'):string {
 
             return input.length >= width ? input : new Array(width - input.length + 1).join(zero) + input;
         }
