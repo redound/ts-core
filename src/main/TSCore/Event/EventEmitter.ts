@@ -65,7 +65,7 @@ module TSCore.Events {
                 }
 
                 var callbacksToRemove = _.where(callbackArray, context ? {callback: callback, context: context} : {callback: callback});
-                callbackArray = _.without(callbackArray, callbacksToRemove);
+                callbackArray = _.difference(callbackArray, callbacksToRemove);
 
                 if (callbackArray.length == 0) {
                     delete this._eventCallbacks[event];
