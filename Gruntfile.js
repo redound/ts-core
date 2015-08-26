@@ -53,26 +53,6 @@ module.exports = function(grunt) {
             }
         },
 
-        // For testing
-
-        jshint: {
-            all: ['<%= dir.dist %>/**/*.js'],
-            options: {
-                globals: {
-                    _: false,
-                    jasmine: false,
-                    describe: false,
-                    it: false,
-                    expect: false,
-                    beforeEach: false,
-                    afterEach: false,
-                    sinon: false
-                },
-                browser: true,
-                devel: true
-            }
-        },
-
         testem: {
             unit: {
                 options: {
@@ -91,22 +71,37 @@ module.exports = function(grunt) {
                     ]
                 }
             }
+        },
+
+        tslint: {
+
+            options: {
+                configuration: grunt.file.readJSON('./tslint.json')
+            },
+
+            dev: {
+                src: ['src/**/*.ts']
+            }
         }
     });
 
-    grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-testem');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-tslint');
     grunt.loadNpmTasks('grunt-ts');
 
     grunt.registerTask('default', [
         'ts:compile',
-        'ts:compile_tests',
+        'ts:compile_tests'
     ]);
 
     grunt.registerTask('build', [
         'default',
         'uglify:tscore'
+    ]);
+
+    grunt.registerTask('test', [
+        'testem:run:unit'
     ]);
 };
