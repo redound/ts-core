@@ -1,11 +1,6 @@
 /// <reference path="../../tscore.d.ts" />
-/// <reference path="../Data/Collection/Dictionary.ts" />
-/// <reference path="../Data/Collection/Set.ts" />
 
 module TSCore.Events {
-
-    import Set = TSCore.Data.Collection.Set;
-    import Dictionary = TSCore.Data.Collection.Dictionary;
 
     interface IEventEmitterCallbackItem {
         callback:Function,
@@ -14,10 +9,10 @@ module TSCore.Events {
 
     export class EventEmitter {
 
-        private _eventCallbacks: Dictionary<string, Set<IEventEmitterCallbackItem>>;
+        private _eventCallbacks: {};
 
         constructor() {
-            this._eventCallbacks = new Dictionary<string, Set<IEventEmitterCallbackItem>>();
+            this._eventCallbacks = {};
         }
 
         /**
@@ -31,16 +26,16 @@ module TSCore.Events {
             _.each(events.split(' '), (event:string) => {
 
                 // Get or create event collection
-                var callbackSet = this._eventCallbacks.get(event);
+                var callbackArray:IEventEmitterCallbackItem[] = this._eventCallbacks[event];
 
-                if (!callbackSet) {
+                if (!callbackArray) {
 
-                    callbackSet = new Set<IEventEmitterCallbackItem>();
-                    this._eventCallbacks.set(event, callbackSet);
+                    callbackArray = [];
+                    this._eventCallbacks[event] = callbackArray;
                 }
 
                 // Push callback
-                callbackSet.add({
+                callbackArray.push({
                     callback: callback,
                     context: context
                 });
@@ -57,21 +52,26 @@ module TSCore.Events {
 
             _.each(events.split(' '), (event:string) => {
 
-                if (!this._eventCallbacks.contains(event)) {
+                var callbackArray = this._eventCallbacks[event];
+
+                if (!callbackArray) {
                     return;
                 }
 
                 if (!callback) {
 
-                    this._eventCallbacks.remove(event);
+                    delete this._eventCallbacks[event];
                     return;
                 }
 
-                var callbackSet = this._eventCallbacks.get(event);
-                callbackSet.removeWhere(context ? {callback: callback, context: context} : {callback: callback});
+                var callbacksToRemove = _.where(callbackArray, context ? {callback: callback, context: context} : {callback: callback});
+                callbackArray = _.without(callbackArray, callbacksToRemove);
 
-                if (callbackSet.length == 0) {
-                    this._eventCallbacks.remove(event);
+                if (callbackArray.length == 0) {
+                    delete this._eventCallbacks[event];
+                }
+                else {
+                    this._eventCallbacks[event] = callbackArray;
                 }
             });
         }
@@ -84,11 +84,13 @@ module TSCore.Events {
          */
         public trigger(event:string, ...args) {
 
-            if (!this._eventCallbacks.contains(event)) {
+            var callbackArray = this._eventCallbacks[event];
+
+            if (!callbackArray) {
                 return;
             }
 
-            this._eventCallbacks.get(event).each((item:IEventEmitterCallbackItem) => {
+            _.each(callbackArray, (item:IEventEmitterCallbackItem) => {
 
                 item.callback.apply(item.context || this, args || []);
             });
@@ -98,7 +100,7 @@ module TSCore.Events {
          * Reset all subscriptions.
          */
         public resetEvents() {
-            this._eventCallbacks.clear();
+            this._eventCallbacks = {};
         }
     }
 }
