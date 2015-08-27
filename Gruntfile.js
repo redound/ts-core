@@ -6,24 +6,10 @@ module.exports = function(grunt) {
             name: 'tscore'
         },
 
-        dir: {
-            "source": "src",
-            // location where TypeScript source files are located
-            "source_main": "src/main",
-            // location where TypeScript/Jasmine test files are located
-            "source_test": "src/test",
-            // location where all build files shall be placed
-            "dist": "dist",
-            // location to place (compiled) javascript files
-            "dist_main": "dist/main",
-            // location to place (compiles) javascript test files
-            "dist_test": "dist/test",
-        },
-
         // Watch for changing ts files
         watch: {
             dev: {
-                files: ['<%= dir.source_main %>/**/*.ts', '<%= dir.source_test %>/**/*.ts'],
+                files: ['src/**/*.ts', 'test/**/*.ts'],
                 tasks: ['default']
             }
         },
@@ -31,24 +17,24 @@ module.exports = function(grunt) {
         // For compiling our TypeScript/JavaScript
         ts: {
             compile: {
-                src: ['<%= dir.source_main %>/**/*.ts', '!node_modules/**/*.ts'],
-                out: '<%= dir.dist_main %>/<%= project.name %>.js',
+                src: ['src/**/*.ts', '!node_modules/**/*.ts'],
+                out: 'build/<%= project.name %>.js',
                 options: {
-                    declaration: true,
-                },
+                    declaration: true
+                }
             },
-            compile_tests: {
-                src: ['<%= dir.source_test %>/**/*.ts', '!node_modules/**/*.ts'],
-                out: '<%= dir.dist_test %>/<%= project.name %>.js',
+            compile_test: {
+                src: ['test/**/*.ts', '!node_modules/**/*.spec.ts'],
+                out: 'test/<%= project.name %>.spec.js',
                 options: {
-                    declaration: true,
-                },
+                    sourceMap: false
+                }
             }
         },
         uglify: {
             tscore: {
                 files: {
-                    '<%= dir.dist_main %>/<%= project.name %>.min.js': ['<%= dir.dist_main %>/<%= project.name %>.js']
+                    '<%= dir.dist_main %>/<%= project.name %>.min.js': ['build/<%= project.name %>.js']
                 }
             }
         },
@@ -93,7 +79,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('default', [
         'ts:compile',
-        'ts:compile_tests'
+        'ts:compile_test'
     ]);
 
     grunt.registerTask('build', [
