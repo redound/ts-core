@@ -1,21 +1,17 @@
 {
-  "name": "typescript-data",
+  "name": "ts-core",
   "version": "0.0.1",
-  "description": "",
+  "description": "TypeScript Core Library",
   "main": "build/tscore.js",
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "install": "node node_modules/tsd/build/cli install",
+    "prepublish": "grunt build"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ts-core/ts-core.git"
+  "dependencies": {
+    "tsd": "^0.6.3",
+    "underscore": "^1.8.3"
   },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/ts-core/ts-core/issues"
-  },
-  "homepage": "https://github.com/ts-core/ts-core#readme",
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-cli": "^0.1.13",
@@ -28,7 +24,39 @@
     "karma": "^0.13.9",
     "karma-firefox-launcher": "^0.1.6",
     "karma-jasmine": "^0.3.6",
-    "tslint": "^2.4.2",
-    "underscore": "^1.8.3"
-  }
+    "tslint": "^2.4.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ts-core/ts-core.git"
+  },
+  "keywords": [
+    "typescript",
+    "javascript",
+    "core",
+    "library",
+    "collection",
+    "dictionary",
+    "array",
+    "set",
+    "events",
+    "config",
+    "di",
+    "grid",
+    "sortedcollection",
+    "geometry",
+    "data",
+    "model",
+    "size",
+    "point"
+  ],
+  "contributors": [
+    "Bart Blok <bart@wittig.nl>",
+    "Olivier Andriessen <olivierandriessen@gmail.com>"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ts-core/ts-core/issues"
+  },
+  "homepage": "https://github.com/ts-core/ts-core#readme"
 }

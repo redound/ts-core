@@ -34,7 +34,7 @@ module.exports = function(grunt) {
         uglify: {
             tscore: {
                 files: {
-                    '<%= dir.dist_main %>/<%= project.name %>.min.js': ['build/<%= project.name %>.js']
+                    'build/<%= project.name %>.min.js': ['build/<%= project.name %>.js']
                 }
             }
         },
