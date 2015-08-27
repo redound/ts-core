@@ -10,7 +10,7 @@ module.exports = function(grunt) {
         watch: {
             dev: {
                 files: ['src/**/*.ts', 'test/**/*.ts'],
-                tasks: ['default']
+                tasks: ['compile']
             }
         },
 
@@ -63,17 +63,19 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-ts');
 
-    grunt.registerTask('default', [
+    grunt.registerTask('compile', [
         'ts:compile',
         'ts:compile_test'
     ]);
 
     grunt.registerTask('build', [
-        'default',
+        'compile',
         'uglify:tscore'
     ]);
 
     grunt.registerTask('test', [
         'karma:unit'
     ]);
+
+    grunt.registerTask('default', 'watch');
 };
