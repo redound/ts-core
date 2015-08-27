@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/angular/angular.svg?branch=master)](https://travis-ci.org/angular/angular) 
+[![Build Status](https://travis-ci.org/ts-core/ts-core.svg?branch=development)](https://travis-ci.org/ts-core/ts-core) 
 
 TSCore 
 =========
