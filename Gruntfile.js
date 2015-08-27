@@ -2,23 +2,11 @@ module.exports = function(grunt) {
 
     grunt.initConfig({
 
-        project: {
-            name: 'tscore'
-        },
-
-        // Watch for changing ts files
-        watch: {
-            dev: {
-                files: ['src/**/*.ts', 'test/**/*.ts'],
-                tasks: ['compile']
-            }
-        },
-
         // For compiling our TypeScript/JavaScript
         ts: {
             compile: {
                 src: ['src/tscore.r.ts', 'src/**/*.ts', '!node_modules/**/*.ts'],
-                out: 'build/<%= project.name %>.js',
+                out: 'build/tscore.js',
                 reference: 'src/tscore.r.ts',
                 options: {
                     declaration: true
@@ -26,7 +14,7 @@ module.exports = function(grunt) {
             },
             compile_test: {
                 src: ['test/**/*.ts', '!node_modules/**/*.spec.ts'],
-                out: 'test/<%= project.name %>.spec.js',
+                out: 'test/tscore.spec.js',
                 options: {
                     sourceMap: false
                 }
@@ -35,7 +23,7 @@ module.exports = function(grunt) {
         uglify: {
             tscore: {
                 files: {
-                    'build/<%= project.name %>.min.js': ['build/<%= project.name %>.js']
+                    'build/tscore.min.js': ['build/tscore.js']
                 }
             }
         },
@@ -44,23 +32,10 @@ module.exports = function(grunt) {
             unit: {
                 configFile: 'karma.conf.js'
             }
-        },
-
-        tslint: {
-
-            options: {
-                configuration: grunt.file.readJSON('./tslint.json')
-            },
-
-            dev: {
-                src: ['src/**/*.ts']
-            }
         }
     });
 
-    grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-tslint');
     grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-ts');
 
@@ -79,5 +54,5 @@ module.exports = function(grunt) {
         'karma:unit'
     ]);
 
-    grunt.registerTask('default', 'watch');
+    grunt.registerTask('default', 'compile');
 };

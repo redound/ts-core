@@ -3,7 +3,8 @@
   "version": "0.0.2",
   "homepage": "https://github.com/ts-core/ts-core",
   "authors": [
-    "Olivier Andriessen <olivierandriessen@gmail.com>"
+    "Olivier Andriessen <olivierandriessen@gmail.com>",
+    "Bart Blok <bart@wittig.nl>"
   ],
   "description": "TypeScript Core Library",
   "main": [
