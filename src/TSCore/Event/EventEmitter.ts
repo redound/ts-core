@@ -76,6 +76,10 @@ module TSCore.Events {
 
         /**
          * Publish event for a topic.
+         * ````
+         * var emitter = new TSCore.Event.EventEmitter();
+         * emitter.trigger('topic', arg1, arg2);
+         * ````
          * @param event         Which event to trigger.
          * @param args          Arguments to pass along event.
          * @returns             void
