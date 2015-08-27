@@ -75,7 +75,7 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask('test', [
-        'ts:compile_test',
+        'compile',
         'karma:unit'
     ]);
 
