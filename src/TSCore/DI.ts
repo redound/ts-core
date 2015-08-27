@@ -1,5 +1,4 @@
-/// <reference path="TSCore.ts" />
-/// <reference path="../TSCore/Data/Collection/Dictionary.ts" />
+/// <reference path="./Data/Collection/Dictionary.ts" />
 
 module TSCore {
 

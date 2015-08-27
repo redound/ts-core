@@ -10,6 +10,61 @@ declare module TSCore.Events {
     }
 }
 declare module TSCore.Data.Collection {
+    interface IDictionaryData {
+        [key: string]: IKeyValuePair;
+    }
+    interface IDictionaryIterator<K, V> {
+        (key: K, value: V): any;
+    }
+    class Dictionary<K, V> extends TSCore.Events.EventEmitter {
+        static EVENTS: {
+            CHANGE: string;
+            SET: string;
+            REMOVE: string;
+            CLEAR: string;
+        };
+        private static _OBJECT_UNIQUE_ID_KEY;
+        private static _OBJECT_UNIQUE_ID_COUNTER;
+        protected _data: IDictionaryData;
+        protected _itemCount: number;
+        constructor(data?: IDictionaryData);
+        get(key: K): V;
+        set(key: K, value: V): void;
+        remove(key: K): V;
+        contains(key: K): boolean;
+        containsValue(value: V): boolean;
+        each(iterator: IDictionaryIterator<K, V>): void;
+        values(): K[];
+        keys(): K[];
+        count(): number;
+        isEmpty(): boolean;
+        clear(): void;
+        protected _getPair(key: K): IKeyValuePair;
+        protected _getKeyString(key: K): string;
+        protected _assignUniqueID(object: Object): void;
+    }
+}
+declare module TSCore {
+    interface IDIInjectable {
+        getDI(): DI;
+        setDI(di: DI): void;
+    }
+    interface IDIServiceFactory {
+        (di: DI): any;
+    }
+    class DI {
+        private _services;
+        private _cache;
+        constructor();
+        get(key: string, shared?: boolean): any;
+        getShared(key: string): any;
+        set(key: string, service: IDIServiceFactory | any, shared?: boolean): void;
+        setShared(key: string, service: IDIServiceFactory | any): void;
+        reset(): void;
+        private _instantiate(service);
+    }
+}
+declare module TSCore.Data.Collection {
     class Set<T> extends TSCore.Events.EventEmitter {
         static EVENTS: {
             CHANGE: string;
@@ -58,6 +113,14 @@ declare module TSCore.Data.Collection {
     }
 }
 declare module TSCore.Data.Collection {
+    class Grid<T> {
+    }
+}
+declare module TSCore.Data.Collection {
+    class Queue<T> {
+    }
+}
+declare module TSCore.Data.Collection {
     class SortedCollection<T> extends Set<T> {
         static EVENTS: {
             CHANGE: string;
@@ -82,47 +145,8 @@ declare module TSCore.Data.Collection {
         sort(): void;
     }
 }
-declare module TSCore.Data.Collection {
-    interface IDictionaryData {
-        [key: string]: IKeyValuePair;
-    }
-    interface IDictionaryIterator<K, V> {
-        (key: K, value: V): any;
-    }
-    class Dictionary<K, V> extends TSCore.Events.EventEmitter {
-        static EVENTS: {
-            CHANGE: string;
-            SET: string;
-            REMOVE: string;
-            CLEAR: string;
-        };
-        private static _OBJECT_UNIQUE_ID_KEY;
-        private static _OBJECT_UNIQUE_ID_COUNTER;
-        protected _data: IDictionaryData;
-        protected _itemCount: number;
-        constructor(data?: IDictionaryData);
-        get(key: K): V;
-        set(key: K, value: V): void;
-        remove(key: K): V;
-        contains(key: K): boolean;
-        containsValue(value: V): boolean;
-        each(iterator: IDictionaryIterator<K, V>): void;
-        values(): K[];
-        keys(): K[];
-        count(): number;
-        isEmpty(): boolean;
-        clear(): void;
-        protected _getPair(key: K): IKeyValuePair;
-        protected _getKeyString(key: K): string;
-        protected _assignUniqueID(object: Object): void;
-    }
-}
-declare module TSCore.Data.Collection {
-    class Queue<T> {
-    }
-}
-declare module TSCore.Data.Collection {
-    class Grid<T> {
+declare module TSCore.Data {
+    class Config {
     }
 }
 declare module TSCore.Data.Model {
@@ -132,11 +156,11 @@ declare module TSCore.Data.Model {
     }
 }
 declare module TSCore.DateTime {
-    class DateTime {
+    class DateFormatter {
     }
 }
 declare module TSCore.DateTime {
-    class DateFormatter {
+    class DateTime {
     }
 }
 declare module TSCore.DateTime {
@@ -167,21 +191,26 @@ declare module TSCore.DateTime {
         private _timerTick();
     }
 }
+declare module TSCore.Exception {
+    class ArgumentException {
+    }
+}
+declare module TSCore.Exception {
+    class Exception {
+        message: string;
+        code: number;
+        data: {};
+        name: string;
+        constructor(message: string, code?: number, data?: {});
+        toString(): string;
+    }
+}
 declare module TSCore.Geometry {
     class Point {
         x: number;
         y: number;
         constructor(x?: number, y?: number);
         translate(x: number, y: number): void;
-    }
-}
-declare module TSCore.Geometry {
-    class Size {
-        width: number;
-        height: number;
-        constructor(width?: number, height?: number);
-        halfWidth(): number;
-        halfHeight(): number;
     }
 }
 declare module TSCore.Geometry {
@@ -209,18 +238,19 @@ declare module TSCore.Geometry {
         reduce(horizontal: number, vertical: number): void;
     }
 }
-declare module TSCore.Exception {
-    class Exception {
-        message: string;
-        code: number;
-        data: {};
-        name: string;
-        constructor(message: string, code?: number, data?: {});
-        toString(): string;
+declare module TSCore.Geometry {
+    class Size {
+        width: number;
+        height: number;
+        constructor(width?: number, height?: number);
+        halfWidth(): number;
+        halfHeight(): number;
     }
 }
-declare module TSCore.Exception {
-    class ArgumentException {
+declare module TSCore {
+    interface IKeyValuePair {
+        key: any;
+        value: any;
     }
 }
 declare module TSCore.Text {
@@ -266,35 +296,5 @@ declare module TSCore.Text {
         host: string;
         basePath: string;
         relativePath: string;
-    }
-}
-declare module TSCore {
-    interface IKeyValuePair {
-        key: any;
-        value: any;
-    }
-}
-declare module TSCore {
-    interface IDIInjectable {
-        getDI(): DI;
-        setDI(di: DI): void;
-    }
-    interface IDIServiceFactory {
-        (di: DI): any;
-    }
-    class DI {
-        private _services;
-        private _cache;
-        constructor();
-        get(key: string, shared?: boolean): any;
-        getShared(key: string): any;
-        set(key: string, service: IDIServiceFactory | any, shared?: boolean): void;
-        setShared(key: string, service: IDIServiceFactory | any): void;
-        reset(): void;
-        private _instantiate(service);
-    }
-}
-declare module TSCore.Data {
-    class Config {
     }
 }

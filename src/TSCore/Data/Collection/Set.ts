@@ -1,4 +1,3 @@
-/// <reference path="../../TSCore.ts" />
 /// <reference path="../../Event/EventEmitter.ts" />
 
 module TSCore.Data.Collection {

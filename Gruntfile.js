@@ -17,8 +17,9 @@ module.exports = function(grunt) {
         // For compiling our TypeScript/JavaScript
         ts: {
             compile: {
-                src: ['src/**/*.ts', '!node_modules/**/*.ts'],
+                src: ['src/tscore.r.ts', 'src/**/*.ts', '!node_modules/**/*.ts'],
                 out: 'build/<%= project.name %>.js',
+                reference: 'src/tscore.r.ts',
                 options: {
                     declaration: true
                 }
@@ -74,6 +75,7 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask('test', [
+        'ts:compile_test',
         'karma:unit'
     ]);
 

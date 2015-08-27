@@ -1,1 +1,1 @@
-/// <reference path="../../src/TSCore/TSCore.ts" />
+/// <reference path="../../src/tscore.r.ts" />

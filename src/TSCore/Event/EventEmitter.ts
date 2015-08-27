@@ -1,5 +1,3 @@
-/// <reference path="../TSCore.ts" />
-
 module TSCore.Events {
 
     interface IEventEmitterCallbackItem {

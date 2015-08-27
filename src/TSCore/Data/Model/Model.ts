@@ -1,4 +1,3 @@
-/// <reference path="../../TSCore.ts" />
 
 module TSCore.Data.Model {
 

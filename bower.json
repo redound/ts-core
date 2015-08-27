@@ -1,0 +1,45 @@
+{
+  "name": "ts-core",
+  "version": "0.0.2",
+  "homepage": "https://github.com/ts-core/ts-core",
+  "authors": [
+    "Olivier Andriessen <olivierandriessen@gmail.com>"
+  ],
+  "description": "TypeScript Core Library",
+  "main": [
+    "build/tscore.js",
+    "build/tscore.min.js",
+    "build/tscore.d.ts"
+  ],
+  "dependencies": {
+    "underscore": "^1.8.3"
+  },
+  "keywords": [
+    "typescript",
+    "javascript",
+    "core",
+    "library",
+    "collection",
+    "dictionary",
+    "array",
+    "set",
+    "events",
+    "config",
+    "di",
+    "grid",
+    "sortedcollection",
+    "geometry",
+    "data",
+    "model",
+    "size",
+    "point"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

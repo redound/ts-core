@@ -1,4 +1,3 @@
-/// <reference path="../../TSCore.ts" />
 /// <reference path="./Set.ts" />
 
 module TSCore.Data.Collection {

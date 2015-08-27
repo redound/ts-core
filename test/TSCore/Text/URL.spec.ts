@@ -1,4 +1,4 @@
-/// <reference path="../TSCore.spec.ts" />
+/// <reference path="../../../src/tscore.r.ts" />
 
 declare var describe, it, expect;
 
