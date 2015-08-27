@@ -60,6 +60,9 @@ module.exports = function(grunt) {
             options: {
                 additionalFiles: ['bower.json'],
                 indentation: '    ', // four spaces
+                beforeRelease: [
+                    'build'
+                ],
                 afterRelease: [
                     'exec:push_docs'
                 ]
