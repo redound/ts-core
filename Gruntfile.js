@@ -39,23 +39,9 @@ module.exports = function(grunt) {
             }
         },
 
-        testem: {
+        karma: {
             unit: {
-                options: {
-                    framework: 'jasmine2',
-                    launch_in_dev: ['PhantomJS'],
-                    //before_tests: 'grunt jshint',
-                    serve_files: [
-                        'node_modules/underscore/underscore.js',
-                        'node_modules/sinon/pkg/sinon.js',
-                        '<%= dir.dist_main %>/**/*.js',
-                        '<%= dir.dist_test %>/**/*.js',
-                    ],
-                    watch_files: [
-                        '<%= dir.dist_main %>/**/*.js',
-                        '<%= dir.dist_test %>/**/*.js',
-                    ]
-                }
+                configFile: 'karma.conf.js'
             }
         },
 
@@ -71,10 +57,10 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.loadNpmTasks('grunt-contrib-testem');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-tslint');
+    grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-ts');
 
     grunt.registerTask('default', [
@@ -88,6 +74,6 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask('test', [
-        'testem:run:unit'
+        'karma:unit'
     ]);
 };

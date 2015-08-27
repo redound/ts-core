@@ -15,7 +15,8 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'dist/test/**/*.js'
+      'node_modules/underscore/underscore.js',
+      'test/tscore.spec.js'
     ],
 
 
@@ -55,11 +56,11 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Firefox'],
+    browsers: ['Chrome'],
 
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
     singleRun: false
   })
-}
+};
