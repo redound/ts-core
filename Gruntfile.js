@@ -85,6 +85,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-typedoc');
 
     /** Development **/
+
     grunt.registerTask('compile', [
         'ts:compile',
         'ts:compile_test'

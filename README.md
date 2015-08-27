@@ -8,7 +8,7 @@ TSCore
 *TypeScript Core Library*
 
 ## Reference ##
-Read the full [reference](http://ts-core.github.io/ts-core/)
+Read the full [reference](http://reference.ts-core.org)
 
 ## Documentation ##
 ~~Read the full documentation~~
