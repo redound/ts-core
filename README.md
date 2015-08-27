@@ -7,6 +7,18 @@ TSCore
 
 *TypeScript Core Library*
 
+## Installing ##
+Install using npm.
+````
+npm install ts-core
+````
+
+Install using Bower.
+````
+bower install ts-score
+````
+*Where is the declaration file?* Until we've added our declaration file to the [DefinitelyTyped repo](https://github.com/borisyankov/DefinitelyTyped) you can use `build/tscore.d.ts`.
+
 ## Reference ##
 Read the full [reference](http://reference.ts-core.org)
 
