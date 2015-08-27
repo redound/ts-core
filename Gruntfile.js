@@ -1,6 +1,12 @@
+var semver = require('semver');
+
 module.exports = function(grunt) {
 
     grunt.initConfig({
+
+        exec: {
+            push_docs: "git subtree push --prefix docs origin gh-pages"
+        },
 
         // For compiling our TypeScript/JavaScript
         ts: {
@@ -21,7 +27,7 @@ module.exports = function(grunt) {
             }
         },
         uglify: {
-            tscore: {
+            build: {
                 files: {
                     'build/tscore.min.js': ['build/tscore.js']
                 }
@@ -29,8 +35,12 @@ module.exports = function(grunt) {
         },
 
         karma: {
-            unit: {
+            dev: {
                 configFile: 'karma.conf.js'
+            },
+            build: {
+                configFile: 'karma.conf.js',
+                singleRun: true
             }
         },
 
@@ -45,29 +55,46 @@ module.exports = function(grunt) {
                 },
                 src: ['./src/**/*.ts']
             }
+        },
+        release: {
+            options: {
+                additionalFiles: ['bower.json'],
+                indentation: '    ', // four spaces
+            }
         }
     });
 
+    grunt.loadNpmTasks('grunt-release');
+    grunt.loadNpmTasks('grunt-prompt');
+    grunt.loadNpmTasks('grunt-bump');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-exec');
     grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-ts');
     grunt.loadNpmTasks('grunt-typedoc');
 
+    /** Development **/
     grunt.registerTask('compile', [
         'ts:compile',
         'ts:compile_test'
     ]);
 
-    grunt.registerTask('build', [
-        'compile',
-        'uglify:tscore',
-        'typedoc:build'
-    ]);
-
     grunt.registerTask('test', [
         'compile',
-        'karma:unit'
+        'karma:dev'
     ]);
 
-    grunt.registerTask('default', 'compile');
+    grunt.registerTask('docs', [
+        'compile',
+        'typedoc'
+    ]);
+
+    /** Release **/
+
+    grunt.registerTask('build', [
+        'compile',
+        'karma:build',
+        'uglify:build',
+        'typedoc'
+    ]);
 };
