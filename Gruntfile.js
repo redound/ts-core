@@ -8,6 +8,13 @@ module.exports = function(grunt) {
             push_docs: "git subtree push --prefix docs origin gh-pages"
         },
 
+        copy: {
+            main: {
+                src: 'src/*',
+                dest: 'dest/',
+            },
+        },
+
         // For compiling our TypeScript/JavaScript
         ts: {
             compile: {
@@ -88,9 +95,15 @@ module.exports = function(grunt) {
         'karma:dev'
     ]);
 
+    grunt.registerTask('cname', function() {
+
+        grunt.file.write('./docs/CNAME', 'ts-core.org');
+    });
+
     grunt.registerTask('docs', [
         'compile',
-        'typedoc'
+        'typedoc',
+        'cname'
     ]);
 
     /** Release **/
