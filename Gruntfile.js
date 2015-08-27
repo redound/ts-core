@@ -68,8 +68,6 @@ module.exports = function(grunt) {
     });
 
     grunt.loadNpmTasks('grunt-release');
-    grunt.loadNpmTasks('grunt-prompt');
-    grunt.loadNpmTasks('grunt-bump');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-exec');
     grunt.loadNpmTasks('grunt-karma');

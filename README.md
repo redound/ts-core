@@ -7,8 +7,12 @@ TSCore
 
 *TypeScript Core Library*
 
+## Reference ##
+Read the full [reference](http://ts-core.github.io/ts-core/)
+
 ## Documentation ##
-Read the full documentation
+~~Read the full documentation~~
+
 
 ## Contributing ##
 Please file issues under GitHub, or submit a pull request if you'd like to directly contribute.
