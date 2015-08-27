@@ -32,6 +32,9 @@
 /// <reference path="TSCore/Text/Random.ts" />
 /// <reference path="TSCore/Text/URL.ts" />
 
+/** Model **/
+/// <reference path="TSCore/DI.ts" />
+
 
 module TSCore {
 

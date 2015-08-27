@@ -58,8 +58,7 @@ module TSCore {
 
 
 
-        public set(key: string, service: any, shared: boolean = false);
-        public set(key: string, service:IDIServiceFactory, shared: boolean = false){
+        public set(key: string, service: IDIServiceFactory|any, shared: boolean = false): void {
 
             this._services.set(key, {
                 service: service,
@@ -67,8 +66,7 @@ module TSCore {
             });
         }
 
-        public setShared(key: string, service: any);
-        public setShared(key: string, service: IDIServiceFactory){
+        public setShared(key: string, service: IDIServiceFactory|any): void {
 
             this.set(key, service, true);
         }
@@ -79,7 +77,7 @@ module TSCore {
         }
 
 
-        private _instantiate(service:any){
+        private _instantiate(service:any): {} {
 
             var instance:any = null;
 
