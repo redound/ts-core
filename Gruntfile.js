@@ -32,12 +32,26 @@ module.exports = function(grunt) {
             unit: {
                 configFile: 'karma.conf.js'
             }
+        },
+
+        typedoc: {
+            build: {
+                options: {
+                    module: 'commonjs',
+                    out: './docs',
+                    name: 'TSCore',
+                    target: 'es5',
+                    mode: 'file'
+                },
+                src: ['./src/**/*.ts']
+            }
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-ts');
+    grunt.loadNpmTasks('grunt-typedoc');
 
     grunt.registerTask('compile', [
         'ts:compile',
@@ -46,7 +60,8 @@ module.exports = function(grunt) {
 
     grunt.registerTask('build', [
         'compile',
-        'uglify:tscore'
+        'uglify:tscore',
+        'typedoc:build'
     ]);
 
     grunt.registerTask('test', [
