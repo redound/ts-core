@@ -62,7 +62,7 @@ module TSCore.Data.Collection {
         }
 
         /**
-         * Replace one item with another item.
+         * Replace an item with another item.
          *
          * @param source        The item that gets replaced inside the collection.
          * @param replacement   The item that replaces the source item.
@@ -73,7 +73,7 @@ module TSCore.Data.Collection {
         }
 
         /**
-         * Replace one item at a certain index.
+         * Replace an item at a certain index.
          *
          * @param index         Index of the item that gets replaced.
          * @param replacement   The item the replaces the source item.
