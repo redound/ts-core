@@ -17,8 +17,16 @@ module TSCore.Events {
 
         private _eventCallbacks: {};
 
+        /**
+         * Constructor function
+         *
+         * @returns {TSCore.Events.EventEmitter}
+         */
         constructor() {
+
             this._eventCallbacks = {};
+
+            return this;
         }
 
         /**
@@ -27,8 +35,9 @@ module TSCore.Events {
          * @param callback      Callback function to execute on trigger.
          * @param context       Context for the callback
          * @param once          Run the callback for emitted event exactly one
+         * @returns             {TSCore.Events.EventEmitter}
          */
-        public on(topics: string, callback: IEventEmitterCallback, context?, once: boolean = false) {
+        public on(topics: string, callback: IEventEmitterCallback, context?, once: boolean = false): TSCore.Events.EventEmitter {
 
             _.each(topics.split(' '), (topic:string) => {
 
@@ -49,6 +58,8 @@ module TSCore.Events {
                     once: once
                 });
             });
+
+            return this;
         }
 
         /**
@@ -56,8 +67,9 @@ module TSCore.Events {
          * @param topics        Which topics to listen, separated by space
          * @param callback      Callback function to execute on trigger.
          * @param context       Context for the callback
+         * @returns             {TSCore.Events.EventEmitter}
          */
-        public once(topics: string, callback: IEventEmitterCallback, context?): void {
+        public once(topics: string, callback: IEventEmitterCallback, context?): TSCore.Events.EventEmitter {
 
             return this.on.apply(this, [topics, callback, context, true]);
         }
@@ -67,8 +79,9 @@ module TSCore.Events {
          * @param topics        Which topics to stop listening, seperated by space
          * @param callback      Callback function executed on trigger.
          * @param context       Context for the callback
+         * @returns             {TSCore.Events.EventEmitter}
          */
-        public off(topics: string, callback?: Function, context?) {
+        public off(topics: string, callback?: Function, context?): TSCore.Events.EventEmitter {
 
             _.each(topics.split(' '), (topic:string) => {
 
@@ -94,6 +107,8 @@ module TSCore.Events {
                     this._eventCallbacks[topic] = callbackArray;
                 }
             });
+
+            return this;
         }
 
         /**
@@ -104,9 +119,9 @@ module TSCore.Events {
          * ````
          * @param topic         Which topic to trigger.
          * @param args          Arguments to pass along event.
-         * @returns             void
+         * @returns             {TSCore.Events.EventEmitter}
          */
-        public trigger(topic: string, params?: {}, caller?: any) {
+        public trigger(topic: string, params?: {}, caller?: any): TSCore.Events.EventEmitter {
 
             var callbackArray = this._eventCallbacks[topic];
 
@@ -129,13 +144,19 @@ module TSCore.Events {
                     this.off(topic, item.callback, item.context);
                 }
             });
+
+            return this;
         }
 
         /**
          * Reset all subscriptions.
+         *
+         * @returns {TSCore.Events.EventEmitter}
          */
-        public resetEvents() {
+        public resetEvents(): TSCore.Events.EventEmitter {
             this._eventCallbacks = {};
+
+            return this;
         }
     }
 }
