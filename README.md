@@ -1,9 +1,7 @@
-[![Build Status](https://travis-ci.org/ts-core/ts-core.svg?branch=development)](https://travis-ci.org/ts-core/ts-core) [![npm version](https://badge.fury.io/js/ts-core.svg)](http://badge.fury.io/js/ts-core)
+[![Build Status](https://travis-ci.org/ts-core/ts-core.svg?branch=development)](https://travis-ci.org/ts-core/ts-core) [![npm version](https://badge.fury.io/js/ts-core.svg)](http://badge.fury.io/js/ts-core) [![Bower version](https://badge.fury.io/bo/ts-core.svg)](http://badge.fury.io/bo/ts-core)
 
 TSCore 
 =========
-
-**Note: This project is under development. Staging branch stable for use.**
 
 *TypeScript Core Library*
 
@@ -15,7 +13,7 @@ npm install ts-core
 
 Install using Bower.
 ````
-bower install ts-score
+bower install ts-core
 ````
 *Where is the declaration file?* Until we've added our declaration file to the [DefinitelyTyped repo](https://github.com/borisyankov/DefinitelyTyped) you can use `build/tscore.d.ts`.
 
@@ -23,8 +21,7 @@ bower install ts-score
 Read the full [reference](http://reference.ts-core.org)
 
 ## Documentation ##
-~~Read the full documentation~~
-
+Documentation is coming soon
 
 ## Contributing ##
 Please file issues under GitHub, or submit a pull request if you'd like to directly contribute.
