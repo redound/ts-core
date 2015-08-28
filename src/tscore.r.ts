@@ -1,6 +1,7 @@
 /// <reference path="../typings/tsd.d.ts" />
 
 //grunt-start
+/// <reference path="TSCore/Config.ts" />
 /// <reference path="TSCore/DI.ts" />
 /// <reference path="TSCore/Data/Collection/Collection.ts" />
 /// <reference path="TSCore/Data/Collection/Dictionary.ts" />
@@ -8,7 +9,6 @@
 /// <reference path="TSCore/Data/Collection/Queue.ts" />
 /// <reference path="TSCore/Data/Collection/Set.ts" />
 /// <reference path="TSCore/Data/Collection/SortedCollection.ts" />
-/// <reference path="TSCore/Data/Config.ts" />
 /// <reference path="TSCore/Data/Model/Model.ts" />
 /// <reference path="TSCore/DateTime/DateFormatter.ts" />
 /// <reference path="TSCore/DateTime/DateTime.ts" />

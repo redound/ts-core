@@ -1,5 +1,17 @@
 var TSCore;
 (function (TSCore) {
+    var Data;
+    (function (Data) {
+        var Config = (function () {
+            function Config() {
+            }
+            return Config;
+        })();
+        Data.Config = Config;
+    })(Data = TSCore.Data || (TSCore.Data = {}));
+})(TSCore || (TSCore = {}));
+var TSCore;
+(function (TSCore) {
     var Events;
     (function (Events) {
         var Event = (function () {
@@ -32,6 +44,7 @@ var TSCore;
         var EventEmitter = (function () {
             function EventEmitter() {
                 this._eventCallbacks = {};
+                return this;
             }
             EventEmitter.prototype.on = function (topics, callback, context, once) {
                 var _this = this;
@@ -49,6 +62,7 @@ var TSCore;
                         once: once
                     });
                 });
+                return this;
             };
             EventEmitter.prototype.once = function (topics, callback, context) {
                 return this.on.apply(this, [topics, callback, context, true]);
@@ -73,6 +87,7 @@ var TSCore;
                         _this._eventCallbacks[topic] = callbackArray;
                     }
                 });
+                return this;
             };
             EventEmitter.prototype.trigger = function (topic, params, caller) {
                 var _this = this;
@@ -90,9 +105,11 @@ var TSCore;
                         _this.off(topic, item.callback, item.context);
                     }
                 });
+                return this;
             };
             EventEmitter.prototype.resetEvents = function () {
                 this._eventCallbacks = {};
+                return this;
             };
             return EventEmitter;
         })();
@@ -133,6 +150,9 @@ var TSCore;
                     enumerable: true,
                     configurable: true
                 });
+                Set.prototype.count = function () {
+                    return this._data.length;
+                };
                 Set.prototype.add = function (item) {
                     this._data.push(item);
                     this.trigger(SetEvents.ADD, { items: [item] });
@@ -178,9 +198,6 @@ var TSCore;
                 };
                 Set.prototype.pluck = function (propertyName) {
                     return _.pluck(this._data, propertyName);
-                };
-                Set.prototype.count = function () {
-                    return this._data.length;
                 };
                 Set.prototype.isEmpty = function () {
                     return this.count() === 0;
@@ -384,9 +401,11 @@ var TSCore;
         };
         DI.prototype.setShared = function (key, service) {
             this.set(key, service, true);
+            return this;
         };
         DI.prototype.reset = function () {
             this._services.clear();
+            return this;
         };
         DI.prototype._instantiate = function (service) {
             var instance = null;
@@ -585,18 +604,6 @@ var TSCore;
             })(Collection.Set);
             Collection.SortedCollection = SortedCollection;
         })(Collection = Data.Collection || (Data.Collection = {}));
-    })(Data = TSCore.Data || (TSCore.Data = {}));
-})(TSCore || (TSCore = {}));
-var TSCore;
-(function (TSCore) {
-    var Data;
-    (function (Data) {
-        var Config = (function () {
-            function Config() {
-            }
-            return Config;
-        })();
-        Data.Config = Config;
     })(Data = TSCore.Data || (TSCore.Data = {}));
 })(TSCore || (TSCore = {}));
 var TSCore;
@@ -887,15 +894,19 @@ var TSCore;
                 this.origin.y += top;
                 this.size.width -= right;
                 this.size.height -= bottom;
+                return this;
             };
             Rect.prototype.insetCenter = function (horizontal, vertical) {
                 this.inset(vertical / 2, horizontal / 2, vertical / 2, horizontal / 2);
+                return this;
             };
             Rect.prototype.expand = function (horizontal, vertical) {
                 this.insetCenter(-horizontal, -vertical);
+                return this;
             };
             Rect.prototype.reduce = function (horizontal, vertical) {
                 this.insetCenter(horizontal, vertical);
+                return this;
             };
             return Rect;
         })();
@@ -1059,6 +1070,7 @@ var TSCore;
     })(Text = TSCore.Text || (TSCore.Text = {}));
 })(TSCore || (TSCore = {}));
 /// <reference path="../typings/tsd.d.ts" />
+/// <reference path="TSCore/Config.ts" />
 /// <reference path="TSCore/DI.ts" />
 /// <reference path="TSCore/Data/Collection/Collection.ts" />
 /// <reference path="TSCore/Data/Collection/Dictionary.ts" />
@@ -1066,7 +1078,6 @@ var TSCore;
 /// <reference path="TSCore/Data/Collection/Queue.ts" />
 /// <reference path="TSCore/Data/Collection/Set.ts" />
 /// <reference path="TSCore/Data/Collection/SortedCollection.ts" />
-/// <reference path="TSCore/Data/Config.ts" />
 /// <reference path="TSCore/Data/Model/Model.ts" />
 /// <reference path="TSCore/DateTime/DateFormatter.ts" />
 /// <reference path="TSCore/DateTime/DateTime.ts" />

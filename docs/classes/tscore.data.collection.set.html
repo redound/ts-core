@@ -130,7 +130,7 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="tscore.data.collection.set.html#_createitem" class="tsd-kind-icon">_create<wbr>Item</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="tscore.data.collection.set.html#_createitem" class="tsd-kind-icon">_create<wbr>Item</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="tscore.data.collection.set.html#add" class="tsd-kind-icon">add</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="tscore.data.collection.set.html#addmany" class="tsd-kind-icon">add<wbr>Many</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="tscore.data.collection.set.html#clear" class="tsd-kind-icon">clear</a></li>
@@ -211,9 +211,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L40">TSCore/Data/Collection/Set.ts:40</a></li>
+									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L45">TSCore/Data/Collection/Set.ts:45</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get length of set. (same as method count)</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 						</li>
 					</ul>
@@ -221,23 +226,31 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
 					<a name="_createitem" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _create<wbr>Item</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _create<wbr>Item</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
 						<li class="tsd-signature tsd-kind-icon">_create<wbr>Item<span class="tsd-signature-symbol">(</span>itemData<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L157">TSCore/Data/Collection/Set.ts:157</a></li>
+									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L274">TSCore/Data/Collection/Set.ts:274</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Create item based on itemData.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>itemData: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Data to build item with.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span></h4>
@@ -254,13 +267,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L44">TSCore/Data/Collection/Set.ts:44</a></li>
+									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L63">TSCore/Data/Collection/Set.ts:63</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Add (push) item to set.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>item: <span class="tsd-signature-type">T</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Item to be added.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -277,13 +298,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L52">TSCore/Data/Collection/Set.ts:52</a></li>
+									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L76">TSCore/Data/Collection/Set.ts:76</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Add multiple (concat) items to set.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>items: <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Items to be added.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -300,9 +329,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L97">TSCore/Data/Collection/Set.ts:97</a></li>
+									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L145">TSCore/Data/Collection/Set.ts:145</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Clears the set.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
@@ -317,13 +351,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L149">TSCore/Data/Collection/Set.ts:149</a></li>
+									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L254">TSCore/Data/Collection/Set.ts:254</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Check if set contains item.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>item: <span class="tsd-signature-type">T</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Item to check against.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -340,9 +382,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L114">TSCore/Data/Collection/Set.ts:114</a></li>
+									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L54">TSCore/Data/Collection/Set.ts:54</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Get count of set. (same as property length)</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 						</li>
 					</ul>
@@ -357,13 +404,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L106">TSCore/Data/Collection/Set.ts:106</a></li>
+									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L159">TSCore/Data/Collection/Set.ts:159</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Iterates over all item in set, yielding each in turn to an iteratee function.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>iterator: <span class="tsd-signature-type">ListIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Iteratee function.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -380,13 +435,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L133">TSCore/Data/Collection/Set.ts:133</a></li>
+									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L205">TSCore/Data/Collection/Set.ts:205</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Find items using an iterator.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>iterator: <span class="tsd-signature-type">ListIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Iterator to use.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span></h4>
@@ -403,9 +466,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L137">TSCore/Data/Collection/Set.ts:137</a></li>
+									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L217">TSCore/Data/Collection/Set.ts:217</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Find first item using an iterator.</p>
+								</div>
+								<p>TODO: Make this return one item.</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -426,9 +495,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L118">TSCore/Data/Collection/Set.ts:118</a></li>
+									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L179">TSCore/Data/Collection/Set.ts:179</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Check whether the set is empty.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						</li>
 					</ul>
@@ -437,14 +511,14 @@
 					<a name="off" class="tsd-anchor"></a>
 					<h3>off</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">off<span class="tsd-signature-symbol">(</span>topics<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, callback<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Function</span>, context<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">off<span class="tsd-signature-symbol">(</span>topics<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, callback<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Function</span>, context<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="tscore.events.eventemitter.html" class="tsd-signature-type">EventEmitter</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="tscore.events.eventemitter.html">EventEmitter</a>.<a href="tscore.events.eventemitter.html#off">off</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Event/EventEmitter.ts#L71">TSCore/Event/EventEmitter.ts:71</a></li>
+									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Event/EventEmitter.ts#L84">TSCore/Event/EventEmitter.ts:84</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -473,7 +547,7 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="tscore.events.eventemitter.html" class="tsd-signature-type">EventEmitter</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -481,14 +555,14 @@
 					<a name="on" class="tsd-anchor"></a>
 					<h3>on</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">on<span class="tsd-signature-symbol">(</span>topics<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, callback<span class="tsd-signature-symbol">: </span><a href="../interfaces/tscore.events.ieventemittercallback.html" class="tsd-signature-type">IEventEmitterCallback</a>, context<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span>, once<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">on<span class="tsd-signature-symbol">(</span>topics<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, callback<span class="tsd-signature-symbol">: </span><a href="../interfaces/tscore.events.ieventemittercallback.html" class="tsd-signature-type">IEventEmitterCallback</a>, context<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span>, once<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="tscore.events.eventemitter.html" class="tsd-signature-type">EventEmitter</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="tscore.events.eventemitter.html">EventEmitter</a>.<a href="tscore.events.eventemitter.html#on">on</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Event/EventEmitter.ts#L31">TSCore/Event/EventEmitter.ts:31</a></li>
+									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Event/EventEmitter.ts#L40">TSCore/Event/EventEmitter.ts:40</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -523,7 +597,7 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="tscore.events.eventemitter.html" class="tsd-signature-type">EventEmitter</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -531,14 +605,14 @@
 					<a name="once" class="tsd-anchor"></a>
 					<h3>once</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">once<span class="tsd-signature-symbol">(</span>topics<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, callback<span class="tsd-signature-symbol">: </span><a href="../interfaces/tscore.events.ieventemittercallback.html" class="tsd-signature-type">IEventEmitterCallback</a>, context<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">once<span class="tsd-signature-symbol">(</span>topics<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, callback<span class="tsd-signature-symbol">: </span><a href="../interfaces/tscore.events.ieventemittercallback.html" class="tsd-signature-type">IEventEmitterCallback</a>, context<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="tscore.events.eventemitter.html" class="tsd-signature-type">EventEmitter</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="tscore.events.eventemitter.html">EventEmitter</a>.<a href="tscore.events.eventemitter.html#once">once</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Event/EventEmitter.ts#L60">TSCore/Event/EventEmitter.ts:60</a></li>
+									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Event/EventEmitter.ts#L72">TSCore/Event/EventEmitter.ts:72</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -567,7 +641,7 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="tscore.events.eventemitter.html" class="tsd-signature-type">EventEmitter</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -581,13 +655,22 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L110">TSCore/Data/Collection/Set.ts:110</a></li>
+									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L170">TSCore/Data/Collection/Set.ts:170</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A convenient version of what is perhaps the most common use-case for map:
+									extracting a list of property values.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>propertyName: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Property name to pluck.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h4>
@@ -604,13 +687,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L122">TSCore/Data/Collection/Set.ts:122</a></li>
+									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L188">TSCore/Data/Collection/Set.ts:188</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Adds multiple items after called the _createItem method on them.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>items: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Items to be added.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -627,13 +718,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L60">TSCore/Data/Collection/Set.ts:60</a></li>
+									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L89">TSCore/Data/Collection/Set.ts:89</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Remove item from set.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>item: <span class="tsd-signature-type">T</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Item to be removed.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -650,13 +749,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L68">TSCore/Data/Collection/Set.ts:68</a></li>
+									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L102">TSCore/Data/Collection/Set.ts:102</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Remove multiple items from set.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>items: <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Items to be removed.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -673,13 +780,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L76">TSCore/Data/Collection/Set.ts:76</a></li>
+									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L115">TSCore/Data/Collection/Set.ts:115</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Remove items using properties.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>properties: <span class="tsd-signature-type">object</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Object containing key-value pairs.</p>
+									</div>
 									<ul class="tsd-parameters">
 									</ul>
 								</li>
@@ -698,16 +813,27 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L80">TSCore/Data/Collection/Set.ts:80</a></li>
+									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L125">TSCore/Data/Collection/Set.ts:125</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Replace an item with another item in set</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>source: <span class="tsd-signature-type">T</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The item that gets replaced inside the set.</p>
+									</div>
 								</li>
 								<li>
 									<h5>replacement: <span class="tsd-signature-type">T</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The item that replaces the source item.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span></h4>
@@ -718,14 +844,14 @@
 					<a name="resetevents" class="tsd-anchor"></a>
 					<h3>reset<wbr>Events</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">reset<wbr>Events<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">reset<wbr>Events<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="tscore.events.eventemitter.html" class="tsd-signature-type">EventEmitter</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="tscore.events.eventemitter.html">EventEmitter</a>.<a href="tscore.events.eventemitter.html#resetevents">resetEvents</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Event/EventEmitter.ts#L137">TSCore/Event/EventEmitter.ts:137</a></li>
+									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Event/EventEmitter.ts#L156">TSCore/Event/EventEmitter.ts:156</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -733,7 +859,7 @@
 									<p>Reset all subscriptions.</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="tscore.events.eventemitter.html" class="tsd-signature-type">EventEmitter</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -747,9 +873,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L153">TSCore/Data/Collection/Set.ts:153</a></li>
+									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L263">TSCore/Data/Collection/Set.ts:263</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Convert set to array.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span></h4>
 						</li>
 					</ul>
@@ -758,14 +889,14 @@
 					<a name="trigger" class="tsd-anchor"></a>
 					<h3>trigger</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">trigger<span class="tsd-signature-symbol">(</span>topic<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, params<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">object</span>, caller<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">trigger<span class="tsd-signature-symbol">(</span>topic<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, params<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">object</span>, caller<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="tscore.events.eventemitter.html" class="tsd-signature-type">EventEmitter</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="tscore.events.eventemitter.html">EventEmitter</a>.<a href="tscore.events.eventemitter.html#trigger">trigger</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Event/EventEmitter.ts#L109">TSCore/Event/EventEmitter.ts:109</a></li>
+									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Event/EventEmitter.ts#L124">TSCore/Event/EventEmitter.ts:124</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -793,8 +924,7 @@ emitter.trigger(<span class="hljs-string">'topic'</span>, arg1, arg2);
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> caller: <span class="tsd-signature-type">any</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-							<p>void</p>
+							<h4 class="tsd-returns-title">Returns <a href="tscore.events.eventemitter.html" class="tsd-signature-type">EventEmitter</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -808,13 +938,26 @@ emitter.trigger(<span class="hljs-string">'topic'</span>, arg1, arg2);
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L141">TSCore/Data/Collection/Set.ts:141</a></li>
+									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L233">TSCore/Data/Collection/Set.ts:233</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Looks through each value in the list, returning an array of all the values that contain all
+									of the key-value pairs listed in properties.</p>
+								</div>
+								<pre><code class="lang-js">collection.where({author: <span class="hljs-string">"Shakespeare"</span>, year: <span class="hljs-number">1611</span>});
+    =&gt; [{title: <span class="hljs-string">"Cymbeline"</span>, author: <span class="hljs-string">"Shakespeare"</span>, year: <span class="hljs-number">1611</span>},
+        {title: <span class="hljs-string">"The Tempest"</span>, author: <span class="hljs-string">"Shakespeare"</span>, year: <span class="hljs-number">1611</span>}]
+</code></pre>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>properties: <span class="tsd-signature-type">object</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Object containing key-value pairs.</p>
+									</div>
 									<ul class="tsd-parameters">
 									</ul>
 								</li>
@@ -833,13 +976,22 @@ emitter.trigger(<span class="hljs-string">'topic'</span>, arg1, arg2);
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L145">TSCore/Data/Collection/Set.ts:145</a></li>
+									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Collection/Set.ts#L244">TSCore/Data/Collection/Set.ts:244</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Looks through the list and returns the first value that matches all of the key-value pairs
+									listed in properties.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>properties: <span class="tsd-signature-type">object</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Object containing key-value pairs.</p>
+									</div>
 									<ul class="tsd-parameters">
 									</ul>
 								</li>
@@ -931,7 +1083,7 @@ emitter.trigger(<span class="hljs-string">'topic'</span>, arg1, arg2);
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
 								<a href="tscore.data.collection.set.html#length" class="tsd-kind-icon">length</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
 								<a href="tscore.data.collection.set.html#_createitem" class="tsd-kind-icon">_create<wbr>Item</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">

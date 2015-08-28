@@ -98,7 +98,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('cname', function() {
 
-        grunt.file.write('./docs/CNAME', 'ts-core.org');
+        grunt.file.write('./docs/CNAME', 'reference.ts-core.org');
     });
 
     grunt.registerTask('docs', [

@@ -20,10 +20,10 @@ bower install ts-core
 *Where is the declaration file?* Until we've added our declaration file to the [DefinitelyTyped repo](https://github.com/borisyankov/DefinitelyTyped) you can use `build/tscore.d.ts`.
 
 ## Reference ##
-Read the full [reference](http://ts-core.org)
+Read the full [reference](http://reference.ts-core.org)
 
 ## Documentation ##
-Documentation is coming soon
+Read the full [documentation](http://docs.ts-core.org)
 
 ## Contributing ##
 Please file issues under GitHub, or submit a pull request if you'd like to directly contribute.

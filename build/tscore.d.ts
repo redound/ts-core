@@ -1,4 +1,8 @@
 /// <reference path="../typings/tsd.d.ts" />
+declare module TSCore.Data {
+    class Config {
+    }
+}
 declare module TSCore.Events {
     class Event<T> {
         topic: string;
@@ -17,11 +21,11 @@ declare module TSCore.Events {
     class EventEmitter {
         private _eventCallbacks;
         constructor();
-        on(topics: string, callback: IEventEmitterCallback, context?: any, once?: boolean): void;
-        once(topics: string, callback: IEventEmitterCallback, context?: any): void;
-        off(topics: string, callback?: Function, context?: any): void;
-        trigger(topic: string, params?: {}, caller?: any): void;
-        resetEvents(): void;
+        on(topics: string, callback: IEventEmitterCallback, context?: any, once?: boolean): TSCore.Events.EventEmitter;
+        once(topics: string, callback: IEventEmitterCallback, context?: any): TSCore.Events.EventEmitter;
+        off(topics: string, callback?: Function, context?: any): TSCore.Events.EventEmitter;
+        trigger(topic: string, params?: {}, caller?: any): TSCore.Events.EventEmitter;
+        resetEvents(): TSCore.Events.EventEmitter;
     }
 }
 declare module TSCore.Data.Collection {
@@ -50,6 +54,7 @@ declare module TSCore.Data.Collection {
         protected _data: T[];
         constructor(data?: T[]);
         length: number;
+        count(): number;
         add(item: T): void;
         addMany(items: T[]): void;
         remove(item: T): void;
@@ -59,7 +64,6 @@ declare module TSCore.Data.Collection {
         clear(): void;
         each(iterator: _.ListIterator<T, void>): void;
         pluck(propertyName: string): any[];
-        count(): number;
         isEmpty(): boolean;
         populate(items: any): void;
         find(iterator: _.ListIterator<T, boolean>): T[];
@@ -133,8 +137,8 @@ declare module TSCore {
         get(key: string, shared?: boolean): any;
         getShared(key: string): any;
         set(key: string, service: IDIServiceFactory | any, shared?: boolean): void;
-        setShared(key: string, service: IDIServiceFactory | any): void;
-        reset(): void;
+        setShared(key: string, service: IDIServiceFactory | any): TSCore.DI;
+        reset(): TSCore.DI;
         private _instantiate(service);
     }
 }
@@ -213,10 +217,6 @@ declare module TSCore.Data.Collection {
         get(index: number): T;
         indexOf(item: T): number;
         sort(): void;
-    }
-}
-declare module TSCore.Data {
-    class Config {
     }
 }
 declare module TSCore.Data.Model {
@@ -302,10 +302,10 @@ declare module TSCore.Geometry {
         containsPoint(point: Point): boolean;
         containsRect(rect: Rect): boolean;
         intersectsRect(rect: Rect): boolean;
-        inset(top: number, right: number, bottom: number, left: number): void;
-        insetCenter(horizontal: number, vertical: number): void;
-        expand(horizontal: number, vertical: number): void;
-        reduce(horizontal: number, vertical: number): void;
+        inset(top: number, right: number, bottom: number, left: number): TSCore.Geometry.Rect;
+        insetCenter(horizontal: number, vertical: number): TSCore.Geometry.Rect;
+        expand(horizontal: number, vertical: number): TSCore.Geometry.Rect;
+        reduce(horizontal: number, vertical: number): TSCore.Geometry.Rect;
     }
 }
 declare module TSCore.Geometry {
