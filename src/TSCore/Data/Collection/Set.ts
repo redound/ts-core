@@ -37,10 +37,29 @@ module TSCore.Data.Collection {
             this._data = data || [];
         }
 
+        /**
+         * Get length of set. (same as method count)
+         *
+         * @returns {number}
+         */
         public get length():number {
             return this.count();
         }
 
+        /**
+         * Get count of set. (same as property length)
+         *
+         * @returns {number}
+         */
+        public count(): number {
+            return this._data.length;
+        }
+
+        /**
+         * Add (push) item to set.
+         *
+         * @param item Item to be added.
+         */
         public add(item:T) {
 
             this._data.push(item);
@@ -49,6 +68,11 @@ module TSCore.Data.Collection {
             this.trigger(SetEvents.CHANGE);
         }
 
+        /**
+         * Add multiple (concat) items to set.
+         *
+         * @param items Items to be added.
+         */
         public addMany(items:T[]) {
 
             this._data = this._data.concat(items);
@@ -57,6 +81,11 @@ module TSCore.Data.Collection {
             this.trigger(SetEvents.CHANGE);
         }
 
+        /**
+         * Remove item from set.
+         *
+         * @param item Item to be removed.
+         */
         public remove(item:T) {
 
             this._data = _.without(this._data, item);
@@ -65,6 +94,11 @@ module TSCore.Data.Collection {
             this.trigger(SetEvents.CHANGE);
         }
 
+        /**
+         * Remove multiple items from set.
+         *
+         * @param items Items to be removed.
+         */
         public removeMany(items:T[]) {
 
             this._data = _.difference(this._data, items);
@@ -73,10 +107,21 @@ module TSCore.Data.Collection {
             this.trigger(SetEvents.CHANGE);
         }
 
+        /**
+         * Remove items using properties.
+         *
+         * @param properties    Object containing key-value pairs.
+         */
         public removeWhere(properties: {}) {
             this.removeMany(this.where(properties));
         }
 
+        /**
+         * Replace an item with another item in set
+         * @param source    The item that gets replaced inside the set.
+         * @param replacement The item that replaces the source item.
+         * @returns {any}
+         */
         public replaceItem(source:T, replacement:T): T {
 
             var index = _.indexOf(this._data, source);
@@ -94,6 +139,9 @@ module TSCore.Data.Collection {
             return currentItem;
         }
 
+        /**
+         * Clears the set.
+         */
         public clear() {
 
             this._data = [];
@@ -103,22 +151,40 @@ module TSCore.Data.Collection {
             this.trigger(SetEvents.CHANGE);
         }
 
+        /**
+         * Iterates over all item in set, yielding each in turn to an iteratee function.
+         *
+         * @param iterator Iteratee function.
+         */
         public each(iterator:_.ListIterator<T, void>){
-            _.each(this._data, iterator)
+            _.each(this._data, iterator);
         }
 
+        /**
+         * A convenient version of what is perhaps the most common use-case for map:
+         * extracting a list of property values.
+         *
+         * @param propertyName Property name to pluck.
+         * @returns {any[]}
+         */
         public pluck(propertyName:string) : any[] {
             return _.pluck(this._data, propertyName);
         }
 
-        public count(): number {
-            return this._data.length;
-        }
-
+        /**
+         * Check whether the set is empty.
+         *
+         * @returns {boolean}
+         */
         public isEmpty(): boolean {
             return this.count() === 0;
         }
 
+        /**
+         * Adds multiple items after called the _createItem method on them.
+         *
+         * @param items Items to be added.
+         */
         public populate(items) {
 
             _.each(items, (itemData) => {
@@ -130,30 +196,81 @@ module TSCore.Data.Collection {
             });
         }
 
+        /**
+         * Find items using an iterator.
+         *
+         * @param iterator Iterator to use.
+         * @returns {T[]}
+         */
         public find(iterator:_.ListIterator<T, boolean>): T[] {
             return _.filter(this._data, iterator);
         }
 
+        /**
+         * Find first item using an iterator.
+         *
+         * TODO: Make this return one item.
+         *
+         * @param iterator
+         * @returns {T}
+         */
         public findFirst(iterator:_.ListIterator<T, boolean>): T {
             return _.find(this._data, iterator);
         }
 
+        /**
+         * Looks through each value in the list, returning an array of all the values that contain all
+         * of the key-value pairs listed in properties.
+         *
+         * ````js
+         * collection.where({author: "Shakespeare", year: 1611});
+         *     => [{title: "Cymbeline", author: "Shakespeare", year: 1611},
+         *         {title: "The Tempest", author: "Shakespeare", year: 1611}]
+         * ````
+         * @param properties Object containing key-value pairs.
+         * @returns {T[]}
+         */
         public where(properties:{}): T[] {
             return _.where(this._data, properties);
         }
 
+        /**
+         * Looks through the list and returns the first value that matches all of the key-value pairs
+         * listed in properties.
+         *
+         * @param properties Object containing key-value pairs.
+         * @returns {T}
+         */
         public whereFirst(properties:{}): T {
             return _.findWhere(this._data, properties);
         }
 
+        /**
+         * Check if set contains item.
+         *
+         * @param item Item to check against.
+         * @returns {boolean}
+         */
         public contains(item:T): boolean {
             return _.contains(this._data, item);
         }
 
+        /**
+         * Convert set to array.
+         *
+         * @returns {any[]}
+         */
         public toArray():T[] {
             return _.clone(this._data);
         }
 
+        /**
+         * Create item based on itemData.
+         *
+         * @param itemData Data to build item with.
+         * @returns {any}
+         * @private
+         */
         protected _createItem(itemData): T {
             return itemData;
         }
