@@ -23,11 +23,21 @@ module TSCore {
         private _services: Dictionary<string, IDIServiceItem>;
         private _cache: Dictionary<string, any>;
 
-        constructor(){
+        /**
+         * Constructor function.
+         */
+        constructor() {
             this._services = new Dictionary<string, IDIServiceItem>();
             this._cache = new Dictionary<string, any>();
         }
 
+        /**
+         * Resolves the service based on its configuration.
+         *
+         * @param key Name of the service.
+         * @param shared Whether to get a shared instance of the service.
+         * @returns {any}
+         */
         public get(key: string, shared: boolean = false): any {
 
             var serviceItem = this._services.get(key);
@@ -50,11 +60,25 @@ module TSCore {
             return instance;
         }
 
+        /**
+         * Resolves a service, the resolved service is stored in the DI, subsequent requests
+         * for this service will return the same instance.
+         *
+         * @param key Name of the service.
+         * @returns {any}
+         */
         public getShared(key: string): any {
 
             return this.get(key, true);
         }
 
+        /**
+         * Registers a service in the services container.
+         *
+         * @param key Name of the service.
+         * @param service Factory method to resolve service instance.
+         * @param shared Whether to return always the same instance.
+         */
         public set(key: string, service: IDIServiceFactory|any, shared: boolean = false): void {
 
             this._services.set(key, {
@@ -63,16 +87,40 @@ module TSCore {
             });
         }
 
-        public setShared(key: string, service: IDIServiceFactory|any): void {
+        /**
+         * Registers an “always shared” service in the services container.
+         *
+         * @param key Name of the service.
+         * @param service Factory method to resolve service instance.
+         *
+         * @returns {TSCore.DI}
+         */
+        public setShared(key: string, service: IDIServiceFactory|any): TSCore.DI {
 
             this.set(key, service, true);
+
+            return this;
         }
 
-        public reset(): void {
+        /**
+         * Resets the internal default DI.
+         *
+         * @returns {TSCore.DI}
+         */
+        public reset(): TSCore.DI {
 
             this._services.clear();
+
+            return this;
         }
 
+        /**
+         * Instantiate a service using its factory method.
+         *
+         * @param service Name of the service.
+         * @returns {any}
+         * @private
+         */
         private _instantiate(service:any): {} {
 
             var instance:any = null;
