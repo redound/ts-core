@@ -31,7 +31,13 @@ module TSCore.DateTime {
         private _internalTimer:number;
         private _internalTimerIsInterval:boolean;
 
-
+        /**
+         * Constructor function
+         *
+         * @param timeout Time (in milliseconds) for the timer to execute.
+         * @param tickCallback Callback to call when timer gets executed.
+         * @param repeats Whether the timer should repeat.
+         */
         constructor(timeout:number, tickCallback:ITimerTickCallback=null, repeats:boolean=false){
 
             this.timeout = timeout;
@@ -39,7 +45,12 @@ module TSCore.DateTime {
             this.repeats = repeats;
         }
 
-        public start(){
+        /**
+         * Start timer if not already started.
+         *
+         * @returns {void}
+         */
+        public start(): void {
 
             if(this._isStarted){
                 return;
@@ -51,7 +62,12 @@ module TSCore.DateTime {
             this.resume();
         }
 
-        public resume(){
+        /**
+         * Resume timer if not running.
+         *
+         * @returns {void}
+         */
+        public resume(): void {
 
             if(this._isStarted){
                 return;
@@ -63,7 +79,12 @@ module TSCore.DateTime {
             this._isStarted = true;
         }
 
-        public pause(){
+        /**
+         * Pause timer if it's running.
+         *
+         * @returns {void}
+         */
+        public pause(): void {
 
             if(!this._isStarted){
                 return;
@@ -75,17 +96,32 @@ module TSCore.DateTime {
             this._isStarted = false;
         }
 
+        /**
+         * Restart the timer.
+         *
+         * @returns {void}
+         */
         public restart(){
 
             this.stop();
             this.start();
         }
 
+        /**
+         * Stop the timer.
+         *
+         * @returns {void}
+         */
         public stop(){
 
             this.reset();
         }
 
+        /**
+         * Reset the timer. The timer will pause.
+         *
+         * @returns {void}
+         */
         public reset(){
 
             if(this._isStarted){
@@ -96,7 +132,14 @@ module TSCore.DateTime {
             this._startDate = null;
         }
 
-
+        /**
+         * Start the timer.
+         *
+         * @param timeout Time (in milliseconds) for the timer to execute.
+         * @param tickCallback Callback to call when timer gets executed.
+         * @param repeats   Whether the timer should repeat.
+         * @returns {TSCore.DateTime.Timer}
+         */
         public static start(timeout:number, tickCallback:ITimerTickCallback=null, repeats:boolean=false) : Timer {
 
             var timer = new Timer(timeout, tickCallback, repeats);
@@ -105,7 +148,12 @@ module TSCore.DateTime {
             return timer;
         }
 
-
+        /**
+         * Increases tick count.
+         * Calls tick callback.
+         *
+         * @private
+         */
         private _timerTick(){
 
             this._tickCount++;
