@@ -80,10 +80,10 @@
 						<span class="target">EventEmitter</span>
 						<ul class="tsd-hierarchy">
 							<li>
-								<a href="tscore.data.collection.dictionary.html" class="tsd-signature-type">Dictionary</a>
+								<a href="tscore.data.collection.set.html" class="tsd-signature-type">Set</a>
 							</li>
 							<li>
-								<a href="tscore.data.collection.set.html" class="tsd-signature-type">Set</a>
+								<a href="tscore.data.collection.dictionary.html" class="tsd-signature-type">Dictionary</a>
 							</li>
 						</ul>
 					</li>
@@ -110,6 +110,7 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="tscore.events.eventemitter.html#off" class="tsd-kind-icon">off</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="tscore.events.eventemitter.html#on" class="tsd-kind-icon">on</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="tscore.events.eventemitter.html#once" class="tsd-kind-icon">once</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="tscore.events.eventemitter.html#resetevents" class="tsd-kind-icon">reset<wbr>Events</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="tscore.events.eventemitter.html#trigger" class="tsd-kind-icon">trigger</a></li>
 							</ul>
@@ -129,7 +130,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Event/EventEmitter.ts#L10">TSCore/Event/EventEmitter.ts:10</a></li>
+									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Event/EventEmitter.ts#L18">TSCore/Event/EventEmitter.ts:18</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="tscore.events.eventemitter.html" class="tsd-signature-type">EventEmitter</a></h4>
@@ -145,7 +146,7 @@
 					<div class="tsd-signature tsd-kind-icon">_event<wbr>Callbacks<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Event/EventEmitter.ts#L10">TSCore/Event/EventEmitter.ts:10</a></li>
+							<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Event/EventEmitter.ts#L18">TSCore/Event/EventEmitter.ts:18</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -161,26 +162,26 @@
 					<a name="off" class="tsd-anchor"></a>
 					<h3>off</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">off<span class="tsd-signature-symbol">(</span>events<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, callback<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Function</span>, context<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">off<span class="tsd-signature-symbol">(</span>topics<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, callback<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Function</span>, context<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Event/EventEmitter.ts#L49">TSCore/Event/EventEmitter.ts:49</a></li>
+									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Event/EventEmitter.ts#L71">TSCore/Event/EventEmitter.ts:71</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Unsubscribe from published events.</p>
+									<p>Unsubscribe from published topics.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>events: <span class="tsd-signature-type">string</span></h5>
+									<h5>topics: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Which events to stop listening, seperated by space</p>
+										<p>Which topics to stop listening, seperated by space</p>
 									</div>
 								</li>
 								<li>
@@ -204,13 +205,13 @@
 					<a name="on" class="tsd-anchor"></a>
 					<h3>on</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">on<span class="tsd-signature-symbol">(</span>events<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span>, context<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">on<span class="tsd-signature-symbol">(</span>topics<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, callback<span class="tsd-signature-symbol">: </span><a href="../interfaces/tscore.events.ieventemittercallback.html" class="tsd-signature-type">IEventEmitterCallback</a>, context<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span>, once<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Event/EventEmitter.ts#L22">TSCore/Event/EventEmitter.ts:22</a></li>
+									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Event/EventEmitter.ts#L31">TSCore/Event/EventEmitter.ts:31</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -221,13 +222,62 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>events: <span class="tsd-signature-type">string</span></h5>
+									<h5>topics: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Which events to listen, seperated by space</p>
+										<p>Which topics to listen, separated by space</p>
 									</div>
 								</li>
 								<li>
-									<h5>callback: <span class="tsd-signature-type">Function</span></h5>
+									<h5>callback: <a href="../interfaces/tscore.events.ieventemittercallback.html" class="tsd-signature-type">IEventEmitterCallback</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Callback function to execute on trigger.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> context: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Context for the callback</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> once: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Run the callback for emitted event exactly one</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="once" class="tsd-anchor"></a>
+					<h3>once</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">once<span class="tsd-signature-symbol">(</span>topics<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, callback<span class="tsd-signature-symbol">: </span><a href="../interfaces/tscore.events.ieventemittercallback.html" class="tsd-signature-type">IEventEmitterCallback</a>, context<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Event/EventEmitter.ts#L60">TSCore/Event/EventEmitter.ts:60</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Subscribe to emitted topics exactly once</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>topics: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Which topics to listen, separated by space</p>
+									</div>
+								</li>
+								<li>
+									<h5>callback: <a href="../interfaces/tscore.events.ieventemittercallback.html" class="tsd-signature-type">IEventEmitterCallback</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>Callback function to execute on trigger.</p>
 									</div>
@@ -253,7 +303,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Event/EventEmitter.ts#L104">TSCore/Event/EventEmitter.ts:104</a></li>
+									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Event/EventEmitter.ts#L137">TSCore/Event/EventEmitter.ts:137</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -269,13 +319,13 @@
 					<a name="trigger" class="tsd-anchor"></a>
 					<h3>trigger</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">trigger<span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, <span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">trigger<span class="tsd-signature-symbol">(</span>topic<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, params<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">object</span>, caller<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Event/EventEmitter.ts#L87">TSCore/Event/EventEmitter.ts:87</a></li>
+									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Event/EventEmitter.ts#L109">TSCore/Event/EventEmitter.ts:109</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -289,16 +339,18 @@ emitter.trigger(<span class="hljs-string">'topic'</span>, arg1, arg2);
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>event: <span class="tsd-signature-type">string</span></h5>
+									<h5>topic: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Which event to trigger.</p>
+										<p>Which topic to trigger.</p>
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Arguments to pass along event.</p>
-									</div>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> params: <span class="tsd-signature-type">object</span></h5>
+									<ul class="tsd-parameters">
+									</ul>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> caller: <span class="tsd-signature-type">any</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -314,37 +366,36 @@ emitter.trigger(<span class="hljs-string">'topic'</span>, arg1, arg2);
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class=" tsd-kind-module tsd-is-not-exported">
+					<li class="current tsd-kind-module tsd-is-not-exported">
 						<a href="../modules/tscore.html">TSCore</a>
-					</li>
-					<li class=" tsd-kind-module tsd-parent-kind-module">
-						<a href="../modules/tscore.data.html">TSCore.<wbr>Data</a>
-					</li>
-					<li class=" tsd-kind-module tsd-parent-kind-module">
-						<a href="../modules/tscore.data.collection.html">TSCore.<wbr>Data.<wbr>Collection</a>
-					</li>
-					<li class=" tsd-kind-module tsd-parent-kind-module">
-						<a href="../modules/tscore.data.model.html">TSCore.<wbr>Data.<wbr>Model</a>
-					</li>
-					<li class=" tsd-kind-module tsd-parent-kind-module">
-						<a href="../modules/tscore.datetime.html">TSCore.<wbr>Date<wbr>Time</a>
-					</li>
-					<li class="current tsd-kind-module tsd-parent-kind-module">
-						<a href="../modules/tscore.events.html">TSCore.<wbr>Events</a>
-					</li>
-					<li class=" tsd-kind-module tsd-parent-kind-module">
-						<a href="../modules/tscore.exception.html">TSCore.<wbr>Exception</a>
-					</li>
-					<li class=" tsd-kind-module tsd-parent-kind-module">
-						<a href="../modules/tscore.geometry.html">TSCore.<wbr>Geometry</a>
-					</li>
-					<li class=" tsd-kind-module tsd-parent-kind-module">
-						<a href="../modules/tscore.text.html">TSCore.<wbr>Text</a>
+						<ul>
+							<li class=" tsd-kind-module tsd-parent-kind-module">
+								<a href="../modules/tscore.data.html">Data</a>
+							</li>
+							<li class=" tsd-kind-module tsd-parent-kind-module">
+								<a href="../modules/tscore.datetime.html">Date<wbr>Time</a>
+							</li>
+							<li class="current tsd-kind-module tsd-parent-kind-module">
+								<a href="../modules/tscore.events.html">Events</a>
+							</li>
+							<li class=" tsd-kind-module tsd-parent-kind-module">
+								<a href="../modules/tscore.exception.html">Exception</a>
+							</li>
+							<li class=" tsd-kind-module tsd-parent-kind-module">
+								<a href="../modules/tscore.geometry.html">Geometry</a>
+							</li>
+							<li class=" tsd-kind-module tsd-parent-kind-module">
+								<a href="../modules/tscore.text.html">Text</a>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="tscore.events.event.html" class="tsd-kind-icon">Event</a>
+					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-module">
@@ -363,6 +414,9 @@ emitter.trigger(<span class="hljs-string">'topic'</span>, arg1, arg2);
 								<a href="tscore.events.eventemitter.html#on" class="tsd-kind-icon">on</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="tscore.events.eventemitter.html#once" class="tsd-kind-icon">once</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="tscore.events.eventemitter.html#resetevents" class="tsd-kind-icon">reset<wbr>Events</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
@@ -372,6 +426,9 @@ emitter.trigger(<span class="hljs-string">'topic'</span>, arg1, arg2);
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/tscore.events.ieventemittercallback.html" class="tsd-kind-icon">IEvent<wbr>Emitter<wbr>Callback</a>
+					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
 						<a href="../interfaces/tscore.events.ieventemittercallbackitem.html" class="tsd-kind-icon">IEvent<wbr>Emitter<wbr>Callback<wbr>Item</a>
 					</li>
