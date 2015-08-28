@@ -45,12 +45,24 @@ module TSCore.Data.Collection {
             this._data = data || {};
         }
 
+        /**
+         * Get value for key in dictionary.
+         *
+         * @param key Key to return value for.
+         * @returns {any}
+         */
         public get(key: K): V {
 
             var foundPair = this._getPair(key);
             return foundPair ? foundPair.value : null;
         }
 
+        /**
+         * Set value for key in dictionary.
+         *
+         * @param key Key to set item for.
+         * @param value Value to set for given key.
+         */
         public set(key: K, value: V) {
 
             if(key == null || key == undefined){
@@ -77,6 +89,11 @@ module TSCore.Data.Collection {
             this.trigger(DictionaryEvents.CHANGE);
         }
 
+        /**
+         * Remove value for key in dictionary.
+         * @param key   Key to remove item for.
+         * @returns {null}
+         */
         public remove(key: K): V {
 
             var removedItem = null;
@@ -96,6 +113,12 @@ module TSCore.Data.Collection {
             return removedItem;
         }
 
+        /**
+         * Check if dictionary contains key.
+         *
+         * @param key Key to check against.
+         * @returns {boolean}
+         */
         public contains(key: K): boolean {
             return this._getPair(key) != null;
         }
@@ -116,6 +139,11 @@ module TSCore.Data.Collection {
             return foundValue != null;
         }
 
+        /**
+         * Iterate over each key/value pair in dictionary.
+         *
+         * @param iterator
+         */
         public each(iterator:IDictionaryIterator<K,V>): void {
 
             _.each(this._data, (pair) => {
@@ -123,23 +151,48 @@ module TSCore.Data.Collection {
             });
         }
 
+        /**
+         * Get all values in dictionary.
+         *
+         * @returns {any[]}
+         */
         public values(): K[] {
             return _.pluck(_.values(this._data), 'value');
         }
 
+        /**
+         * Get all keys in dictionary.
+         *
+         * @returns {any[]}
+         */
         public keys(): K[] {
             return _.pluck(_.values(this._data), 'key');
         }
 
+        /**
+         * Count all pairs in dictionary.
+         *
+         * @returns {number}
+         */
         public count(): number {
             return this._itemCount;
         }
 
+        /**
+         * Check if dictionary is empty/
+         *
+         * @returns {boolean}
+         */
         public isEmpty(): boolean {
             return this.count() === 0;
         }
 
-        public clear(){
+        /**
+         * Clear the dictionary.
+         *
+         * @returns {void}
+         */
+        public clear(): void {
 
             this._data = {};
             this._itemCount = 0;
@@ -148,7 +201,13 @@ module TSCore.Data.Collection {
             this.trigger(DictionaryEvents.CHANGE);
         }
 
-
+        /**
+         * Get pair for key in dictionary.
+         *
+         * @param key Key to get pair for.
+         * @returns {IKeyValuePair}
+         * @private
+         */
         protected _getPair(key: K): IKeyValuePair {
 
             var keyString = this._getKeyString(key);
@@ -161,6 +220,13 @@ module TSCore.Data.Collection {
             return foundPair;
         }
 
+        /**
+         * Get string version for key in dictionary.
+         *
+         * @param key Key to get string for.
+         * @returns {any}
+         * @private
+         */
         protected _getKeyString(key: K): string {
 
             if(key == null || key == undefined){
@@ -178,6 +244,12 @@ module TSCore.Data.Collection {
             }
         }
 
+        /**
+         * Assign unique id to object.
+         *
+         * @param object Object to assign id to.
+         * @private
+         */
         protected _assignUniqueID(object: Object): void {
 
             object[Dictionary._OBJECT_UNIQUE_ID_KEY] = '_' + Dictionary._OBJECT_UNIQUE_ID_COUNTER;
