@@ -2,6 +2,21 @@
 
 module TSCore.Data.Collection {
 
+    export module CollectionEvents {
+
+        export const ADD:string = SetEvents.ADD;
+        export const CHANGE:string = SetEvents.CHANGE;
+        export const REMOVE:string = SetEvents.REMOVE;
+        export const REPLACE:string = SetEvents.REPLACE;
+        export const CLEAR:string = SetEvents.CLEAR;
+
+        export interface IChangeParams<T> extends SetEvents.IChangeParams<T> {}
+        export interface IClearParams<T> extends SetEvents.IClearParams<T> {}
+        export interface IAddParams<T> extends SetEvents.IAddParams<T> {}
+        export interface IRemoveParams<T> extends SetEvents.IRemoveParams<T> {}
+        export interface IReplaceParams<T> extends SetEvents.IReplaceParams<T> {}
+    }
+
     export class Collection<T> extends Set<T> {
 
         public get length():number {
@@ -11,24 +26,24 @@ module TSCore.Data.Collection {
         protected _data:T[];
 
 
-        public prepend(item:T){
+        public prepend(item:T) {
             this.insert(item, 0);
         }
 
-        public prependMany(items:T[]){
+        public prependMany(items:T[]) {
 
             this._data = items.concat(this._data);
 
-            this.trigger(Collection.EVENTS.ADD, [items], this);
-            this.trigger(Collection.EVENTS.CHANGE, this);
+            this.trigger(CollectionEvents.ADD, { items: [items] });
+            this.trigger(CollectionEvents.CHANGE);
         }
 
         public insert(item:T, index:number){
 
             this._data.splice(index, 0, item);
 
-            this.trigger(Collection.EVENTS.ADD, [item], this);
-            this.trigger(Collection.EVENTS.CHANGE, this);
+            this.trigger(CollectionEvents.ADD, { items: [item] });
+            this.trigger(CollectionEvents.CHANGE);
         }
 
         public replaceItem(source:T, replacement:T): T {
@@ -44,8 +59,8 @@ module TSCore.Data.Collection {
             var currentItem = this._data[index];
             this._data[index] = replacement;
 
-            this.trigger(Set.EVENTS.REPLACE, currentItem, replacement, this);
-            this.trigger(Set.EVENTS.CHANGE, this);
+            this.trigger(CollectionEvents.REPLACE, { source: currentItem, replacement: replacement });
+            this.trigger(CollectionEvents.CHANGE);
 
             return currentItem;
         }

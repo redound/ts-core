@@ -1,21 +1,36 @@
 /// <reference path="../../Event/EventEmitter.ts" />
+/// <reference path="Set.ts" />
 
 module TSCore.Data.Collection {
 
     export interface IDictionaryData { [key:string]: IKeyValuePair }
+
     export interface IDictionaryIterator<K, V> {
         (key:K, value:V);
     }
 
+    export module DictionaryEvents {
+
+        export const ADD:string = "add";
+        export const CHANGE:string = "change";
+        export const REMOVE:string = "remove";
+        export const CLEAR:string = "clear";
+
+        export interface IChangeParams {}
+        export interface IClearParams {}
+
+        export interface IAddParams<K, V> {
+            key: K,
+            value: V
+        }
+
+        export interface IRemoveParams<K, V> {
+            key: K,
+            value: V
+        }
+    }
+
     export class Dictionary<K, V> extends TSCore.Events.EventEmitter {
-
-        public static EVENTS = {
-
-            CHANGE: 'change',
-            SET: 'add',
-            REMOVE: 'remove',
-            CLEAR: 'clear'
-        };
 
         private static _OBJECT_UNIQUE_ID_KEY = '__TSCore_Object_Unique_ID';
         private static _OBJECT_UNIQUE_ID_COUNTER = 1;
@@ -58,8 +73,8 @@ module TSCore.Data.Collection {
                 this._itemCount++;
             }
 
-            this.trigger(Dictionary.EVENTS.SET, key, value, this);
-            this.trigger(Dictionary.EVENTS.CHANGE, this);
+            this.trigger(DictionaryEvents.ADD, { key: key, value: value });
+            this.trigger(DictionaryEvents.CHANGE);
         }
 
         public remove(key: K): V {
@@ -74,8 +89,8 @@ module TSCore.Data.Collection {
 
                 this._itemCount--;
 
-                this.trigger(Dictionary.EVENTS.REMOVE, key, this);
-                this.trigger(Dictionary.EVENTS.CHANGE, this);
+                this.trigger(DictionaryEvents.REMOVE, { key: key, value: removedItem });
+                this.trigger(DictionaryEvents.CHANGE);
             }
 
             return removedItem;
@@ -101,7 +116,7 @@ module TSCore.Data.Collection {
             return foundValue != null;
         }
 
-        public each(iterator:IDictionaryIterator<K,V>){
+        public each(iterator:IDictionaryIterator<K,V>): void {
 
             _.each(this._data, (pair) => {
                 return iterator(pair.key, pair.value);
@@ -129,8 +144,8 @@ module TSCore.Data.Collection {
             this._data = {};
             this._itemCount = 0;
 
-            this.trigger(Dictionary.EVENTS.CLEAR, this);
-            this.trigger(Dictionary.EVENTS.CHANGE, this);
+            this.trigger(DictionaryEvents.CLEAR);
+            this.trigger(DictionaryEvents.CHANGE);
         }
 
 
@@ -163,7 +178,7 @@ module TSCore.Data.Collection {
             }
         }
 
-        protected _assignUniqueID(object: Object){
+        protected _assignUniqueID(object: Object): void {
 
             object[Dictionary._OBJECT_UNIQUE_ID_KEY] = '_' + Dictionary._OBJECT_UNIQUE_ID_COUNTER;
             Dictionary._OBJECT_UNIQUE_ID_COUNTER++;

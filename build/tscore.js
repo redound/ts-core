@@ -2,57 +2,93 @@ var TSCore;
 (function (TSCore) {
     var Events;
     (function (Events) {
+        var Event = (function () {
+            function Event(topic, _params, caller) {
+                this.topic = topic;
+                this._params = _params;
+                this.caller = caller;
+                this.isStopped = false;
+            }
+            Object.defineProperty(Event.prototype, "params", {
+                get: function () {
+                    return this._params;
+                },
+                enumerable: true,
+                configurable: true
+            });
+            Event.prototype.stop = function () {
+                this.isStopped = true;
+            };
+            return Event;
+        })();
+        Events.Event = Event;
+    })(Events = TSCore.Events || (TSCore.Events = {}));
+})(TSCore || (TSCore = {}));
+/// <reference path="Event.ts" />
+var TSCore;
+(function (TSCore) {
+    var Events;
+    (function (Events) {
         var EventEmitter = (function () {
             function EventEmitter() {
                 this._eventCallbacks = {};
             }
-            EventEmitter.prototype.on = function (events, callback, context) {
+            EventEmitter.prototype.on = function (topics, callback, context, once) {
                 var _this = this;
-                _.each(events.split(' '), function (event) {
-                    var callbackArray = _this._eventCallbacks[event];
+                if (once === void 0) { once = false; }
+                _.each(topics.split(' '), function (topic) {
+                    var callbackArray = _this._eventCallbacks[topic];
                     if (!callbackArray) {
                         callbackArray = [];
-                        _this._eventCallbacks[event] = callbackArray;
+                        _this._eventCallbacks[topic] = callbackArray;
                     }
                     callbackArray.push({
+                        topic: topic,
                         callback: callback,
-                        context: context
+                        context: context,
+                        once: once
                     });
                 });
             };
-            EventEmitter.prototype.off = function (events, callback, context) {
+            EventEmitter.prototype.once = function (topics, callback, context) {
+                return this.on.apply(this, [topics, callback, context, true]);
+            };
+            EventEmitter.prototype.off = function (topics, callback, context) {
                 var _this = this;
-                _.each(events.split(' '), function (event) {
-                    var callbackArray = _this._eventCallbacks[event];
+                _.each(topics.split(' '), function (topic) {
+                    var callbackArray = _this._eventCallbacks[topic];
                     if (!callbackArray) {
                         return;
                     }
                     if (!callback) {
-                        delete _this._eventCallbacks[event];
+                        delete _this._eventCallbacks[topic];
                         return;
                     }
                     var callbacksToRemove = _.where(callbackArray, context ? { callback: callback, context: context } : { callback: callback });
                     callbackArray = _.difference(callbackArray, callbacksToRemove);
                     if (callbackArray.length == 0) {
-                        delete _this._eventCallbacks[event];
+                        delete _this._eventCallbacks[topic];
                     }
                     else {
-                        _this._eventCallbacks[event] = callbackArray;
+                        _this._eventCallbacks[topic] = callbackArray;
                     }
                 });
             };
-            EventEmitter.prototype.trigger = function (event) {
+            EventEmitter.prototype.trigger = function (topic, params, caller) {
                 var _this = this;
-                var args = [];
-                for (var _i = 1; _i < arguments.length; _i++) {
-                    args[_i - 1] = arguments[_i];
-                }
-                var callbackArray = this._eventCallbacks[event];
+                var callbackArray = this._eventCallbacks[topic];
                 if (!callbackArray) {
                     return;
                 }
+                var event = new Events.Event(topic, params, caller);
                 _.each(callbackArray, function (item) {
-                    item.callback.apply(item.context || _this, args || []);
+                    if (event.isStopped) {
+                        return;
+                    }
+                    item.callback.apply(item.context || _this, [event]);
+                    if (item.once) {
+                        _this.off(topic, item.callback, item.context);
+                    }
                 });
             };
             EventEmitter.prototype.resetEvents = function () {
@@ -76,6 +112,130 @@ var TSCore;
     (function (Data) {
         var Collection;
         (function (Collection) {
+            var SetEvents;
+            (function (SetEvents) {
+                SetEvents.ADD = "add";
+                SetEvents.CHANGE = "change";
+                SetEvents.REMOVE = "remove";
+                SetEvents.REPLACE = "replace";
+                SetEvents.CLEAR = "clear";
+            })(SetEvents = Collection.SetEvents || (Collection.SetEvents = {}));
+            var Set = (function (_super) {
+                __extends(Set, _super);
+                function Set(data) {
+                    _super.call(this);
+                    this._data = data || [];
+                }
+                Object.defineProperty(Set.prototype, "length", {
+                    get: function () {
+                        return this.count();
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                Set.prototype.add = function (item) {
+                    this._data.push(item);
+                    this.trigger(SetEvents.ADD, { items: [item] });
+                    this.trigger(SetEvents.CHANGE);
+                };
+                Set.prototype.addMany = function (items) {
+                    this._data = this._data.concat(items);
+                    this.trigger(SetEvents.ADD, { items: [items] });
+                    this.trigger(SetEvents.CHANGE);
+                };
+                Set.prototype.remove = function (item) {
+                    this._data = _.without(this._data, item);
+                    this.trigger(SetEvents.REMOVE, { items: [item] });
+                    this.trigger(SetEvents.CHANGE);
+                };
+                Set.prototype.removeMany = function (items) {
+                    this._data = _.difference(this._data, items);
+                    this.trigger(SetEvents.REMOVE, { items: items });
+                    this.trigger(SetEvents.CHANGE);
+                };
+                Set.prototype.removeWhere = function (properties) {
+                    this.removeMany(this.where(properties));
+                };
+                Set.prototype.replaceItem = function (source, replacement) {
+                    var index = _.indexOf(this._data, source);
+                    if (index < 0 || index >= this.count()) {
+                        return null;
+                    }
+                    var currentItem = this._data[index];
+                    this._data[index] = replacement;
+                    this.trigger(SetEvents.REPLACE, { source: source, replacement: replacement });
+                    this.trigger(SetEvents.CHANGE);
+                    return currentItem;
+                };
+                Set.prototype.clear = function () {
+                    this._data = [];
+                    this.trigger(SetEvents.REMOVE, { items: this.toArray() });
+                    this.trigger(SetEvents.CLEAR);
+                    this.trigger(SetEvents.CHANGE);
+                };
+                Set.prototype.each = function (iterator) {
+                    _.each(this._data, iterator);
+                };
+                Set.prototype.pluck = function (propertyName) {
+                    return _.pluck(this._data, propertyName);
+                };
+                Set.prototype.count = function () {
+                    return this._data.length;
+                };
+                Set.prototype.isEmpty = function () {
+                    return this.count() === 0;
+                };
+                Set.prototype.populate = function (items) {
+                    var _this = this;
+                    _.each(items, function (itemData) {
+                        var model = _this._createItem(itemData);
+                        if (model) {
+                            return _this.add(model);
+                        }
+                    });
+                };
+                Set.prototype.find = function (iterator) {
+                    return _.filter(this._data, iterator);
+                };
+                Set.prototype.findFirst = function (iterator) {
+                    return _.find(this._data, iterator);
+                };
+                Set.prototype.where = function (properties) {
+                    return _.where(this._data, properties);
+                };
+                Set.prototype.whereFirst = function (properties) {
+                    return _.findWhere(this._data, properties);
+                };
+                Set.prototype.contains = function (item) {
+                    return _.contains(this._data, item);
+                };
+                Set.prototype.toArray = function () {
+                    return _.clone(this._data);
+                };
+                Set.prototype._createItem = function (itemData) {
+                    return itemData;
+                };
+                return Set;
+            })(TSCore.Events.EventEmitter);
+            Collection.Set = Set;
+        })(Collection = Data.Collection || (Data.Collection = {}));
+    })(Data = TSCore.Data || (TSCore.Data = {}));
+})(TSCore || (TSCore = {}));
+/// <reference path="../../Event/EventEmitter.ts" />
+/// <reference path="Set.ts" />
+var TSCore;
+(function (TSCore) {
+    var Data;
+    (function (Data) {
+        var Collection;
+        (function (Collection) {
+            var DictionaryEvents;
+            (function (DictionaryEvents) {
+                DictionaryEvents.ADD = "add";
+                DictionaryEvents.CHANGE = "change";
+                DictionaryEvents.REMOVE = "remove";
+                DictionaryEvents.CLEAR = "clear";
+            })(DictionaryEvents = Collection.DictionaryEvents || (Collection.DictionaryEvents = {}));
             var Dictionary = (function (_super) {
                 __extends(Dictionary, _super);
                 function Dictionary(data) {
@@ -102,8 +262,8 @@ var TSCore;
                     if (!alreadyExisted) {
                         this._itemCount++;
                     }
-                    this.trigger(Dictionary.EVENTS.SET, key, value, this);
-                    this.trigger(Dictionary.EVENTS.CHANGE, this);
+                    this.trigger(DictionaryEvents.ADD, { key: key, value: value });
+                    this.trigger(DictionaryEvents.CHANGE);
                 };
                 Dictionary.prototype.remove = function (key) {
                     var removedItem = null;
@@ -112,8 +272,8 @@ var TSCore;
                         delete this._data[foundPair.key];
                         removedItem = foundPair.value;
                         this._itemCount--;
-                        this.trigger(Dictionary.EVENTS.REMOVE, key, this);
-                        this.trigger(Dictionary.EVENTS.CHANGE, this);
+                        this.trigger(DictionaryEvents.REMOVE, { key: key, value: removedItem });
+                        this.trigger(DictionaryEvents.CHANGE);
                     }
                     return removedItem;
                 };
@@ -150,8 +310,8 @@ var TSCore;
                 Dictionary.prototype.clear = function () {
                     this._data = {};
                     this._itemCount = 0;
-                    this.trigger(Dictionary.EVENTS.CLEAR, this);
-                    this.trigger(Dictionary.EVENTS.CHANGE, this);
+                    this.trigger(DictionaryEvents.CLEAR);
+                    this.trigger(DictionaryEvents.CHANGE);
                 };
                 Dictionary.prototype._getPair = function (key) {
                     var keyString = this._getKeyString(key);
@@ -178,12 +338,6 @@ var TSCore;
                 Dictionary.prototype._assignUniqueID = function (object) {
                     object[Dictionary._OBJECT_UNIQUE_ID_KEY] = '_' + Dictionary._OBJECT_UNIQUE_ID_COUNTER;
                     Dictionary._OBJECT_UNIQUE_ID_COUNTER++;
-                };
-                Dictionary.EVENTS = {
-                    CHANGE: 'change',
-                    SET: 'add',
-                    REMOVE: 'remove',
-                    CLEAR: 'clear'
                 };
                 Dictionary._OBJECT_UNIQUE_ID_KEY = '__TSCore_Object_Unique_ID';
                 Dictionary._OBJECT_UNIQUE_ID_COUNTER = 1;
@@ -251,121 +405,6 @@ var TSCore;
     })();
     TSCore.DI = DI;
 })(TSCore || (TSCore = {}));
-/// <reference path="../../Event/EventEmitter.ts" />
-var TSCore;
-(function (TSCore) {
-    var Data;
-    (function (Data) {
-        var Collection;
-        (function (Collection) {
-            var Set = (function (_super) {
-                __extends(Set, _super);
-                function Set(data) {
-                    _super.call(this);
-                    this._data = data || [];
-                }
-                Object.defineProperty(Set.prototype, "length", {
-                    get: function () {
-                        return this.count();
-                    },
-                    enumerable: true,
-                    configurable: true
-                });
-                Set.prototype.add = function (item) {
-                    this._data.push(item);
-                    this.trigger(Set.EVENTS.ADD, [item], this);
-                    this.trigger(Set.EVENTS.CHANGE, this);
-                };
-                Set.prototype.addMany = function (items) {
-                    this._data = this._data.concat(items);
-                    this.trigger(Set.EVENTS.ADD, items, this);
-                    this.trigger(Set.EVENTS.CHANGE, this);
-                };
-                Set.prototype.remove = function (item) {
-                    this._data = _.without(this._data, item);
-                    this.trigger(Set.EVENTS.REMOVE, [item], this);
-                    this.trigger(Set.EVENTS.CHANGE, this);
-                };
-                Set.prototype.removeMany = function (items) {
-                    this._data = _.difference(this._data, items);
-                    this.trigger(Set.EVENTS.REMOVE, items, this);
-                    this.trigger(Set.EVENTS.CHANGE, this);
-                };
-                Set.prototype.removeWhere = function (properties) {
-                    this.removeMany(this.where(properties));
-                };
-                Set.prototype.replaceItem = function (source, replacement) {
-                    var index = _.indexOf(this._data, source);
-                    if (index < 0 || index >= this.count()) {
-                        return null;
-                    }
-                    var currentItem = this._data[index];
-                    this._data[index] = replacement;
-                    this.trigger(Set.EVENTS.REPLACE, source, replacement, this);
-                    this.trigger(Set.EVENTS.CHANGE, this);
-                    return currentItem;
-                };
-                Set.prototype.clear = function () {
-                    this._data = [];
-                    this.trigger(Set.EVENTS.REMOVE, this.toArray(), this);
-                    this.trigger(Set.EVENTS.CLEAR, this);
-                    this.trigger(Set.EVENTS.CHANGE, this);
-                };
-                Set.prototype.each = function (iterator) {
-                    _.each(this._data, iterator);
-                };
-                Set.prototype.pluck = function (propertyName) {
-                    return _.pluck(this._data, propertyName);
-                };
-                Set.prototype.count = function () {
-                    return this._data.length;
-                };
-                Set.prototype.isEmpty = function () {
-                    return this.count() === 0;
-                };
-                Set.prototype.populate = function (items) {
-                    var _this = this;
-                    _.each(items, function (itemData) {
-                        var model = _this._createItem(itemData);
-                        if (model) {
-                            return _this.add(model);
-                        }
-                    });
-                };
-                Set.prototype.find = function (iterator) {
-                    return _.filter(this._data, iterator);
-                };
-                Set.prototype.findFirst = function (iterator) {
-                    return _.find(this._data, iterator);
-                };
-                Set.prototype.where = function (properties) {
-                    return _.where(this._data, properties);
-                };
-                Set.prototype.whereFirst = function (properties) {
-                    return _.findWhere(this._data, properties);
-                };
-                Set.prototype.contains = function (item) {
-                    return _.contains(this._data, item);
-                };
-                Set.prototype.toArray = function () {
-                    return _.clone(this._data);
-                };
-                Set.prototype._createItem = function (itemData) {
-                    return itemData;
-                };
-                Set.EVENTS = {
-                    CHANGE: 'change',
-                    ADD: 'add',
-                    REMOVE: 'remove',
-                    REPLACE: 'replace',
-                    CLEAR: 'clear'
-                };
-                return Set;
-            })(TSCore.Events.EventEmitter);
-            Collection.Set = Set;
-        })(Collection = Data.Collection || (Data.Collection = {}));
-    })(Data = TSCore.Data || (TSCore.Data = {}));
-})(TSCore || (TSCore = {}));
 /// <reference path="./Set.ts" />
 var TSCore;
 (function (TSCore) {
@@ -373,6 +412,14 @@ var TSCore;
     (function (Data) {
         var Collection;
         (function (Collection_1) {
+            var CollectionEvents;
+            (function (CollectionEvents) {
+                CollectionEvents.ADD = Collection_1.SetEvents.ADD;
+                CollectionEvents.CHANGE = Collection_1.SetEvents.CHANGE;
+                CollectionEvents.REMOVE = Collection_1.SetEvents.REMOVE;
+                CollectionEvents.REPLACE = Collection_1.SetEvents.REPLACE;
+                CollectionEvents.CLEAR = Collection_1.SetEvents.CLEAR;
+            })(CollectionEvents = Collection_1.CollectionEvents || (Collection_1.CollectionEvents = {}));
             var Collection = (function (_super) {
                 __extends(Collection, _super);
                 function Collection() {
@@ -390,13 +437,13 @@ var TSCore;
                 };
                 Collection.prototype.prependMany = function (items) {
                     this._data = items.concat(this._data);
-                    this.trigger(Collection.EVENTS.ADD, [items], this);
-                    this.trigger(Collection.EVENTS.CHANGE, this);
+                    this.trigger(CollectionEvents.ADD, { items: [items] });
+                    this.trigger(CollectionEvents.CHANGE);
                 };
                 Collection.prototype.insert = function (item, index) {
                     this._data.splice(index, 0, item);
-                    this.trigger(Collection.EVENTS.ADD, [item], this);
-                    this.trigger(Collection.EVENTS.CHANGE, this);
+                    this.trigger(CollectionEvents.ADD, { items: [item] });
+                    this.trigger(CollectionEvents.CHANGE);
                 };
                 Collection.prototype.replaceItem = function (source, replacement) {
                     return this.replace(this.indexOf(source), replacement);
@@ -407,8 +454,8 @@ var TSCore;
                     }
                     var currentItem = this._data[index];
                     this._data[index] = replacement;
-                    this.trigger(Collection_1.Set.EVENTS.REPLACE, currentItem, replacement, this);
-                    this.trigger(Collection_1.Set.EVENTS.CHANGE, this);
+                    this.trigger(CollectionEvents.REPLACE, { source: currentItem, replacement: replacement });
+                    this.trigger(CollectionEvents.CHANGE);
                     return currentItem;
                 };
                 Collection.prototype.first = function () {
@@ -466,6 +513,15 @@ var TSCore;
     (function (Data) {
         var Collection;
         (function (Collection) {
+            var SortedCollectionEvents;
+            (function (SortedCollectionEvents) {
+                SortedCollectionEvents.ADD = Collection.SetEvents.ADD;
+                SortedCollectionEvents.CHANGE = Collection.SetEvents.CHANGE;
+                SortedCollectionEvents.REMOVE = Collection.SetEvents.REMOVE;
+                SortedCollectionEvents.REPLACE = Collection.SetEvents.REPLACE;
+                SortedCollectionEvents.CLEAR = Collection.SetEvents.CLEAR;
+                SortedCollectionEvents.SORT = "sort";
+            })(SortedCollectionEvents = Collection.SortedCollectionEvents || (Collection.SortedCollectionEvents = {}));
             var SortedCollection = (function (_super) {
                 __extends(SortedCollection, _super);
                 function SortedCollection(data, sortPredicate) {
@@ -522,16 +578,8 @@ var TSCore;
                         return;
                     }
                     this._data = _.sortBy(this._data, this._sortPredicate);
-                    this.trigger(SortedCollection.EVENTS.SORT, this);
-                    this.trigger(SortedCollection.EVENTS.CHANGE, this);
-                };
-                SortedCollection.EVENTS = {
-                    CHANGE: 'change',
-                    ADD: 'add',
-                    REMOVE: 'remove',
-                    REPLACE: 'replace',
-                    CLEAR: 'clear',
-                    SORT: 'sort'
+                    this.trigger(SortedCollectionEvents.SORT);
+                    this.trigger(SortedCollectionEvents.CHANGE);
                 };
                 return SortedCollection;
             })(Collection.Set);
@@ -878,6 +926,15 @@ var TSCore;
 })(TSCore || (TSCore = {}));
 var TSCore;
 (function (TSCore) {
+    var Logger = (function () {
+        function Logger() {
+        }
+        return Logger;
+    })();
+    TSCore.Logger = Logger;
+})(TSCore || (TSCore = {}));
+var TSCore;
+(function (TSCore) {
     var Text;
     (function (Text) {
         var Format = (function () {
@@ -1014,12 +1071,14 @@ var TSCore;
 /// <reference path="TSCore/DateTime/DateFormatter.ts" />
 /// <reference path="TSCore/DateTime/DateTime.ts" />
 /// <reference path="TSCore/DateTime/Timer.ts" />
+/// <reference path="TSCore/Event/Event.ts" />
 /// <reference path="TSCore/Event/EventEmitter.ts" />
 /// <reference path="TSCore/Exception/ArgumentException.ts" />
 /// <reference path="TSCore/Exception/Exception.ts" />
 /// <reference path="TSCore/Geometry/Point.ts" />
 /// <reference path="TSCore/Geometry/Rect.ts" />
 /// <reference path="TSCore/Geometry/Size.ts" />
+/// <reference path="TSCore/Logger.ts" />
 /// <reference path="TSCore/TSCore.ts" />
 /// <reference path="TSCore/Text/Format.ts" />
 /// <reference path="TSCore/Text/Language.ts" />

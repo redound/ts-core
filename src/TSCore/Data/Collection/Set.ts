@@ -2,23 +2,34 @@
 
 module TSCore.Data.Collection {
 
-    export class Set<T> extends TSCore.Events.EventEmitter {
+    export module SetEvents {
 
-        public static EVENTS = {
+        export const ADD:string = "add";
+        export const CHANGE:string = "change";
+        export const REMOVE:string = "remove";
+        export const REPLACE:string = "replace";
+        export const CLEAR:string = "clear";
 
-            CHANGE: 'change',
-            ADD: 'add',
-            REMOVE: 'remove',
-            REPLACE: 'replace',
-            CLEAR: 'clear'
-        };
+        export interface IChangeParams<T> {}
+        export interface IClearParams<T> {}
 
-        public get length():number {
-            return this.count();
+        export interface IAddParams<T> {
+            items: T[]
         }
 
-        protected _data:T[];
+        export interface IRemoveParams<T> {
+            items: T[]
+        }
 
+        export interface IReplaceParams<T> {
+            source: T,
+            replacement: T
+        }
+    }
+
+    export class Set<T> extends TSCore.Events.EventEmitter {
+
+        protected _data:T[];
 
         constructor(data?:T[]){
 
@@ -26,39 +37,43 @@ module TSCore.Data.Collection {
             this._data = data || [];
         }
 
+        public get length():number {
+            return this.count();
+        }
+
         public add(item:T) {
 
             this._data.push(item);
 
-            this.trigger(Set.EVENTS.ADD, [item], this);
-            this.trigger(Set.EVENTS.CHANGE, this);
+            this.trigger(SetEvents.ADD, { items: [item] });
+            this.trigger(SetEvents.CHANGE);
         }
 
-        public addMany(items:T[]){
+        public addMany(items:T[]) {
 
             this._data = this._data.concat(items);
 
-            this.trigger(Set.EVENTS.ADD, items, this);
-            this.trigger(Set.EVENTS.CHANGE, this);
+            this.trigger(SetEvents.ADD, { items: [items] });
+            this.trigger(SetEvents.CHANGE);
         }
 
-        public remove(item:T){
+        public remove(item:T) {
 
             this._data = _.without(this._data, item);
 
-            this.trigger(Set.EVENTS.REMOVE, [item], this);
-            this.trigger(Set.EVENTS.CHANGE, this);
+            this.trigger(SetEvents.REMOVE, { items: [item] });
+            this.trigger(SetEvents.CHANGE);
         }
 
-        public removeMany(items:T[]){
+        public removeMany(items:T[]) {
 
             this._data = _.difference(this._data, items);
 
-            this.trigger(Set.EVENTS.REMOVE, items, this);
-            this.trigger(Set.EVENTS.CHANGE, this);
+            this.trigger(SetEvents.REMOVE, { items: items });
+            this.trigger(SetEvents.CHANGE);
         }
 
-        public removeWhere(properties:{}){
+        public removeWhere(properties: {}) {
             this.removeMany(this.where(properties));
         }
 
@@ -73,8 +88,8 @@ module TSCore.Data.Collection {
             var currentItem = this._data[index];
             this._data[index] = replacement;
 
-            this.trigger(Set.EVENTS.REPLACE, source, replacement, this);
-            this.trigger(Set.EVENTS.CHANGE, this);
+            this.trigger(SetEvents.REPLACE, { source: source, replacement: replacement });
+            this.trigger(SetEvents.CHANGE);
 
             return currentItem;
         }
@@ -83,9 +98,9 @@ module TSCore.Data.Collection {
 
             this._data = [];
 
-            this.trigger(Set.EVENTS.REMOVE, this.toArray(), this);
-            this.trigger(Set.EVENTS.CLEAR, this);
-            this.trigger(Set.EVENTS.CHANGE, this);
+            this.trigger(SetEvents.REMOVE, { items: this.toArray() });
+            this.trigger(SetEvents.CLEAR);
+            this.trigger(SetEvents.CHANGE);
         }
 
         public each(iterator:_.ListIterator<T, void>){
@@ -138,7 +153,6 @@ module TSCore.Data.Collection {
         public toArray():T[] {
             return _.clone(this._data);
         }
-
 
         protected _createItem(itemData): T {
             return itemData;

@@ -1,8 +1,16 @@
+/// <reference path="Event.ts" />
+
 module TSCore.Events {
 
     interface IEventEmitterCallbackItem {
-        callback:Function,
-        context?
+        topic: string,
+        callback: IEventEmitterCallback,
+        context?: any,
+        once: boolean,
+    }
+
+    export interface IEventEmitterCallback {
+        (event: Event<any>);
     }
 
     export class EventEmitter {
@@ -15,42 +23,56 @@ module TSCore.Events {
 
         /**
          * Subscribe to triggered events.
-         * @param events        Which events to listen, seperated by space
+         * @param topics        Which topics to listen, separated by space
          * @param callback      Callback function to execute on trigger.
          * @param context       Context for the callback
+         * @param once          Run the callback for emitted event exactly one
          */
-        public on(events:string, callback:Function, context?) {
+        public on(topics: string, callback: IEventEmitterCallback, context?, once: boolean = false) {
 
-            _.each(events.split(' '), (event:string) => {
+            _.each(topics.split(' '), (topic:string) => {
 
                 // Get or create event collection
-                var callbackArray:IEventEmitterCallbackItem[] = this._eventCallbacks[event];
+                var callbackArray:IEventEmitterCallbackItem[] = this._eventCallbacks[topic];
 
                 if (!callbackArray) {
 
                     callbackArray = [];
-                    this._eventCallbacks[event] = callbackArray;
+                    this._eventCallbacks[topic] = callbackArray;
                 }
 
                 // Push callback
                 callbackArray.push({
+                    topic: topic,
                     callback: callback,
-                    context: context
+                    context: context,
+                    once: once
                 });
             });
         }
 
         /**
-         * Unsubscribe from published events.
-         * @param events        Which events to stop listening, seperated by space
+         * Subscribe to emitted topics exactly once
+         * @param topics        Which topics to listen, separated by space
+         * @param callback      Callback function to execute on trigger.
+         * @param context       Context for the callback
+         */
+        public once(topics: string, callback: IEventEmitterCallback, context?): void {
+
+            return this.on.apply(this, [topics, callback, context, true]);
+        }
+
+        /**
+         * Unsubscribe from published topics.
+         * @param topics        Which topics to stop listening, seperated by space
          * @param callback      Callback function executed on trigger.
          * @param context       Context for the callback
          */
-        public off(events:string, callback?:Function, context?) {
+        public off(topics: string, callback?: Function, context?) {
 
-            _.each(events.split(' '), (event:string) => {
+            _.each(topics.split(' '), (topic:string) => {
 
-                var callbackArray = this._eventCallbacks[event];
+                var callbackArray = this._eventCallbacks[topic];
 
                 if (!callbackArray) {
                     return;
@@ -58,7 +80,7 @@ module TSCore.Events {
 
                 if (!callback) {
 
-                    delete this._eventCallbacks[event];
+                    delete this._eventCallbacks[topic];
                     return;
                 }
 
@@ -66,10 +88,10 @@ module TSCore.Events {
                 callbackArray = _.difference(callbackArray, callbacksToRemove);
 
                 if (callbackArray.length == 0) {
-                    delete this._eventCallbacks[event];
+                    delete this._eventCallbacks[topic];
                 }
                 else {
-                    this._eventCallbacks[event] = callbackArray;
+                    this._eventCallbacks[topic] = callbackArray;
                 }
             });
         }
@@ -80,21 +102,32 @@ module TSCore.Events {
          * var emitter = new TSCore.Event.EventEmitter();
          * emitter.trigger('topic', arg1, arg2);
          * ````
-         * @param event         Which event to trigger.
+         * @param topic         Which topic to trigger.
          * @param args          Arguments to pass along event.
          * @returns             void
          */
-        public trigger(event:string, ...args) {
+        public trigger(topic: string, params?: {}, caller?: any) {
 
-            var callbackArray = this._eventCallbacks[event];
+            var callbackArray = this._eventCallbacks[topic];
 
             if (!callbackArray) {
                 return;
             }
 
+            // create event
+            var event = new Event(topic, params, caller);
+
             _.each(callbackArray, (item:IEventEmitterCallbackItem) => {
 
-                item.callback.apply(item.context || this, args || []);
+                if (event.isStopped) {
+                    return;
+                }
+
+                item.callback.apply(item.context || this, [event]);
+
+                if (item.once) {
+                    this.off(topic, item.callback, item.context);
+                }
             });
         }
 
