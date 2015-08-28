@@ -23,7 +23,7 @@ bower install ts-core
 Read the full [reference](http://reference.ts-core.org)
 
 ## Documentation ##
-Read the full [documentation](http://docs.ts-core.org)
+Read the full [documentation](http://ts-core.readme.io)
 
 ## Contributing ##
 Please file issues under GitHub, or submit a pull request if you'd like to directly contribute.
