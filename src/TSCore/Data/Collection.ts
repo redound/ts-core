@@ -43,7 +43,7 @@ module TSCore.Data {
 
             this._data = items.concat(this._data);
 
-            this.trigger(CollectionEvents.ADD, { items: [items] });
+            this.trigger(CollectionEvents.ADD, { items: items });
             this.trigger(CollectionEvents.CHANGE);
         }
 
