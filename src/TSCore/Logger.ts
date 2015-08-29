@@ -4,7 +4,26 @@ module TSCore {
 
         constructor() {
 
-            
+        }
+
+        public log() {
+
+        }
+
+        public info() {
+
+        }
+
+        public debug() {
+
+        }
+
+        public error() {
+
+        }
+
+        public warn() {
+
         }
     }
 }
