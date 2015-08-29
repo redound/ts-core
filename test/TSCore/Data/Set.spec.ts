@@ -1,62 +1,55 @@
 /// <reference path="../TSCore.spec.ts" />
 
-/** Setup for items **/
-class IAnimal {
-    id: number;
-    name: string;
-}
-
-var animal1 = {
-    id: 1,
-    name: 'Cat'
-};
-
-var animal2 = {
-    id: 2,
-    name: 'Dog'
-};
-
-var animal3 = {
-    id: 3,
-    name: 'Horse'
-};
-
-var animal4 = {
-    id: 4,
-    name: 'Hippo'
-};
-
-/** Setup basic set **/
-var basicSet = new TSCore.Data.Set<IAnimal>();
-
-/** Setup for testing events **/
-// Initialize a set to test events on
-var eventSet = new TSCore.Data.Set<IAnimal>();
-
-// Setup for testing SetEvents.ADD
-var addListener = jasmine.createSpy("SetEvents.Add listener");
-eventSet.on(TSCore.Data.SetEvents.ADD, addListener);
-
-// Setup for testing SetEvents.ADD
-var changeListener = jasmine.createSpy("SetEvents.CHANGE listener");
-eventSet.on(TSCore.Data.SetEvents.CHANGE, changeListener);
-
-// Setup for testing SetEvents.REMOVE
-var removeListener = jasmine.createSpy("SetEvents.REMOVE listener");
-eventSet.on(TSCore.Data.SetEvents.REMOVE, removeListener);
-
-// Setup for testing SetEvents.REPLACE
-var replaceListener = jasmine.createSpy("SetEvents.REPLACE listener");
-eventSet.on(TSCore.Data.SetEvents.REPLACE, replaceListener);
-
-// Setup for testing SetEvents.REMOVE
-var clearListener = jasmine.createSpy("SetEvents.CLEAR listener");
-eventSet.on(TSCore.Data.SetEvents.CLEAR, clearListener);
-
 declare var describe, it, expect, jasmine;
 
-/** Test start **/
 describe("TSCore.Data.Set", () => {
+
+    var animal1 = {
+        id: 1,
+        name: 'Cat'
+    };
+
+    var animal2 = {
+        id: 2,
+        name: 'Dog'
+    };
+
+    var animal3 = {
+        id: 3,
+        name: 'Horse'
+    };
+
+    var animal4 = {
+        id: 4,
+        name: 'Hippo'
+    };
+
+    /** Setup basic set **/
+    var basicSet = new TSCore.Data.Set<IAnimal>();
+
+    /** Setup for testing events **/
+    // Initialize a set to test events on
+    var eventSet = new TSCore.Data.Set<IAnimal>();
+
+    // Setup for testing SetEvents.ADD
+    var addListener = jasmine.createSpy("SetEvents.ADD listener");
+    eventSet.on(TSCore.Data.SetEvents.ADD, addListener);
+
+    // Setup for testing SetEvents.ADD
+    var changeListener = jasmine.createSpy("SetEvents.CHANGE listener");
+    eventSet.on(TSCore.Data.SetEvents.CHANGE, changeListener);
+
+    // Setup for testing SetEvents.REMOVE
+    var removeListener = jasmine.createSpy("SetEvents.REMOVE listener");
+    eventSet.on(TSCore.Data.SetEvents.REMOVE, removeListener);
+
+    // Setup for testing SetEvents.REPLACE
+    var replaceListener = jasmine.createSpy("SetEvents.REPLACE listener");
+    eventSet.on(TSCore.Data.SetEvents.REPLACE, replaceListener);
+
+    // Setup for testing SetEvents.REMOVE
+    var clearListener = jasmine.createSpy("SetEvents.CLEAR listener");
+    eventSet.on(TSCore.Data.SetEvents.CLEAR, clearListener);
 
     describe("General", () => {
 
@@ -581,7 +574,7 @@ describe("TSCore.Data.Set", () => {
 
             // Test
             var returned = basicSet.toArray();
-            expect(JSON.stringify(animals) === JSON.stringify(returned)).toBe(true);
+            expect(animals).toEqual(returned);
         });
     });
 
