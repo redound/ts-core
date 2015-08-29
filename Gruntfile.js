@@ -4,17 +4,6 @@ module.exports = function(grunt) {
 
     grunt.initConfig({
 
-        exec: {
-            push_docs: "git subtree push --prefix docs origin gh-pages"
-        },
-
-        copy: {
-            main: {
-                src: 'src/*',
-                dest: 'dest/',
-            },
-        },
-
         // For compiling our TypeScript/JavaScript
         ts: {
             compile: {
@@ -33,6 +22,7 @@ module.exports = function(grunt) {
                 }
             }
         },
+
         uglify: {
             build: {
                 files: {
@@ -51,18 +41,6 @@ module.exports = function(grunt) {
             }
         },
 
-        typedoc: {
-            build: {
-                options: {
-                    module: 'commonjs',
-                    out: './docs',
-                    name: 'TSCore',
-                    target: 'es5',
-                    mode: 'file'
-                },
-                src: ['./src/**/*.ts']
-            }
-        },
         release: {
             options: {
                 additionalFiles: ['bower.json'],
@@ -70,19 +48,14 @@ module.exports = function(grunt) {
                 beforeRelease: [
                     'build'
                 ],
-                afterRelease: [
-                    'exec:push_docs'
-                ]
             }
         }
     });
 
     grunt.loadNpmTasks('grunt-release');
     grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-exec');
     grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-ts');
-    grunt.loadNpmTasks('grunt-typedoc');
 
     /** Development **/
 
@@ -96,23 +69,11 @@ module.exports = function(grunt) {
         'karma:dev'
     ]);
 
-    grunt.registerTask('cname', function() {
-
-        grunt.file.write('./docs/CNAME', 'reference.ts-core.org');
-    });
-
-    grunt.registerTask('docs', [
-        'compile',
-        'typedoc',
-        'cname'
-    ]);
-
     /** Release **/
 
     grunt.registerTask('build', [
         'compile',
         'karma:build',
         'uglify:build',
-        'typedoc'
     ]);
 };
