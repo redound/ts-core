@@ -116,7 +116,7 @@ var TSCore;
         Events.EventEmitter = EventEmitter;
     })(Events = TSCore.Events || (TSCore.Events = {}));
 })(TSCore || (TSCore = {}));
-/// <reference path="../../Event/EventEmitter.ts" />
+/// <reference path="../Events/EventEmitter.ts" />
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -127,247 +127,241 @@ var TSCore;
 (function (TSCore) {
     var Data;
     (function (Data) {
-        var Collection;
-        (function (Collection) {
-            var SetEvents;
-            (function (SetEvents) {
-                SetEvents.ADD = "add";
-                SetEvents.CHANGE = "change";
-                SetEvents.REMOVE = "remove";
-                SetEvents.REPLACE = "replace";
-                SetEvents.CLEAR = "clear";
-            })(SetEvents = Collection.SetEvents || (Collection.SetEvents = {}));
-            var Set = (function (_super) {
-                __extends(Set, _super);
-                function Set(data) {
-                    _super.call(this);
-                    this._data = data || [];
+        var SetEvents;
+        (function (SetEvents) {
+            SetEvents.ADD = "add";
+            SetEvents.CHANGE = "change";
+            SetEvents.REMOVE = "remove";
+            SetEvents.REPLACE = "replace";
+            SetEvents.CLEAR = "clear";
+        })(SetEvents = Data.SetEvents || (Data.SetEvents = {}));
+        var Set = (function (_super) {
+            __extends(Set, _super);
+            function Set(data) {
+                _super.call(this);
+                this._data = data || [];
+            }
+            Object.defineProperty(Set.prototype, "length", {
+                get: function () {
+                    return this.count();
+                },
+                enumerable: true,
+                configurable: true
+            });
+            Set.prototype.count = function () {
+                return this._data.length;
+            };
+            Set.prototype.add = function (item) {
+                this._data.push(item);
+                this.trigger(SetEvents.ADD, { items: [item] });
+                this.trigger(SetEvents.CHANGE);
+            };
+            Set.prototype.addMany = function (items) {
+                this._data = this._data.concat(items);
+                this.trigger(SetEvents.ADD, { items: [items] });
+                this.trigger(SetEvents.CHANGE);
+            };
+            Set.prototype.remove = function (item) {
+                this._data = _.without(this._data, item);
+                this.trigger(SetEvents.REMOVE, { items: [item] });
+                this.trigger(SetEvents.CHANGE);
+            };
+            Set.prototype.removeMany = function (items) {
+                this._data = _.difference(this._data, items);
+                this.trigger(SetEvents.REMOVE, { items: items });
+                this.trigger(SetEvents.CHANGE);
+            };
+            Set.prototype.removeWhere = function (properties) {
+                this.removeMany(this.where(properties));
+            };
+            Set.prototype.replaceItem = function (source, replacement) {
+                var index = _.indexOf(this._data, source);
+                if (index < 0 || index >= this.count()) {
+                    return null;
                 }
-                Object.defineProperty(Set.prototype, "length", {
-                    get: function () {
-                        return this.count();
-                    },
-                    enumerable: true,
-                    configurable: true
-                });
-                Set.prototype.count = function () {
-                    return this._data.length;
-                };
-                Set.prototype.add = function (item) {
-                    this._data.push(item);
-                    this.trigger(SetEvents.ADD, { items: [item] });
-                    this.trigger(SetEvents.CHANGE);
-                };
-                Set.prototype.addMany = function (items) {
-                    this._data = this._data.concat(items);
-                    this.trigger(SetEvents.ADD, { items: [items] });
-                    this.trigger(SetEvents.CHANGE);
-                };
-                Set.prototype.remove = function (item) {
-                    this._data = _.without(this._data, item);
-                    this.trigger(SetEvents.REMOVE, { items: [item] });
-                    this.trigger(SetEvents.CHANGE);
-                };
-                Set.prototype.removeMany = function (items) {
-                    this._data = _.difference(this._data, items);
-                    this.trigger(SetEvents.REMOVE, { items: items });
-                    this.trigger(SetEvents.CHANGE);
-                };
-                Set.prototype.removeWhere = function (properties) {
-                    this.removeMany(this.where(properties));
-                };
-                Set.prototype.replaceItem = function (source, replacement) {
-                    var index = _.indexOf(this._data, source);
-                    if (index < 0 || index >= this.count()) {
-                        return null;
+                var currentItem = this._data[index];
+                this._data[index] = replacement;
+                this.trigger(SetEvents.REPLACE, { source: source, replacement: replacement });
+                this.trigger(SetEvents.CHANGE);
+                return currentItem;
+            };
+            Set.prototype.clear = function () {
+                this._data = [];
+                this.trigger(SetEvents.REMOVE, { items: this.toArray() });
+                this.trigger(SetEvents.CLEAR);
+                this.trigger(SetEvents.CHANGE);
+            };
+            Set.prototype.each = function (iterator) {
+                _.each(this._data, iterator);
+            };
+            Set.prototype.pluck = function (propertyName) {
+                return _.pluck(this._data, propertyName);
+            };
+            Set.prototype.isEmpty = function () {
+                return this.count() === 0;
+            };
+            Set.prototype.populate = function (items) {
+                var _this = this;
+                _.each(items, function (itemData) {
+                    var model = _this._createItem(itemData);
+                    if (model) {
+                        return _this.add(model);
                     }
-                    var currentItem = this._data[index];
-                    this._data[index] = replacement;
-                    this.trigger(SetEvents.REPLACE, { source: source, replacement: replacement });
-                    this.trigger(SetEvents.CHANGE);
-                    return currentItem;
-                };
-                Set.prototype.clear = function () {
-                    this._data = [];
-                    this.trigger(SetEvents.REMOVE, { items: this.toArray() });
-                    this.trigger(SetEvents.CLEAR);
-                    this.trigger(SetEvents.CHANGE);
-                };
-                Set.prototype.each = function (iterator) {
-                    _.each(this._data, iterator);
-                };
-                Set.prototype.pluck = function (propertyName) {
-                    return _.pluck(this._data, propertyName);
-                };
-                Set.prototype.isEmpty = function () {
-                    return this.count() === 0;
-                };
-                Set.prototype.populate = function (items) {
-                    var _this = this;
-                    _.each(items, function (itemData) {
-                        var model = _this._createItem(itemData);
-                        if (model) {
-                            return _this.add(model);
-                        }
-                    });
-                };
-                Set.prototype.find = function (iterator) {
-                    return _.filter(this._data, iterator);
-                };
-                Set.prototype.findFirst = function (iterator) {
-                    return _.find(this._data, iterator);
-                };
-                Set.prototype.where = function (properties) {
-                    return _.where(this._data, properties);
-                };
-                Set.prototype.whereFirst = function (properties) {
-                    return _.findWhere(this._data, properties);
-                };
-                Set.prototype.contains = function (item) {
-                    return _.contains(this._data, item);
-                };
-                Set.prototype.toArray = function () {
-                    return _.clone(this._data);
-                };
-                Set.prototype._createItem = function (itemData) {
-                    return itemData;
-                };
-                return Set;
-            })(TSCore.Events.EventEmitter);
-            Collection.Set = Set;
-        })(Collection = Data.Collection || (Data.Collection = {}));
+                });
+            };
+            Set.prototype.find = function (iterator) {
+                return _.filter(this._data, iterator);
+            };
+            Set.prototype.findFirst = function (iterator) {
+                return _.find(this._data, iterator);
+            };
+            Set.prototype.where = function (properties) {
+                return _.where(this._data, properties);
+            };
+            Set.prototype.whereFirst = function (properties) {
+                return _.findWhere(this._data, properties);
+            };
+            Set.prototype.contains = function (item) {
+                return _.contains(this._data, item);
+            };
+            Set.prototype.toArray = function () {
+                return _.clone(this._data);
+            };
+            Set.prototype._createItem = function (itemData) {
+                return itemData;
+            };
+            return Set;
+        })(TSCore.Events.EventEmitter);
+        Data.Set = Set;
     })(Data = TSCore.Data || (TSCore.Data = {}));
 })(TSCore || (TSCore = {}));
-/// <reference path="../../Event/EventEmitter.ts" />
+/// <reference path="../Events/EventEmitter.ts" />
 /// <reference path="Set.ts" />
 var TSCore;
 (function (TSCore) {
     var Data;
     (function (Data) {
-        var Collection;
-        (function (Collection) {
-            var DictionaryEvents;
-            (function (DictionaryEvents) {
-                DictionaryEvents.ADD = "add";
-                DictionaryEvents.CHANGE = "change";
-                DictionaryEvents.REMOVE = "remove";
-                DictionaryEvents.CLEAR = "clear";
-            })(DictionaryEvents = Collection.DictionaryEvents || (Collection.DictionaryEvents = {}));
-            var Dictionary = (function (_super) {
-                __extends(Dictionary, _super);
-                function Dictionary(data) {
-                    _super.call(this);
-                    this._data = data || {};
+        var DictionaryEvents;
+        (function (DictionaryEvents) {
+            DictionaryEvents.ADD = "add";
+            DictionaryEvents.CHANGE = "change";
+            DictionaryEvents.REMOVE = "remove";
+            DictionaryEvents.CLEAR = "clear";
+        })(DictionaryEvents = Data.DictionaryEvents || (Data.DictionaryEvents = {}));
+        var Dictionary = (function (_super) {
+            __extends(Dictionary, _super);
+            function Dictionary(data) {
+                _super.call(this);
+                this._data = data || {};
+            }
+            Dictionary.prototype.get = function (key) {
+                var foundPair = this._getPair(key);
+                return foundPair ? foundPair.value : null;
+            };
+            Dictionary.prototype.set = function (key, value) {
+                if (key == null || key == undefined) {
+                    return;
                 }
-                Dictionary.prototype.get = function (key) {
-                    var foundPair = this._getPair(key);
-                    return foundPair ? foundPair.value : null;
+                if (_.isObject(key)) {
+                    this._assignUniqueID(key);
+                }
+                var alreadyExisted = this.contains(key);
+                var keyString = this._getKeyString(key);
+                this._data[keyString] = {
+                    key: keyString,
+                    value: value
                 };
-                Dictionary.prototype.set = function (key, value) {
-                    if (key == null || key == undefined) {
-                        return;
-                    }
-                    if (_.isObject(key)) {
-                        this._assignUniqueID(key);
-                    }
-                    var alreadyExisted = this.contains(key);
-                    var keyString = this._getKeyString(key);
-                    this._data[keyString] = {
-                        key: keyString,
-                        value: value
-                    };
-                    if (!alreadyExisted) {
-                        this._itemCount++;
-                    }
-                    this.trigger(DictionaryEvents.ADD, { key: key, value: value });
+                if (!alreadyExisted) {
+                    this._itemCount++;
+                }
+                this.trigger(DictionaryEvents.ADD, { key: key, value: value });
+                this.trigger(DictionaryEvents.CHANGE);
+            };
+            Dictionary.prototype.remove = function (key) {
+                var removedItem = null;
+                var foundPair = this._getPair(key);
+                if (foundPair) {
+                    delete this._data[foundPair.key];
+                    removedItem = foundPair.value;
+                    this._itemCount--;
+                    this.trigger(DictionaryEvents.REMOVE, { key: key, value: removedItem });
                     this.trigger(DictionaryEvents.CHANGE);
-                };
-                Dictionary.prototype.remove = function (key) {
-                    var removedItem = null;
-                    var foundPair = this._getPair(key);
-                    if (foundPair) {
-                        delete this._data[foundPair.key];
-                        removedItem = foundPair.value;
-                        this._itemCount--;
-                        this.trigger(DictionaryEvents.REMOVE, { key: key, value: removedItem });
-                        this.trigger(DictionaryEvents.CHANGE);
+                }
+                return removedItem;
+            };
+            Dictionary.prototype.contains = function (key) {
+                return this._getPair(key) != null;
+            };
+            Dictionary.prototype.containsValue = function (value) {
+                var foundValue = null;
+                this.each(function (itKey, itValue) {
+                    if (itValue == value) {
+                        foundValue = itValue;
+                        return false;
                     }
-                    return removedItem;
-                };
-                Dictionary.prototype.contains = function (key) {
-                    return this._getPair(key) != null;
-                };
-                Dictionary.prototype.containsValue = function (value) {
-                    var foundValue = null;
-                    this.each(function (itKey, itValue) {
-                        if (itValue == value) {
-                            foundValue = itValue;
-                            return false;
-                        }
-                    });
-                    return foundValue != null;
-                };
-                Dictionary.prototype.each = function (iterator) {
-                    _.each(this._data, function (pair) {
-                        return iterator(pair.key, pair.value);
-                    });
-                };
-                Dictionary.prototype.values = function () {
-                    return _.pluck(_.values(this._data), 'value');
-                };
-                Dictionary.prototype.keys = function () {
-                    return _.pluck(_.values(this._data), 'key');
-                };
-                Dictionary.prototype.count = function () {
-                    return this._itemCount;
-                };
-                Dictionary.prototype.isEmpty = function () {
-                    return this.count() === 0;
-                };
-                Dictionary.prototype.clear = function () {
-                    this._data = {};
-                    this._itemCount = 0;
-                    this.trigger(DictionaryEvents.CLEAR);
-                    this.trigger(DictionaryEvents.CHANGE);
-                };
-                Dictionary.prototype._getPair = function (key) {
-                    var keyString = this._getKeyString(key);
-                    var foundPair = null;
-                    if (keyString != null && keyString != undefined) {
-                        foundPair = this._data[keyString];
-                    }
-                    return foundPair;
-                };
-                Dictionary.prototype._getKeyString = function (key) {
-                    if (key == null || key == undefined) {
-                        return null;
-                    }
-                    if (_.isString(key)) {
-                        return 's_' + key;
-                    }
-                    else if (_.isNumber(key)) {
-                        return 'n_' + key;
-                    }
-                    else {
-                        return key[Dictionary._OBJECT_UNIQUE_ID_KEY];
-                    }
-                };
-                Dictionary.prototype._assignUniqueID = function (object) {
-                    object[Dictionary._OBJECT_UNIQUE_ID_KEY] = '_' + Dictionary._OBJECT_UNIQUE_ID_COUNTER;
-                    Dictionary._OBJECT_UNIQUE_ID_COUNTER++;
-                };
-                Dictionary._OBJECT_UNIQUE_ID_KEY = '__TSCore_Object_Unique_ID';
-                Dictionary._OBJECT_UNIQUE_ID_COUNTER = 1;
-                return Dictionary;
-            })(TSCore.Events.EventEmitter);
-            Collection.Dictionary = Dictionary;
-        })(Collection = Data.Collection || (Data.Collection = {}));
+                });
+                return foundValue != null;
+            };
+            Dictionary.prototype.each = function (iterator) {
+                _.each(this._data, function (pair) {
+                    return iterator(pair.key, pair.value);
+                });
+            };
+            Dictionary.prototype.values = function () {
+                return _.pluck(_.values(this._data), 'value');
+            };
+            Dictionary.prototype.keys = function () {
+                return _.pluck(_.values(this._data), 'key');
+            };
+            Dictionary.prototype.count = function () {
+                return this._itemCount;
+            };
+            Dictionary.prototype.isEmpty = function () {
+                return this.count() === 0;
+            };
+            Dictionary.prototype.clear = function () {
+                this._data = {};
+                this._itemCount = 0;
+                this.trigger(DictionaryEvents.CLEAR);
+                this.trigger(DictionaryEvents.CHANGE);
+            };
+            Dictionary.prototype._getPair = function (key) {
+                var keyString = this._getKeyString(key);
+                var foundPair = null;
+                if (keyString != null && keyString != undefined) {
+                    foundPair = this._data[keyString];
+                }
+                return foundPair;
+            };
+            Dictionary.prototype._getKeyString = function (key) {
+                if (key == null || key == undefined) {
+                    return null;
+                }
+                if (_.isString(key)) {
+                    return 's_' + key;
+                }
+                else if (_.isNumber(key)) {
+                    return 'n_' + key;
+                }
+                else {
+                    return key[Dictionary._OBJECT_UNIQUE_ID_KEY];
+                }
+            };
+            Dictionary.prototype._assignUniqueID = function (object) {
+                object[Dictionary._OBJECT_UNIQUE_ID_KEY] = '_' + Dictionary._OBJECT_UNIQUE_ID_COUNTER;
+                Dictionary._OBJECT_UNIQUE_ID_COUNTER++;
+            };
+            Dictionary._OBJECT_UNIQUE_ID_KEY = '__TSCore_Object_Unique_ID';
+            Dictionary._OBJECT_UNIQUE_ID_COUNTER = 1;
+            return Dictionary;
+        })(TSCore.Events.EventEmitter);
+        Data.Dictionary = Dictionary;
     })(Data = TSCore.Data || (TSCore.Data = {}));
 })(TSCore || (TSCore = {}));
-/// <reference path="./Data/Collection/Dictionary.ts" />
+/// <reference path="./Data/Dictionary.ts" />
 var TSCore;
 (function (TSCore) {
-    var Dictionary = TSCore.Data.Collection.Dictionary;
+    var Dictionary = TSCore.Data.Dictionary;
     var DI = (function () {
         function DI() {
             this._services = new Dictionary();
@@ -429,100 +423,140 @@ var TSCore;
 (function (TSCore) {
     var Data;
     (function (Data) {
-        var Collection;
-        (function (Collection_1) {
-            var CollectionEvents;
-            (function (CollectionEvents) {
-                CollectionEvents.ADD = Collection_1.SetEvents.ADD;
-                CollectionEvents.CHANGE = Collection_1.SetEvents.CHANGE;
-                CollectionEvents.REMOVE = Collection_1.SetEvents.REMOVE;
-                CollectionEvents.REPLACE = Collection_1.SetEvents.REPLACE;
-                CollectionEvents.CLEAR = Collection_1.SetEvents.CLEAR;
-            })(CollectionEvents = Collection_1.CollectionEvents || (Collection_1.CollectionEvents = {}));
-            var Collection = (function (_super) {
-                __extends(Collection, _super);
-                function Collection() {
-                    _super.apply(this, arguments);
+        var CollectionEvents;
+        (function (CollectionEvents) {
+            CollectionEvents.ADD = Data.SetEvents.ADD;
+            CollectionEvents.CHANGE = Data.SetEvents.CHANGE;
+            CollectionEvents.REMOVE = Data.SetEvents.REMOVE;
+            CollectionEvents.REPLACE = Data.SetEvents.REPLACE;
+            CollectionEvents.CLEAR = Data.SetEvents.CLEAR;
+        })(CollectionEvents = Data.CollectionEvents || (Data.CollectionEvents = {}));
+        var Collection = (function (_super) {
+            __extends(Collection, _super);
+            function Collection() {
+                _super.apply(this, arguments);
+            }
+            Object.defineProperty(Collection.prototype, "length", {
+                get: function () {
+                    return this.count();
+                },
+                enumerable: true,
+                configurable: true
+            });
+            Collection.prototype.prepend = function (item) {
+                this.insert(item, 0);
+            };
+            Collection.prototype.prependMany = function (items) {
+                this._data = items.concat(this._data);
+                this.trigger(CollectionEvents.ADD, { items: [items] });
+                this.trigger(CollectionEvents.CHANGE);
+            };
+            Collection.prototype.insert = function (item, index) {
+                this._data.splice(index, 0, item);
+                this.trigger(CollectionEvents.ADD, { items: [item] });
+                this.trigger(CollectionEvents.CHANGE);
+            };
+            Collection.prototype.replaceItem = function (source, replacement) {
+                return this.replace(this.indexOf(source), replacement);
+            };
+            Collection.prototype.replace = function (index, replacement) {
+                if (index < 0 || index >= this.count()) {
+                    return null;
                 }
-                Object.defineProperty(Collection.prototype, "length", {
-                    get: function () {
-                        return this.count();
-                    },
-                    enumerable: true,
-                    configurable: true
-                });
-                Collection.prototype.prepend = function (item) {
-                    this.insert(item, 0);
-                };
-                Collection.prototype.prependMany = function (items) {
-                    this._data = items.concat(this._data);
-                    this.trigger(CollectionEvents.ADD, { items: [items] });
-                    this.trigger(CollectionEvents.CHANGE);
-                };
-                Collection.prototype.insert = function (item, index) {
-                    this._data.splice(index, 0, item);
-                    this.trigger(CollectionEvents.ADD, { items: [item] });
-                    this.trigger(CollectionEvents.CHANGE);
-                };
-                Collection.prototype.replaceItem = function (source, replacement) {
-                    return this.replace(this.indexOf(source), replacement);
-                };
-                Collection.prototype.replace = function (index, replacement) {
-                    if (index < 0 || index >= this.count()) {
-                        return null;
+                var currentItem = this._data[index];
+                this._data[index] = replacement;
+                this.trigger(CollectionEvents.REPLACE, { source: currentItem, replacement: replacement });
+                this.trigger(CollectionEvents.CHANGE);
+                return currentItem;
+            };
+            Collection.prototype.first = function () {
+                return _.first(this._data);
+            };
+            Collection.prototype.last = function () {
+                return _.last(this._data);
+            };
+            Collection.prototype.get = function (index) {
+                return this._data[index];
+            };
+            Collection.prototype.indexOf = function (item) {
+                return _.indexOf(this._data, item);
+            };
+            return Collection;
+        })(Data.Set);
+        Data.Collection = Collection;
+    })(Data = TSCore.Data || (TSCore.Data = {}));
+})(TSCore || (TSCore = {}));
+var TSCore;
+(function (TSCore) {
+    var Data;
+    (function (Data) {
+        var Grid = (function () {
+            function Grid() {
+            }
+            return Grid;
+        })();
+        Data.Grid = Grid;
+    })(Data = TSCore.Data || (TSCore.Data = {}));
+})(TSCore || (TSCore = {}));
+var TSCore;
+(function (TSCore) {
+    var Data;
+    (function (Data) {
+        var Model = (function () {
+            function Model(attrs) {
+                var _this = this;
+                this.defaults = {};
+                _.each(attrs, function (value, key) {
+                    if (_this.defaults[key] !== undefined) {
+                        _this[key] = value;
                     }
-                    var currentItem = this._data[index];
-                    this._data[index] = replacement;
-                    this.trigger(CollectionEvents.REPLACE, { source: currentItem, replacement: replacement });
-                    this.trigger(CollectionEvents.CHANGE);
-                    return currentItem;
-                };
-                Collection.prototype.first = function () {
-                    return _.first(this._data);
-                };
-                Collection.prototype.last = function () {
-                    return _.last(this._data);
-                };
-                Collection.prototype.get = function (index) {
-                    return this._data[index];
-                };
-                Collection.prototype.indexOf = function (item) {
-                    return _.indexOf(this._data, item);
-                };
-                return Collection;
-            })(Collection_1.Set);
-            Collection_1.Collection = Collection;
-        })(Collection = Data.Collection || (Data.Collection = {}));
+                });
+            }
+            return Model;
+        })();
+        Data.Model = Model;
+    })(Data = TSCore.Data || (TSCore.Data = {}));
+})(TSCore || (TSCore = {}));
+/// <reference path="./Collection.ts" />
+var TSCore;
+(function (TSCore) {
+    var Data;
+    (function (Data) {
+        var ModelCollection = (function (_super) {
+            __extends(ModelCollection, _super);
+            function ModelCollection() {
+                _super.apply(this, arguments);
+            }
+            return ModelCollection;
+        })(Data.Collection);
+        Data.ModelCollection = ModelCollection;
     })(Data = TSCore.Data || (TSCore.Data = {}));
 })(TSCore || (TSCore = {}));
 var TSCore;
 (function (TSCore) {
     var Data;
     (function (Data) {
-        var Collection;
-        (function (Collection) {
-            var Grid = (function () {
-                function Grid() {
-                }
-                return Grid;
-            })();
-            Collection.Grid = Grid;
-        })(Collection = Data.Collection || (Data.Collection = {}));
+        var Queue = (function () {
+            function Queue() {
+            }
+            return Queue;
+        })();
+        Data.Queue = Queue;
     })(Data = TSCore.Data || (TSCore.Data = {}));
 })(TSCore || (TSCore = {}));
+/// <reference path="./ModelCollection.ts" />
 var TSCore;
 (function (TSCore) {
     var Data;
     (function (Data) {
-        var Collection;
-        (function (Collection) {
-            var Queue = (function () {
-                function Queue() {
-                }
-                return Queue;
-            })();
-            Collection.Queue = Queue;
-        })(Collection = Data.Collection || (Data.Collection = {}));
+        var RemoteModelCollection = (function (_super) {
+            __extends(RemoteModelCollection, _super);
+            function RemoteModelCollection() {
+                _super.apply(this, arguments);
+            }
+            return RemoteModelCollection;
+        })(Data.ModelCollection);
+        Data.RemoteModelCollection = RemoteModelCollection;
     })(Data = TSCore.Data || (TSCore.Data = {}));
 })(TSCore || (TSCore = {}));
 /// <reference path="./Set.ts" />
@@ -530,102 +564,77 @@ var TSCore;
 (function (TSCore) {
     var Data;
     (function (Data) {
-        var Collection;
-        (function (Collection) {
-            var SortedCollectionEvents;
-            (function (SortedCollectionEvents) {
-                SortedCollectionEvents.ADD = Collection.SetEvents.ADD;
-                SortedCollectionEvents.CHANGE = Collection.SetEvents.CHANGE;
-                SortedCollectionEvents.REMOVE = Collection.SetEvents.REMOVE;
-                SortedCollectionEvents.REPLACE = Collection.SetEvents.REPLACE;
-                SortedCollectionEvents.CLEAR = Collection.SetEvents.CLEAR;
-                SortedCollectionEvents.SORT = "sort";
-            })(SortedCollectionEvents = Collection.SortedCollectionEvents || (Collection.SortedCollectionEvents = {}));
-            var SortedCollection = (function (_super) {
-                __extends(SortedCollection, _super);
-                function SortedCollection(data, sortPredicate) {
-                    _super.call(this, data);
-                    this._sortPredicate = sortPredicate;
+        var SortedCollectionEvents;
+        (function (SortedCollectionEvents) {
+            SortedCollectionEvents.ADD = Data.SetEvents.ADD;
+            SortedCollectionEvents.CHANGE = Data.SetEvents.CHANGE;
+            SortedCollectionEvents.REMOVE = Data.SetEvents.REMOVE;
+            SortedCollectionEvents.REPLACE = Data.SetEvents.REPLACE;
+            SortedCollectionEvents.CLEAR = Data.SetEvents.CLEAR;
+            SortedCollectionEvents.SORT = "sort";
+        })(SortedCollectionEvents = Data.SortedCollectionEvents || (Data.SortedCollectionEvents = {}));
+        var SortedCollection = (function (_super) {
+            __extends(SortedCollection, _super);
+            function SortedCollection(data, sortPredicate) {
+                _super.call(this, data);
+                this._sortPredicate = sortPredicate;
+                this.sort();
+            }
+            Object.defineProperty(SortedCollection.prototype, "sortPredicate", {
+                get: function () {
+                    return this._sortPredicate;
+                },
+                set: function (predicate) {
+                    this._sortPredicate = predicate;
                     this.sort();
+                },
+                enumerable: true,
+                configurable: true
+            });
+            SortedCollection.prototype.add = function (item) {
+                _super.prototype.add.call(this, item);
+                this.sort();
+            };
+            SortedCollection.prototype.addMany = function (items) {
+                _super.prototype.addMany.call(this, items);
+                this.sort();
+            };
+            SortedCollection.prototype.remove = function (item) {
+                _super.prototype.remove.call(this, item);
+                this.sort();
+            };
+            SortedCollection.prototype.removeMany = function (items) {
+                _super.prototype.removeMany.call(this, items);
+                this.sort();
+            };
+            SortedCollection.prototype.replaceItem = function (source, replacement) {
+                var currentItem = _super.prototype.replaceItem.call(this, source, replacement);
+                this.sort();
+                return currentItem;
+            };
+            SortedCollection.prototype.first = function () {
+                return _.first(this._data);
+            };
+            SortedCollection.prototype.last = function () {
+                return _.last(this._data);
+            };
+            SortedCollection.prototype.get = function (index) {
+                return this._data[index];
+            };
+            SortedCollection.prototype.indexOf = function (item) {
+                return _.indexOf(this._data, item);
+            };
+            SortedCollection.prototype.sort = function () {
+                if (this._sortPredicate === null || this._sortPredicate === undefined) {
+                    return;
                 }
-                Object.defineProperty(SortedCollection.prototype, "sortPredicate", {
-                    get: function () {
-                        return this._sortPredicate;
-                    },
-                    set: function (predicate) {
-                        this._sortPredicate = predicate;
-                        this.sort();
-                    },
-                    enumerable: true,
-                    configurable: true
-                });
-                SortedCollection.prototype.add = function (item) {
-                    _super.prototype.add.call(this, item);
-                    this.sort();
-                };
-                SortedCollection.prototype.addMany = function (items) {
-                    _super.prototype.addMany.call(this, items);
-                    this.sort();
-                };
-                SortedCollection.prototype.remove = function (item) {
-                    _super.prototype.remove.call(this, item);
-                    this.sort();
-                };
-                SortedCollection.prototype.removeMany = function (items) {
-                    _super.prototype.removeMany.call(this, items);
-                    this.sort();
-                };
-                SortedCollection.prototype.replaceItem = function (source, replacement) {
-                    var currentItem = _super.prototype.replaceItem.call(this, source, replacement);
-                    this.sort();
-                    return currentItem;
-                };
-                SortedCollection.prototype.first = function () {
-                    return _.first(this._data);
-                };
-                SortedCollection.prototype.last = function () {
-                    return _.last(this._data);
-                };
-                SortedCollection.prototype.get = function (index) {
-                    return this._data[index];
-                };
-                SortedCollection.prototype.indexOf = function (item) {
-                    return _.indexOf(this._data, item);
-                };
-                SortedCollection.prototype.sort = function () {
-                    if (this._sortPredicate === null || this._sortPredicate === undefined) {
-                        return;
-                    }
-                    this._data = _.sortBy(this._data, this._sortPredicate);
-                    this.trigger(SortedCollectionEvents.SORT);
-                    this.trigger(SortedCollectionEvents.CHANGE);
-                };
-                return SortedCollection;
-            })(Collection.Set);
-            Collection.SortedCollection = SortedCollection;
-        })(Collection = Data.Collection || (Data.Collection = {}));
-    })(Data = TSCore.Data || (TSCore.Data = {}));
-})(TSCore || (TSCore = {}));
-var TSCore;
-(function (TSCore) {
-    var Data;
-    (function (Data) {
-        var Model;
-        (function (Model_1) {
-            var Model = (function () {
-                function Model(attrs) {
-                    var _this = this;
-                    this.defaults = {};
-                    _.each(attrs, function (value, key) {
-                        if (_this.defaults[key] !== undefined) {
-                            _this[key] = value;
-                        }
-                    });
-                }
-                return Model;
-            })();
-            Model_1.Model = Model;
-        })(Model = Data.Model || (Data.Model = {}));
+                this._data = _.sortBy(this._data, this._sortPredicate);
+                this.trigger(SortedCollectionEvents.SORT);
+                this.trigger(SortedCollectionEvents.CHANGE);
+            };
+            return SortedCollection;
+        })(Data.Set);
+        Data.SortedCollection = SortedCollection;
     })(Data = TSCore.Data || (TSCore.Data = {}));
 })(TSCore || (TSCore = {}));
 var TSCore;
@@ -1072,18 +1081,20 @@ var TSCore;
 /// <reference path="../typings/tsd.d.ts" />
 /// <reference path="TSCore/Config.ts" />
 /// <reference path="TSCore/DI.ts" />
-/// <reference path="TSCore/Data/Collection/Collection.ts" />
-/// <reference path="TSCore/Data/Collection/Dictionary.ts" />
-/// <reference path="TSCore/Data/Collection/Grid.ts" />
-/// <reference path="TSCore/Data/Collection/Queue.ts" />
-/// <reference path="TSCore/Data/Collection/Set.ts" />
-/// <reference path="TSCore/Data/Collection/SortedCollection.ts" />
-/// <reference path="TSCore/Data/Model/Model.ts" />
+/// <reference path="TSCore/Data/Collection.ts" />
+/// <reference path="TSCore/Data/Dictionary.ts" />
+/// <reference path="TSCore/Data/Grid.ts" />
+/// <reference path="TSCore/Data/Model.ts" />
+/// <reference path="TSCore/Data/ModelCollection.ts" />
+/// <reference path="TSCore/Data/Queue.ts" />
+/// <reference path="TSCore/Data/RemoteModelCollection.ts" />
+/// <reference path="TSCore/Data/Set.ts" />
+/// <reference path="TSCore/Data/SortedCollection.ts" />
 /// <reference path="TSCore/DateTime/DateFormatter.ts" />
 /// <reference path="TSCore/DateTime/DateTime.ts" />
 /// <reference path="TSCore/DateTime/Timer.ts" />
-/// <reference path="TSCore/Event/Event.ts" />
-/// <reference path="TSCore/Event/EventEmitter.ts" />
+/// <reference path="TSCore/Events/Event.ts" />
+/// <reference path="TSCore/Events/EventEmitter.ts" />
 /// <reference path="TSCore/Exception/ArgumentException.ts" />
 /// <reference path="TSCore/Exception/Exception.ts" />
 /// <reference path="TSCore/Geometry/Point.ts" />

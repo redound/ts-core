@@ -28,7 +28,7 @@ declare module TSCore.Events {
         resetEvents(): TSCore.Events.EventEmitter;
     }
 }
-declare module TSCore.Data.Collection {
+declare module TSCore.Data {
     module SetEvents {
         const ADD: string;
         const CHANGE: string;
@@ -75,7 +75,7 @@ declare module TSCore.Data.Collection {
         protected _createItem(itemData: any): T;
     }
 }
-declare module TSCore.Data.Collection {
+declare module TSCore.Data {
     interface IDictionaryData {
         [key: string]: IKeyValuePair;
     }
@@ -142,7 +142,7 @@ declare module TSCore {
         private _instantiate(service);
     }
 }
-declare module TSCore.Data.Collection {
+declare module TSCore.Data {
     module CollectionEvents {
         const ADD: string;
         const CHANGE: string;
@@ -174,15 +174,29 @@ declare module TSCore.Data.Collection {
         indexOf(item: T): number;
     }
 }
-declare module TSCore.Data.Collection {
+declare module TSCore.Data {
     class Grid<T> {
     }
 }
-declare module TSCore.Data.Collection {
+declare module TSCore.Data {
+    class Model {
+        defaults: {};
+        constructor(attrs: any);
+    }
+}
+declare module TSCore.Data {
+    class ModelCollection<T> extends Collection<T> {
+    }
+}
+declare module TSCore.Data {
     class Queue<T> {
     }
 }
-declare module TSCore.Data.Collection {
+declare module TSCore.Data {
+    class RemoteModelCollection<T> extends ModelCollection<T> {
+    }
+}
+declare module TSCore.Data {
     module SortedCollectionEvents {
         const ADD: string;
         const CHANGE: string;
@@ -217,12 +231,6 @@ declare module TSCore.Data.Collection {
         get(index: number): T;
         indexOf(item: T): number;
         sort(): void;
-    }
-}
-declare module TSCore.Data.Model {
-    class Model {
-        defaults: {};
-        constructor(attrs: any);
     }
 }
 declare module TSCore.DateTime {

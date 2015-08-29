@@ -1,8 +1,8 @@
-/// <reference path="./Data/Collection/Dictionary.ts" />
+/// <reference path="./Data/Dictionary.ts" />
 
 module TSCore {
 
-    import Dictionary = TSCore.Data.Collection.Dictionary;
+    import Dictionary = TSCore.Data.Dictionary;
 
     export interface IDIInjectable {
         getDI(): DI;

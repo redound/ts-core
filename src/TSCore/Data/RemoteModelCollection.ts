@@ -2,7 +2,7 @@
 
 module TSCore.Data {
 
-    export class RemoteModelCollection extends ModelCollection {
+    export class RemoteModelCollection<T> extends ModelCollection<T> {
 
     }
 }

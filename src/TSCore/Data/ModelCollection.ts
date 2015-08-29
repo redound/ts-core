@@ -2,7 +2,7 @@
 
 module TSCore.Data {
 
-    export class ModelCollection extends Collection {
+    export class ModelCollection<T> extends Collection<T> {
 
     }
 }
