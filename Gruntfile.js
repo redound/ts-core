@@ -6,18 +6,20 @@ module.exports = function(grunt) {
 
         // For compiling our TypeScript/JavaScript
         ts: {
-            compile: {
+            build: {
                 src: ['src/tscore.r.ts', 'src/**/*.ts', '!node_modules/**/*.ts'],
                 out: 'build/tscore.js',
                 reference: 'src/tscore.r.ts',
                 options: {
+                    fast: 'never',
                     declaration: true
                 }
             },
-            compile_test: {
+            test: {
                 src: ['test/**/*.ts', '!node_modules/**/*.spec.ts'],
                 out: 'test/tscore.spec.js',
                 options: {
+                    fast: 'never',
                     sourceMap: false
                 }
             }
@@ -58,10 +60,9 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-ts');
 
     /** Development **/
-
     grunt.registerTask('compile', [
-        'ts:compile',
-        'ts:compile_test'
+        'ts:build',
+        'ts:test'
     ]);
 
     grunt.registerTask('test', [
@@ -70,7 +71,6 @@ module.exports = function(grunt) {
     ]);
 
     /** Release **/
-
     grunt.registerTask('build', [
         'compile',
         'karma:build',
