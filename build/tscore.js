@@ -157,8 +157,9 @@ var TSCore;
                 this.trigger(SetEvents.CHANGE);
             };
             Set.prototype.addMany = function (items) {
+                if (items === void 0) { items = []; }
                 this._data = this._data.concat(items);
-                this.trigger(SetEvents.ADD, { items: [items] });
+                this.trigger(SetEvents.ADD, { items: items });
                 this.trigger(SetEvents.CHANGE);
             };
             Set.prototype.remove = function (item) {
@@ -200,15 +201,6 @@ var TSCore;
             Set.prototype.isEmpty = function () {
                 return this.count() === 0;
             };
-            Set.prototype.populate = function (items) {
-                var _this = this;
-                _.each(items, function (itemData) {
-                    var model = _this._createItem(itemData);
-                    if (model) {
-                        return _this.add(model);
-                    }
-                });
-            };
             Set.prototype.find = function (iterator) {
                 return _.filter(this._data, iterator);
             };
@@ -226,9 +218,6 @@ var TSCore;
             };
             Set.prototype.toArray = function () {
                 return _.clone(this._data);
-            };
-            Set.prototype._createItem = function (itemData) {
-                return itemData;
             };
             return Set;
         })(TSCore.Events.EventEmitter);

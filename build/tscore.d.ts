@@ -56,7 +56,7 @@ declare module TSCore.Data {
         length: number;
         count(): number;
         add(item: T): void;
-        addMany(items: T[]): void;
+        addMany(items?: T[]): void;
         remove(item: T): void;
         removeMany(items: T[]): void;
         removeWhere(properties: {}): void;
@@ -65,14 +65,12 @@ declare module TSCore.Data {
         each(iterator: _.ListIterator<T, void>): void;
         pluck(propertyName: string): any[];
         isEmpty(): boolean;
-        populate(items: any): void;
         find(iterator: _.ListIterator<T, boolean>): T[];
         findFirst(iterator: _.ListIterator<T, boolean>): T;
         where(properties: {}): T[];
         whereFirst(properties: {}): T;
         contains(item: T): boolean;
         toArray(): T[];
-        protected _createItem(itemData: any): T;
     }
 }
 declare module TSCore.Data {
