@@ -1,6 +1,6 @@
-/// <reference path="../../Event/EventEmitter.ts" />
+/// <reference path="../Events/EventEmitter.ts" />
 
-module TSCore.Data.Collection {
+module TSCore.Data {
 
     export module SetEvents {
 

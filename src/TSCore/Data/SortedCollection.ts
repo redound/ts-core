@@ -1,6 +1,6 @@
 /// <reference path="./Set.ts" />
 
-module TSCore.Data.Collection {
+module TSCore.Data {
 
     export module SortedCollectionEvents {
 

@@ -1,7 +1,7 @@
-/// <reference path="../../Event/EventEmitter.ts" />
+/// <reference path="../Events/EventEmitter.ts" />
 /// <reference path="Set.ts" />
 
-module TSCore.Data.Collection {
+module TSCore.Data {
 
     export interface IDictionaryData { [key:string]: IKeyValuePair }
 

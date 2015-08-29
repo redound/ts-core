@@ -1,6 +1,6 @@
 /// <reference path="./ModelCollection.ts" />
 
-module TSCore.Data.Collection {
+module TSCore.Data {
 
     export class RemoteModelCollection extends ModelCollection {
 

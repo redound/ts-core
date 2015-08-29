@@ -1,6 +1,6 @@
 /// <reference path="./Collection.ts" />
 
-module TSCore.Data.Collection {
+module TSCore.Data {
 
     export class ModelCollection extends Collection {
 

@@ -1,4 +1,4 @@
-module TSCore.Data.Collection {
+module TSCore.Data {
 
     export class Grid<T> {
 

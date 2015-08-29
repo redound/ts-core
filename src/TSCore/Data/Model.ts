@@ -1,5 +1,5 @@
 
-module TSCore.Data.Model {
+module TSCore.Data {
 
     export class Model {
 
