@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>IEventEmitterCallbackItem | TSCore</title>
+	<title>IChangeParams | TSCore</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -60,13 +60,16 @@
 					<a href="../modules/tscore.html">TSCore</a>
 				</li>
 				<li>
-					<a href="../modules/tscore.events.html">Events</a>
+					<a href="../modules/tscore.data.html">Data</a>
 				</li>
 				<li>
-					<a href="tscore.events.ieventemittercallbackitem.html">IEventEmitterCallbackItem</a>
+					<a href="../modules/tscore.data.dictionaryevents.html">DictionaryEvents</a>
+				</li>
+				<li>
+					<a href="tscore.data.dictionaryevents.ichangeparams.html">IChangeParams</a>
 				</li>
 			</ul>
-			<h1>Interface IEventEmitterCallbackItem</h1>
+			<h1>Interface IChangeParams</h1>
 		</div>
 	</div>
 </header>
@@ -77,68 +80,9 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">IEventEmitterCallbackItem</span>
+						<span class="target">IChangeParams</span>
 					</li>
 				</ul>
-			</section>
-			<section class="tsd-panel-group tsd-index-group">
-				<h2>Index</h2>
-				<section class="tsd-panel tsd-index-panel">
-					<div class="tsd-index-content">
-						<section class="tsd-index-section tsd-is-not-exported">
-							<h3>Properties</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="tscore.events.ieventemittercallbackitem.html#callback" class="tsd-kind-icon">callback</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="tscore.events.ieventemittercallbackitem.html#context" class="tsd-kind-icon">context</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="tscore.events.ieventemittercallbackitem.html#once" class="tsd-kind-icon">once</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="tscore.events.ieventemittercallbackitem.html#topic" class="tsd-kind-icon">topic</a></li>
-							</ul>
-						</section>
-					</div>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="callback" class="tsd-anchor"></a>
-					<h3>callback</h3>
-					<div class="tsd-signature tsd-kind-icon">callback<span class="tsd-signature-symbol">:</span> <a href="tscore.events.ieventemittercallback.html" class="tsd-signature-type">IEventEmitterCallback</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Events/EventEmitter.ts#L7">TSCore/Events/EventEmitter.ts:7</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="context" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> context</h3>
-					<div class="tsd-signature tsd-kind-icon">context<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Events/EventEmitter.ts#L8">TSCore/Events/EventEmitter.ts:8</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="once" class="tsd-anchor"></a>
-					<h3>once</h3>
-					<div class="tsd-signature tsd-kind-icon">once<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Events/EventEmitter.ts#L9">TSCore/Events/EventEmitter.ts:9</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="topic" class="tsd-anchor"></a>
-					<h3>topic</h3>
-					<div class="tsd-signature tsd-kind-icon">topic<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Events/EventEmitter.ts#L6">TSCore/Events/EventEmitter.ts:6</a></li>
-						</ul>
-					</aside>
-				</section>
 			</section>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -150,13 +94,27 @@
 					<li class="current tsd-kind-module tsd-is-not-exported">
 						<a href="../modules/tscore.html">TSCore</a>
 						<ul>
-							<li class=" tsd-kind-module tsd-parent-kind-module">
+							<li class="current tsd-kind-module tsd-parent-kind-module">
 								<a href="../modules/tscore.data.html">Data</a>
+								<ul>
+									<li class=" tsd-kind-module tsd-parent-kind-module">
+										<a href="../modules/tscore.data.collectionevents.html">Collection<wbr>Events</a>
+									</li>
+									<li class="current tsd-kind-module tsd-parent-kind-module">
+										<a href="../modules/tscore.data.dictionaryevents.html">Dictionary<wbr>Events</a>
+									</li>
+									<li class=" tsd-kind-module tsd-parent-kind-module">
+										<a href="../modules/tscore.data.setevents.html">Set<wbr>Events</a>
+									</li>
+									<li class=" tsd-kind-module tsd-parent-kind-module">
+										<a href="../modules/tscore.data.sortedcollectionevents.html">Sorted<wbr>Collection<wbr>Events</a>
+									</li>
+								</ul>
 							</li>
 							<li class=" tsd-kind-module tsd-parent-kind-module">
 								<a href="../modules/tscore.datetime.html">Date<wbr>Time</a>
 							</li>
-							<li class="current tsd-kind-module tsd-parent-kind-module">
+							<li class=" tsd-kind-module tsd-parent-kind-module">
 								<a href="../modules/tscore.events.html">Events</a>
 							</li>
 							<li class=" tsd-kind-module tsd-parent-kind-module">
@@ -174,36 +132,34 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../classes/tscore.events.event.html" class="tsd-kind-icon">Event</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/tscore.events.eventemitter.html" class="tsd-kind-icon">Event<wbr>Emitter</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="tscore.events.ieventemittercallback.html" class="tsd-kind-icon">IEvent<wbr>Emitter<wbr>Callback</a>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="tscore.data.dictionaryevents.iaddparams.html" class="tsd-kind-icon">IAdd<wbr>Params</a>
 					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
-						<a href="tscore.events.ieventemittercallbackitem.html" class="tsd-kind-icon">IEvent<wbr>Emitter<wbr>Callback<wbr>Item</a>
-						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="tscore.events.ieventemittercallbackitem.html#callback" class="tsd-kind-icon">callback</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="tscore.events.ieventemittercallbackitem.html#context" class="tsd-kind-icon">context</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="tscore.events.ieventemittercallbackitem.html#once" class="tsd-kind-icon">once</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="tscore.events.ieventemittercallbackitem.html#topic" class="tsd-kind-icon">topic</a>
-							</li>
-						</ul>
+					<li class="current tsd-kind-interface tsd-parent-kind-module">
+						<a href="tscore.data.dictionaryevents.ichangeparams.html" class="tsd-kind-icon">IChange<wbr>Params</a>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="tscore.data.dictionaryevents.iclearparams.html" class="tsd-kind-icon">IClear<wbr>Params</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="tscore.data.dictionaryevents.iremoveparams.html" class="tsd-kind-icon">IRemove<wbr>Params</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
+						<a href="../modules/tscore.data.dictionaryevents.html#add" class="tsd-kind-icon">ADD</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
+						<a href="../modules/tscore.data.dictionaryevents.html#change" class="tsd-kind-icon">CHANGE</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
+						<a href="../modules/tscore.data.dictionaryevents.html#clear" class="tsd-kind-icon">CLEAR</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
+						<a href="../modules/tscore.data.dictionaryevents.html#remove" class="tsd-kind-icon">REMOVE</a>
+					</li>
 				</ul>
 			</nav>
 		</div>

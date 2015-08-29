@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>IEventEmitterCallbackItem | TSCore</title>
+	<title>Model | TSCore</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -60,13 +60,13 @@
 					<a href="../modules/tscore.html">TSCore</a>
 				</li>
 				<li>
-					<a href="../modules/tscore.events.html">Events</a>
+					<a href="../modules/tscore.data.html">Data</a>
 				</li>
 				<li>
-					<a href="tscore.events.ieventemittercallbackitem.html">IEventEmitterCallbackItem</a>
+					<a href="tscore.data.model.html">Model</a>
 				</li>
 			</ul>
-			<h1>Interface IEventEmitterCallbackItem</h1>
+			<h1>Class Model</h1>
 		</div>
 	</div>
 </header>
@@ -77,7 +77,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">IEventEmitterCallbackItem</span>
+						<span class="target">Model</span>
 					</li>
 				</ul>
 			</section>
@@ -85,59 +85,63 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section tsd-is-not-exported">
+						<section class="tsd-index-section ">
+							<h3>Constructors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="tscore.data.model.html#constructor" class="tsd-kind-icon">constructor</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="tscore.events.ieventemittercallbackitem.html#callback" class="tsd-kind-icon">callback</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="tscore.events.ieventemittercallbackitem.html#context" class="tsd-kind-icon">context</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="tscore.events.ieventemittercallbackitem.html#once" class="tsd-kind-icon">once</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="tscore.events.ieventemittercallbackitem.html#topic" class="tsd-kind-icon">topic</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="tscore.data.model.html#defaults" class="tsd-kind-icon">defaults</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Constructors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
+					<a name="constructor" class="tsd-anchor"></a>
+					<h3>constructor</h3>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Model<span class="tsd-signature-symbol">(</span>attrs<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="tscore.data.model.html" class="tsd-signature-type">Model</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Model.ts#L6">TSCore/Data/Model.ts:6</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>attrs: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="tscore.data.model.html" class="tsd-signature-type">Model</a></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="callback" class="tsd-anchor"></a>
-					<h3>callback</h3>
-					<div class="tsd-signature tsd-kind-icon">callback<span class="tsd-signature-symbol">:</span> <a href="tscore.events.ieventemittercallback.html" class="tsd-signature-type">IEventEmitterCallback</a></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="defaults" class="tsd-anchor"></a>
+					<h3>defaults</h3>
+					<div class="tsd-signature tsd-kind-icon">defaults<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Events/EventEmitter.ts#L7">TSCore/Events/EventEmitter.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Data/Model.ts#L6">TSCore/Data/Model.ts:6</a></li>
 						</ul>
 					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="context" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> context</h3>
-					<div class="tsd-signature tsd-kind-icon">context<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Events/EventEmitter.ts#L8">TSCore/Events/EventEmitter.ts:8</a></li>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
 						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="once" class="tsd-anchor"></a>
-					<h3>once</h3>
-					<div class="tsd-signature tsd-kind-icon">once<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Events/EventEmitter.ts#L9">TSCore/Events/EventEmitter.ts:9</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="topic" class="tsd-anchor"></a>
-					<h3>topic</h3>
-					<div class="tsd-signature tsd-kind-icon">topic<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/ts-core/ts-core/blob/development/src/TSCore/Events/EventEmitter.ts#L6">TSCore/Events/EventEmitter.ts:6</a></li>
-						</ul>
-					</aside>
+					</div>
 				</section>
 			</section>
 		</div>
@@ -150,13 +154,27 @@
 					<li class="current tsd-kind-module tsd-is-not-exported">
 						<a href="../modules/tscore.html">TSCore</a>
 						<ul>
-							<li class=" tsd-kind-module tsd-parent-kind-module">
+							<li class="current tsd-kind-module tsd-parent-kind-module">
 								<a href="../modules/tscore.data.html">Data</a>
+								<ul>
+									<li class=" tsd-kind-module tsd-parent-kind-module">
+										<a href="../modules/tscore.data.collectionevents.html">Collection<wbr>Events</a>
+									</li>
+									<li class=" tsd-kind-module tsd-parent-kind-module">
+										<a href="../modules/tscore.data.dictionaryevents.html">Dictionary<wbr>Events</a>
+									</li>
+									<li class=" tsd-kind-module tsd-parent-kind-module">
+										<a href="../modules/tscore.data.setevents.html">Set<wbr>Events</a>
+									</li>
+									<li class=" tsd-kind-module tsd-parent-kind-module">
+										<a href="../modules/tscore.data.sortedcollectionevents.html">Sorted<wbr>Collection<wbr>Events</a>
+									</li>
+								</ul>
 							</li>
 							<li class=" tsd-kind-module tsd-parent-kind-module">
 								<a href="../modules/tscore.datetime.html">Date<wbr>Time</a>
 							</li>
-							<li class="current tsd-kind-module tsd-parent-kind-module">
+							<li class=" tsd-kind-module tsd-parent-kind-module">
 								<a href="../modules/tscore.events.html">Events</a>
 							</li>
 							<li class=" tsd-kind-module tsd-parent-kind-module">
@@ -175,35 +193,53 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../classes/tscore.events.event.html" class="tsd-kind-icon">Event</a>
+						<a href="tscore.data.collection.html" class="tsd-kind-icon">Collection</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/tscore.events.eventemitter.html" class="tsd-kind-icon">Event<wbr>Emitter</a>
+						<a href="tscore.data.config.html" class="tsd-kind-icon">Config</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="tscore.events.ieventemittercallback.html" class="tsd-kind-icon">IEvent<wbr>Emitter<wbr>Callback</a>
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="tscore.data.dictionary.html" class="tsd-kind-icon">Dictionary</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="tscore.data.grid.html" class="tsd-kind-icon">Grid</a>
 					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
-						<a href="tscore.events.ieventemittercallbackitem.html" class="tsd-kind-icon">IEvent<wbr>Emitter<wbr>Callback<wbr>Item</a>
+					<li class="current tsd-kind-class tsd-parent-kind-module">
+						<a href="tscore.data.model.html" class="tsd-kind-icon">Model</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="tscore.events.ieventemittercallbackitem.html#callback" class="tsd-kind-icon">callback</a>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
+								<a href="tscore.data.model.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="tscore.events.ieventemittercallbackitem.html#context" class="tsd-kind-icon">context</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="tscore.events.ieventemittercallbackitem.html#once" class="tsd-kind-icon">once</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="tscore.events.ieventemittercallbackitem.html#topic" class="tsd-kind-icon">topic</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="tscore.data.model.html#defaults" class="tsd-kind-icon">defaults</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="tscore.data.modelcollection.html" class="tsd-kind-icon">Model<wbr>Collection</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="tscore.data.queue.html" class="tsd-kind-icon">Queue</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="tscore.data.remotemodelcollection.html" class="tsd-kind-icon">Remote<wbr>Model<wbr>Collection</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="tscore.data.set.html" class="tsd-kind-icon">Set</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="tscore.data.sortedcollection.html" class="tsd-kind-icon">Sorted<wbr>Collection</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/tscore.data.idictionarydata.html" class="tsd-kind-icon">IDictionary<wbr>Data</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../interfaces/tscore.data.idictionaryiterator.html" class="tsd-kind-icon">IDictionary<wbr>Iterator</a>
+					</li>
 				</ul>
 			</nav>
 		</div>
