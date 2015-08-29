@@ -73,11 +73,11 @@ module TSCore.Data {
          *
          * @param items Items to be added.
          */
-        public addMany(items:T[]) {
+        public addMany(items:T[] = []) {
 
             this._data = this._data.concat(items);
 
-            this.trigger(SetEvents.ADD, { items: [items] });
+            this.trigger(SetEvents.ADD, { items: items });
             this.trigger(SetEvents.CHANGE);
         }
 
@@ -86,7 +86,7 @@ module TSCore.Data {
          *
          * @param item Item to be removed.
          */
-        public remove(item:T) {
+        public remove(item: T) {
 
             this._data = _.without(this._data, item);
 
@@ -99,7 +99,7 @@ module TSCore.Data {
          *
          * @param items Items to be removed.
          */
-        public removeMany(items:T[]) {
+        public removeMany(items: T[]) {
 
             this._data = _.difference(this._data, items);
 
@@ -118,11 +118,14 @@ module TSCore.Data {
 
         /**
          * Replace an item with another item in set
+         *
+         * TODO: Discussion - Should there be a recursiveReplaceItem() that will replace duplicates?
+         *
          * @param source    The item that gets replaced inside the set.
          * @param replacement The item that replaces the source item.
          * @returns {any}
          */
-        public replaceItem(source:T, replacement:T): T {
+        public replaceItem(source: T, replacement: T): T {
 
             var index = _.indexOf(this._data, source);
 
@@ -181,22 +184,6 @@ module TSCore.Data {
         }
 
         /**
-         * Adds multiple items after called the _createItem method on them.
-         *
-         * @param items Items to be added.
-         */
-        public populate(items) {
-
-            _.each(items, (itemData) => {
-
-                var model = this._createItem(itemData);
-                if (model) {
-                    return this.add(model);
-                }
-            });
-        }
-
-        /**
          * Find items using an iterator.
          *
          * @param iterator Iterator to use.
@@ -208,8 +195,6 @@ module TSCore.Data {
 
         /**
          * Find first item using an iterator.
-         *
-         * TODO: Make this return one item.
          *
          * @param iterator
          * @returns {T}
@@ -262,17 +247,6 @@ module TSCore.Data {
          */
         public toArray():T[] {
             return _.clone(this._data);
-        }
-
-        /**
-         * Create item based on itemData.
-         *
-         * @param itemData Data to build item with.
-         * @returns {any}
-         * @private
-         */
-        protected _createItem(itemData): T {
-            return itemData;
         }
     }
 }
