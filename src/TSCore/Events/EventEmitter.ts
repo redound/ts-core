@@ -113,6 +113,7 @@ module TSCore.Events {
 
         /**
          * Publish event for a topic.
+         * TODO: Generic for param bag.
          * ````
          * var emitter = new TSCore.Event.EventEmitter();
          * emitter.trigger('topic', arg1, arg2);
