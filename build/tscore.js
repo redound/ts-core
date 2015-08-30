@@ -434,11 +434,11 @@ var TSCore;
             if (shared === void 0) { shared = false; }
             var serviceItem = this._services.get(key);
             var instance = null;
-            var instantiateShared = shared === true || serviceItem.shared === true;
+            var instantiateShared = shared === true || serviceItem && serviceItem.shared === true;
             if (instantiateShared && this._cache.contains(key)) {
                 instance = this._cache.get(key);
             }
-            if (!instance) {
+            if (serviceItem && !instance) {
                 instance = this._instantiate(serviceItem.service);
             }
             if (instantiateShared) {
@@ -472,10 +472,10 @@ var TSCore;
             else {
                 instance = service;
             }
-            if (instance.setDI) {
+            if (instance && instance.setDI) {
                 instance.setDI(this);
             }
-            return service;
+            return instance;
         };
         return DI;
     })();

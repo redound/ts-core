@@ -41,19 +41,19 @@ module TSCore {
         public get(key: string, shared: boolean = false): any {
 
             var serviceItem = this._services.get(key);
-            var instance:any = null;
+            var instance = null;
 
-            var instantiateShared = shared === true || serviceItem.shared === true;
+            var instantiateShared = shared === true || serviceItem && serviceItem.shared === true;
 
-            if(instantiateShared && this._cache.contains(key)){
+            if(instantiateShared && this._cache.contains(key)) {
                 instance = this._cache.get(key);
             }
 
-            if(!instance){
+            if(serviceItem && !instance) {
                 instance = this._instantiate(serviceItem.service);
             }
 
-            if(instantiateShared){
+            if(instantiateShared) {
                 this._cache.set(key, instance);
             }
 
@@ -125,18 +125,18 @@ module TSCore {
 
             var instance:any = null;
 
-            if(_.isFunction(service)){
+            if (_.isFunction(service)) {
                 instance = service(this);
             }
             else {
                 instance = service;
             }
 
-            if(instance.setDI){
+            if (instance && instance.setDI) {
                 instance.setDI(this);
             }
 
-            return service;
+            return instance;
         }
     }
 }

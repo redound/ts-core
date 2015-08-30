@@ -93,7 +93,7 @@ describe("TSCore.Config", () => {
 
         it("depending whether there's a value set for the given key it should return the value or null", () => {
 
-            config.load({
+            var data = {
                 value1: 'Door',
                 value2: 'Window',
                 settings: {
@@ -107,7 +107,9 @@ describe("TSCore.Config", () => {
                         }
                     }
                 }
-            });
+            };
+
+            config.load(data);
 
             expect(config.get('settings')).toEqual({
                 open: true,
@@ -115,6 +117,7 @@ describe("TSCore.Config", () => {
             });
 
             expect(config.get('unavailable')).toBe(null);
+            expect(config.get()).toEqual(data);
         });
     });
 

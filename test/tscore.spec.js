@@ -67,7 +67,7 @@ describe("TSCore.Config", function () {
     });
     describe("get()", function () {
         it("depending whether there's a value set for the given key it should return the value or null", function () {
-            config.load({
+            var data = {
                 value1: 'Door',
                 value2: 'Window',
                 settings: {
@@ -79,12 +79,14 @@ describe("TSCore.Config", function () {
                         level3: {}
                     }
                 }
-            });
+            };
+            config.load(data);
             expect(config.get('settings')).toEqual({
                 open: true,
                 locked: false
             });
             expect(config.get('unavailable')).toBe(null);
+            expect(config.get()).toEqual(data);
         });
     });
     describe("has()", function () {
@@ -105,6 +107,84 @@ describe("TSCore.Config", function () {
             console.log(config.get('level1.level2.level3.level4'));
             expect(config.has('level1.level2.level3')).toBe(true);
             expect(config.has('level1.level2.level3.level4')).toBe(false);
+        });
+    });
+});
+/// <reference path="TSCore.spec.ts" />
+describe("TSCore.DI", function () {
+    var di = new TSCore.DI();
+    beforeEach(function () {
+        di.reset();
+    });
+    describe("set()", function () {
+        it("should be able to resolve a function", function () {
+            di.set('logger', function () {
+                return 'resolvedValue';
+            });
+            expect(di.get('logger')).toEqual('resolvedValue');
+        });
+        it("should be able to return the value if it's not a function", function () {
+            di.set('logger', 'value');
+            expect(di.get('logger')).toEqual('value');
+        });
+    });
+    describe("setShared()", function () {
+        it("should cause get() to always resolve the same value", function () {
+            var listener = jasmine.createSpy();
+            di.setShared('logger', function () {
+                listener();
+                return 'value';
+            });
+            di.get('logger');
+            di.get('logger');
+            expect(listener).toHaveBeenCalled();
+            expect(listener.calls.count()).toBe(1);
+        });
+    });
+    describe("get()", function () {
+        it("should always return a new instance", function () {
+            var listener = jasmine.createSpy();
+            di.set('bike', function () {
+                listener();
+                return;
+            });
+            expect(listener).not.toHaveBeenCalled();
+            di.get('bike');
+            expect(listener).toHaveBeenCalled();
+            di.get('bike');
+            expect(listener.calls.count()).toBe(2);
+            di.get('car');
+            expect(listener.calls.count()).toBe(2);
+        });
+    });
+    describe("getShared()", function () {
+        it("should always return the same instance", function () {
+            function Car() {
+                this.hasDriver = false;
+            }
+            var listener = jasmine.createSpy();
+            di.set('car', function () {
+                listener();
+                return new Car();
+            });
+            var car = di.getShared('car');
+            car.hasDriver = true;
+            expect(di.getShared('car').hasDriver).toBe(true);
+            expect(listener).toHaveBeenCalled();
+            expect(listener.calls.count()).toBe(1);
+            expect(di.get('car').hasDriver).toBe(false);
+            expect(di.getShared('car').hasDriver).toBe(true);
+        });
+    });
+    describe("reset()", function () {
+        it("after being called services should be cleared", function () {
+            di.set('a', 'A');
+            di.set('b', 'B');
+            expect(di.get('a')).toBe('A');
+            expect(di.get('b')).toBe('B');
+            di.reset();
+            expect(di.get('a')).toBe(null);
+            expect(di.get('b')).toBe(null);
         });
     });
 });
