@@ -54,6 +54,9 @@ describe("TSCore.Data.Collection", () => {
         collection.clear();
         addListener.calls.reset();
         changeListener.calls.reset();
+        removeListener.calls.reset();
+        replaceListener.calls.reset();
+        clearListener.calls.reset();
     });
 
     describe("prepend()", () => {
@@ -170,14 +173,38 @@ describe("TSCore.Data.Collection", () => {
 
         it("should replace a given item for another given item", () => {
 
+            // Prepare
+            collection.addMany([animal1, animal4, animal3]);
+
+            // Test
+            collection.replaceItem(animal4, animal2);
+            expect(collection.contains(animal2)).toBe(true);
+            expect(collection.get(1)).toEqual(animal2);
         });
 
         it("should fire CollectionEvents.REPLACE containing the source and the replacement", () => {
 
+            // Prepare
+            collection.addMany([animal1, animal3]);
+
+            // Test
+            expect(replaceListener).not.toHaveBeenCalled();
+            collection.replaceItem(animal3, animal2);
+            expect(replaceListener).toHaveBeenCalled();
+            expect(replaceListener.calls.mostRecent().args[0].params.source).toEqual(animal3);
+            expect(replaceListener.calls.mostRecent().args[0].params.replacement).toEqual(animal2);
         });
 
         it("should fire CollectionEvents.CHANGE", () => {
 
+            // Prepare
+            collection.addMany([animal1, animal3]);
+            changeListener.calls.reset();
+
+            // Test
+            expect(changeListener).not.toHaveBeenCalled();
+            collection.replaceItem(animal3, animal2);
+            expect(changeListener).toHaveBeenCalled();
         });
     });
 
@@ -185,14 +212,46 @@ describe("TSCore.Data.Collection", () => {
 
         it("should replace given item at given index in the collection", () => {
 
+            // Prepare
+            collection.addMany([animal1, animal2]);
+
+            // Test
+            collection.replace(1, animal3);
+            expect(collection.get(1)).toEqual(animal3);
+        });
+
+        it("should not allow replacing an empty index", () => {
+
+            // Prepare
+            collection.addMany([animal1, animal2]);
+
+            // Test
+            collection.replace(20, animal4);
+            expect(collection.get(20)).not.toEqual(animal4);
         });
 
         it("should fire CollectionEvents.REPLACE containing the source and the replacement", () => {
 
+            // Prepare
+            collection.addMany([animal1, animal2]);
+
+            // Test
+            collection.replace(0, animal3);
+            expect(replaceListener).toHaveBeenCalled();
+            expect(replaceListener.calls.mostRecent().args[0].params.source).toEqual(animal1);
+            expect(replaceListener.calls.mostRecent().args[0].params.replacement).toEqual(animal3);
         });
 
         it ("should fire CollectionEvents.CHANGE", () => {
 
+            // Prepare
+            collection.addMany([animal1, animal2]);
+            changeListener.calls.reset();
+
+            // Test
+            expect(changeListener).not.toHaveBeenCalled();
+            collection.replace(0, animal3);
+            expect(changeListener).toHaveBeenCalled();
         });
     });
 
@@ -200,6 +259,11 @@ describe("TSCore.Data.Collection", () => {
 
         it("should return the first item out of the collection", () => {
 
+            // Prepare
+            collection.addMany([animal1, animal2, animal3]);
+
+            // Test
+            expect(collection.first()).toEqual(animal1);
         });
     });
 
@@ -207,6 +271,11 @@ describe("TSCore.Data.Collection", () => {
 
         it("should return the last item out of the collection", () => {
 
+            // Prepare
+            collection.addMany([animal1, animal2, animal3]);
+
+            // Test
+            expect(collection.last()).toEqual(animal3);
         });
     });
 
@@ -214,6 +283,11 @@ describe("TSCore.Data.Collection", () => {
 
         it("should return the item in collection at the given index", () => {
 
+            // Prepare
+            collection.addMany([animal1, animal2, animal3]);
+
+            // Test
+            expect(collection.get(1)).toEqual(animal2);
         });
     });
 
@@ -221,7 +295,25 @@ describe("TSCore.Data.Collection", () => {
 
         it("should return the index of given item in collection", () => {
 
+            // Prepare
+            collection.addMany([animal1, animal2, animal3]);
+
+            // Test
+            expect(collection.indexOf(animal3)).toBe(2);
         });
     });
 
+    describe("clear()", () => {
+
+        it("should fire CollectionEvents.CLEAR", () => {
+
+            // Prepare
+            collection.addMany([animal1, animal2, animal3]);
+
+            // Test
+            expect(clearListener).not.toHaveBeenCalled();
+            collection.clear();
+            expect(clearListener).toHaveBeenCalled();
+        });
+    });
 });

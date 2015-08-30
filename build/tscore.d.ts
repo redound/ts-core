@@ -1,8 +1,4 @@
 /// <reference path="../typings/tsd.d.ts" />
-declare module TSCore.Data {
-    class Config {
-    }
-}
 declare module TSCore.Events {
     class Event<T> {
         topic: string;
@@ -26,6 +22,17 @@ declare module TSCore.Events {
         off(topics: string, callback?: Function, context?: any): TSCore.Events.EventEmitter;
         trigger(topic: string, params?: {}, caller?: any): TSCore.Events.EventEmitter;
         resetEvents(): TSCore.Events.EventEmitter;
+    }
+}
+declare module TSCore {
+    class Config extends Events.EventEmitter {
+        private _cache;
+        private _data;
+        get(key: string): any;
+        set(key: string, value: any): TSCore.Config;
+        load(value: any): TSCore.Config;
+        has(key: string): boolean;
+        clear(key?: string): TSCore.Config;
     }
 }
 declare module TSCore.Data {
@@ -326,6 +333,11 @@ declare module TSCore.Geometry {
 declare module TSCore {
     class Logger {
         constructor();
+        log(): void;
+        info(): void;
+        debug(): void;
+        error(): void;
+        warn(): void;
     }
 }
 declare module TSCore {

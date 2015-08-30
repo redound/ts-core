@@ -1,17 +1,5 @@
 var TSCore;
 (function (TSCore) {
-    var Data;
-    (function (Data) {
-        var Config = (function () {
-            function Config() {
-            }
-            return Config;
-        })();
-        Data.Config = Config;
-    })(Data = TSCore.Data || (TSCore.Data = {}));
-})(TSCore || (TSCore = {}));
-var TSCore;
-(function (TSCore) {
     var Events;
     (function (Events) {
         var Event = (function () {
@@ -116,13 +104,91 @@ var TSCore;
         Events.EventEmitter = EventEmitter;
     })(Events = TSCore.Events || (TSCore.Events = {}));
 })(TSCore || (TSCore = {}));
-/// <reference path="../Events/EventEmitter.ts" />
+/// <reference path="Events/EventEmitter.ts" />
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+var TSCore;
+(function (TSCore) {
+    var Config = (function (_super) {
+        __extends(Config, _super);
+        function Config() {
+            _super.apply(this, arguments);
+        }
+        Config.prototype.get = function (key) {
+            if (this._cache[key]) {
+                return this._cache[key];
+            }
+            var segs = key.split('.');
+            var root = this._data;
+            for (var i = 0; i < segs.length; i++) {
+                var part = segs[i];
+                if (root[part] !== void 0) {
+                    root = root[part];
+                }
+                else {
+                    root = null;
+                    break;
+                }
+            }
+            return this._cache[key] = root;
+        };
+        Config.prototype.set = function (key, value) {
+            this._cache = this._cache || {};
+            this._data = this._data || {};
+            var segs = key.split('.');
+            var root = this._data;
+            for (var i = 0; i < segs.length; i++) {
+                var part = segs[i];
+                if (root[part] === void 0 && i !== segs.length - 1) {
+                    root[part] = {};
+                }
+                root = root[part];
+            }
+            this._cache[key] = root = value;
+            return this;
+        };
+        Config.prototype.load = function (value) {
+            this._data = value;
+            return this;
+        };
+        Config.prototype.has = function (key) {
+            return (this.get(key) !== null);
+        };
+        Config.prototype.clear = function (key) {
+            if (key) {
+                this._cache = this._cache || {};
+                this._data = this._data || {};
+                if (!this.has(key)) {
+                    return this;
+                }
+                delete this._cache[key];
+                var segs = key.split('.');
+                var root = this._data;
+                for (var i = 0; i < segs.length; i++) {
+                    var part = segs[i];
+                    if (!root[part]) {
+                        break;
+                    }
+                    if (i === segs.length - 1) {
+                        delete root[part];
+                    }
+                    root = root[part];
+                }
+                return this;
+            }
+            this._cache = {};
+            this._data = {};
+            return this;
+        };
+        return Config;
+    })(TSCore.Events.EventEmitter);
+    TSCore.Config = Config;
+})(TSCore || (TSCore = {}));
+/// <reference path="../Events/EventEmitter.ts" />
 var TSCore;
 (function (TSCore) {
     var Data;
@@ -437,7 +503,7 @@ var TSCore;
             };
             Collection.prototype.prependMany = function (items) {
                 this._data = items.concat(this._data);
-                this.trigger(CollectionEvents.ADD, { items: [items] });
+                this.trigger(CollectionEvents.ADD, { items: items });
                 this.trigger(CollectionEvents.CHANGE);
             };
             Collection.prototype.insert = function (item, index) {
@@ -938,6 +1004,16 @@ var TSCore;
     var Logger = (function () {
         function Logger() {
         }
+        Logger.prototype.log = function () {
+        };
+        Logger.prototype.info = function () {
+        };
+        Logger.prototype.debug = function () {
+        };
+        Logger.prototype.error = function () {
+        };
+        Logger.prototype.warn = function () {
+        };
         return Logger;
     })();
     TSCore.Logger = Logger;
