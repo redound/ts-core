@@ -115,10 +115,18 @@ var TSCore;
 (function (TSCore) {
     var Config = (function (_super) {
         __extends(Config, _super);
-        function Config() {
-            _super.apply(this, arguments);
+        function Config(data) {
+            _super.call(this);
+            if (data) {
+                this.load(data);
+            }
         }
         Config.prototype.get = function (key) {
+            this._data = this._data || {};
+            this._cache = this._cache || {};
+            if (!key) {
+                return this._data;
+            }
             if (this._cache[key]) {
                 return this._cache[key];
             }

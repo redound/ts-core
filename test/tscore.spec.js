@@ -5,6 +5,17 @@ describe("TSCore.Config", function () {
     beforeEach(function () {
         config.clear();
     });
+    describe("constructor()", function () {
+        it("should load data when given", function () {
+            var config = new TSCore.Config({
+                value1: true,
+                value2: true
+            });
+            expect(config.has('value1')).toBe(true);
+            expect(config.has('value2')).toBe(true);
+            expect(config.has('value3')).toBe(false);
+        });
+    });
     describe("clear()", function () {
         it("when given a key it should remove it", function () {
             config.load({

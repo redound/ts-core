@@ -28,7 +28,8 @@ declare module TSCore {
     class Config extends Events.EventEmitter {
         private _cache;
         private _data;
-        get(key: string): any;
+        constructor(data?: any);
+        get(key?: string): any;
         set(key: string, value: any): TSCore.Config;
         load(value: any): TSCore.Config;
         has(key: string): boolean;

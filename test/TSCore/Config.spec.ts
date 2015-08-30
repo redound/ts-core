@@ -11,6 +11,21 @@ describe("TSCore.Config", () => {
         config.clear();
     });
 
+    describe("constructor()", () => {
+
+        it("should load data when given", () => {
+
+            var config = new TSCore.Config({
+                value1: true,
+                value2: true
+            });
+
+            expect(config.has('value1')).toBe(true);
+            expect(config.has('value2')).toBe(true);
+            expect(config.has('value3')).toBe(false);
+        });
+    });
+
     describe("clear()", () => {
 
         it("when given a key it should remove it", () => {

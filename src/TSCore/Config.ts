@@ -8,12 +8,35 @@ module TSCore {
         private _data: any;
 
         /**
+         * Load config by passing data to constructor (optional)
+         *
+         * @param data Any value to load config with.
+         */
+        constructor(data?: any) {
+
+            super();
+
+            if (data) {
+                this.load(data);
+            }
+        }
+
+        /**
          * Get (nested) value for key.
+         * When no key is specified it returns
+         * the full config.
          *
          * @param key   Key to return value for.
          * @returns {any}
          */
-        public get(key: string): any {
+        public get(key?: string): any {
+
+            this._data = this._data || {};
+            this._cache = this._cache || {};
+
+            if (!key) {
+                return this._data;
+            }
 
             if (this._cache[key]) {
                 return this._cache[key];
