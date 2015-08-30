@@ -140,7 +140,6 @@ describe("TSCore.Config", () => {
                     }
                 }
             });
-            console.log(config.get('level1.level2.level3.level4'));
 
             expect(config.has('level1.level2.level3')).toBe(true);
             expect(config.has('level1.level2.level3.level4')).toBe(false);
