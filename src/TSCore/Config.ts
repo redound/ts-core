@@ -7,7 +7,13 @@ module TSCore {
         private _cache: any;
         private _data: any;
 
-        public get(key: string) {
+        /**
+         * Get (nested) value for key.
+         *
+         * @param key   Key to return value for.
+         * @returns {any}
+         */
+        public get(key: string): any {
 
             if (this._cache[key]) {
                 return this._cache[key];
@@ -31,6 +37,13 @@ module TSCore {
             return this._cache[key] = root;
         }
 
+        /**
+         * Set (nested) value for key.
+         *
+         * @param key       Key optionally separated by a dot.
+         * @param value     Value to set for given key.
+         * @returns {TSCore.Config}
+         */
         public set(key: string, value: any): TSCore.Config {
 
             this._cache = this._cache || {};
@@ -56,17 +69,35 @@ module TSCore {
             return this;
         }
 
+        /**
+         * Load config with value.
+         *
+         * @param value Any value.
+         * @returns {TSCore.Config}
+         */
         public load(value: any): TSCore.Config {
 
             this._data = value;
             return this;
         }
 
+        /**
+         * Check if config has (nested) value for key.
+         *
+         * @param key Key to check for.
+         * @returns {boolean}
+         */
         public has(key: string): boolean {
 
             return (this.get(key) !== null);
         }
 
+        /**
+         * Clear the config or when passing a key the value of a that given key.
+         *
+         * @param key   Optional key to clear value of.
+         * @returns {TSCore.Config}
+         */
         public clear(key?: string): TSCore.Config {
 
             if (key) {
