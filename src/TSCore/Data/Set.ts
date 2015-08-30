@@ -4,11 +4,11 @@ module TSCore.Data {
 
     export module SetEvents {
 
-        export const ADD:string = "add";
-        export const CHANGE:string = "change";
-        export const REMOVE:string = "remove";
-        export const REPLACE:string = "replace";
-        export const CLEAR:string = "clear";
+        export const ADD: string = "add";
+        export const CHANGE: string = "change";
+        export const REMOVE: string = "remove";
+        export const REPLACE: string = "replace";
+        export const CLEAR: string = "clear";
 
         export interface IChangeParams<T> {}
         export interface IClearParams<T> {}

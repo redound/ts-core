@@ -1007,24 +1007,162 @@ var TSCore;
         Geometry.Size = Size;
     })(Geometry = TSCore.Geometry || (TSCore.Geometry = {}));
 })(TSCore || (TSCore = {}));
+/// <reference path="Stream/IStream.ts" />
 var TSCore;
 (function (TSCore) {
-    var Logger = (function () {
-        function Logger() {
-        }
-        Logger.prototype.log = function () {
-        };
-        Logger.prototype.info = function () {
-        };
-        Logger.prototype.debug = function () {
-        };
-        Logger.prototype.error = function () {
-        };
-        Logger.prototype.warn = function () {
-        };
-        return Logger;
-    })();
-    TSCore.Logger = Logger;
+    var Logger;
+    (function (Logger_1) {
+        (function (LogLevel) {
+            LogLevel[LogLevel["TRACE"] = 0] = "TRACE";
+            LogLevel[LogLevel["DEBUG"] = 1] = "DEBUG";
+            LogLevel[LogLevel["INFO"] = 2] = "INFO";
+            LogLevel[LogLevel["WARN"] = 3] = "WARN";
+            LogLevel[LogLevel["ERROR"] = 4] = "ERROR";
+            LogLevel[LogLevel["FATAL"] = 5] = "FATAL";
+        })(Logger_1.LogLevel || (Logger_1.LogLevel = {}));
+        var LogLevel = Logger_1.LogLevel;
+        var Logger = (function () {
+            function Logger() {
+                this._streams = new TSCore.Data.Dictionary();
+            }
+            Logger.prototype.setStream = function (key, logger) {
+                this._streams.set(key, logger);
+            };
+            Logger.prototype.unsetStream = function (key) {
+                this._streams.remove(key);
+            };
+            Logger.prototype.trace = function () {
+                var args = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    args[_i - 0] = arguments[_i];
+                }
+                this._exec({
+                    level: TSCore.Logger.LogLevel.TRACE,
+                    args: args
+                });
+            };
+            Logger.prototype.debug = function () {
+                var args = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    args[_i - 0] = arguments[_i];
+                }
+                this._exec({
+                    level: TSCore.Logger.LogLevel.DEBUG,
+                    args: args
+                });
+            };
+            Logger.prototype.info = function () {
+                var args = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    args[_i - 0] = arguments[_i];
+                }
+                this._exec({
+                    level: TSCore.Logger.LogLevel.INFO,
+                    args: args
+                });
+            };
+            Logger.prototype.warn = function () {
+                var args = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    args[_i - 0] = arguments[_i];
+                }
+                this._exec({
+                    level: TSCore.Logger.LogLevel.WARN,
+                    args: args
+                });
+            };
+            Logger.prototype.error = function () {
+                var args = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    args[_i - 0] = arguments[_i];
+                }
+                this._exec({
+                    level: TSCore.Logger.LogLevel.ERROR,
+                    args: args
+                });
+            };
+            Logger.prototype.fatal = function () {
+                var args = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    args[_i - 0] = arguments[_i];
+                }
+                this._exec({
+                    level: TSCore.Logger.LogLevel.FATAL,
+                    args: args
+                });
+            };
+            Logger.prototype._exec = function (options) {
+                this._streams.each(function (key, stream) {
+                    stream.exec({
+                        level: options.level,
+                        args: options.args,
+                        time: new Date().getTime()
+                    });
+                });
+            };
+            return Logger;
+        })();
+        Logger_1.Logger = Logger;
+    })(Logger = TSCore.Logger || (TSCore.Logger = {}));
+})(TSCore || (TSCore = {}));
+/// <reference path="IStream.ts" />
+var TSCore;
+(function (TSCore) {
+    var Logger;
+    (function (Logger) {
+        var Stream;
+        (function (Stream) {
+            var Console = (function () {
+                function Console(_console) {
+                    this._console = _console;
+                    this.level = TSCore.Logger.LogLevel.DEBUG;
+                }
+                Console.prototype.exec = function (options) {
+                    var method;
+                    console.log('options.level', options.level);
+                    console.log('this.level', this.level);
+                    if (this.level > options.level) {
+                        return;
+                    }
+                    switch (options.level) {
+                        case TSCore.Logger.LogLevel.DEBUG:
+                            method = 'debug';
+                            break;
+                        case TSCore.Logger.LogLevel.INFO:
+                            method = 'info';
+                            break;
+                        case TSCore.Logger.LogLevel.WARN:
+                            method = 'warn';
+                            break;
+                        case TSCore.Logger.LogLevel.ERROR:
+                            method = 'error';
+                            break;
+                    }
+                    this._console[method].apply(this._console, options.args || []);
+                };
+                return Console;
+            })();
+            Stream.Console = Console;
+        })(Stream = Logger.Stream || (Logger.Stream = {}));
+    })(Logger = TSCore.Logger || (TSCore.Logger = {}));
+})(TSCore || (TSCore = {}));
+/// <reference path="IStream.ts" />
+var TSCore;
+(function (TSCore) {
+    var Logger;
+    (function (Logger) {
+        var Stream;
+        (function (Stream) {
+            var Toastr = (function () {
+                function Toastr() {
+                }
+                Toastr.prototype.exec = function () {
+                };
+                return Toastr;
+            })();
+            Stream.Toastr = Toastr;
+        })(Stream = Logger.Stream || (Logger.Stream = {}));
+    })(Logger = TSCore.Logger || (TSCore.Logger = {}));
 })(TSCore || (TSCore = {}));
 var TSCore;
 (function (TSCore) {
@@ -1173,7 +1311,10 @@ var TSCore;
 /// <reference path="TSCore/Geometry/Point.ts" />
 /// <reference path="TSCore/Geometry/Rect.ts" />
 /// <reference path="TSCore/Geometry/Size.ts" />
-/// <reference path="TSCore/Logger.ts" />
+/// <reference path="TSCore/Logger/Logger.ts" />
+/// <reference path="TSCore/Logger/Stream/Console.ts" />
+/// <reference path="TSCore/Logger/Stream/IStream.ts" />
+/// <reference path="TSCore/Logger/Stream/Toastr.ts" />
 /// <reference path="TSCore/TSCore.ts" />
 /// <reference path="TSCore/Text/Format.ts" />
 /// <reference path="TSCore/Text/Language.ts" />

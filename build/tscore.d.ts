@@ -331,14 +331,65 @@ declare module TSCore.Geometry {
         halfHeight(): number;
     }
 }
+declare module TSCore.Logger {
+    interface IStream {
+        level: LogLevel;
+        exec(options: ILogOptions): any;
+    }
+}
 declare module TSCore {
-    class Logger {
-        constructor();
-        log(): void;
-        info(): void;
-        debug(): void;
-        error(): void;
-        warn(): void;
+    module Logger {
+        enum LogLevel {
+            TRACE = 0,
+            DEBUG = 1,
+            INFO = 2,
+            WARN = 3,
+            ERROR = 4,
+            FATAL = 5,
+        }
+        interface IExecOptions {
+            level: LogLevel;
+            args: any[];
+        }
+        interface ILogOptions {
+            level: LogLevel;
+            args: any[];
+            time: number;
+        }
+        class Logger {
+            private _streams;
+            constructor();
+            setStream(key: string, logger: TSCore.Logger.IStream): void;
+            unsetStream(key: string): void;
+            trace(...args: any[]): void;
+            debug(...args: any[]): void;
+            info(...args: any[]): void;
+            warn(...args: any[]): void;
+            error(...args: any[]): void;
+            fatal(...args: any[]): void;
+            private _exec(options);
+        }
+    }
+}
+declare module TSCore.Logger.Stream {
+    interface IConsole {
+        debug(): any;
+        log(): any;
+        info(): any;
+        warn(): any;
+        error(): any;
+    }
+    class Console implements TSCore.Logger.IStream {
+        private _console;
+        level: TSCore.Logger.LogLevel;
+        constructor(_console: IConsole);
+        exec(options: TSCore.Logger.IExecOptions): void;
+    }
+}
+declare module TSCore.Logger.Stream {
+    class Toastr implements TSCore.Logger.IStream {
+        level: TSCore.Logger.LogLevel;
+        exec(): void;
     }
 }
 declare module TSCore {

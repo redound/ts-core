@@ -104,7 +104,6 @@ describe("TSCore.Config", function () {
                     }
                 }
             });
-            console.log(config.get('level1.level2.level3.level4'));
             expect(config.has('level1.level2.level3')).toBe(true);
             expect(config.has('level1.level2.level3.level4')).toBe(false);
         });
@@ -857,6 +856,38 @@ describe("TSCore.Geometry.Size", function () {
         var height = 20;
         var size = new TSCore.Geometry.Size(width, height);
         expect(size.halfHeight()).toBe(height / 2);
+    });
+});
+/// <reference path="../../TSCore.spec.ts" />
+describe("TSCore.Logger.Stream.Console", function () {
+    var logSpy = jasmine.createSpy('logSpy');
+    var debugSpy = jasmine.createSpy('debugSpy');
+    var infoSpy = jasmine.createSpy('infoSpy');
+    var warnSpy = jasmine.createSpy('warnSpy');
+    var errorSpy = jasmine.createSpy('errorSpy');
+    var fakeConsole = {
+        log: logSpy,
+        debug: debugSpy,
+        info: infoSpy,
+        warn: warnSpy,
+        error: errorSpy
+    };
+    beforeEach(function () {
+        logSpy.calls.reset();
+        debugSpy.calls.reset();
+        infoSpy.calls.reset();
+        warnSpy.calls.reset();
+        errorSpy.calls.reset();
+    });
+    describe("exec()", function () {
+        it("should not execute when level is higher", function () {
+            var consoleStream = new TSCore.Logger.Stream.Console(fakeConsole);
+            var logger = new TSCore.Logger.Logger();
+            logger.setStream('console', consoleStream);
+            logger.error('Test error');
+            expect(errorSpy).toHaveBeenCalled();
+            expect(errorSpy.calls.mostRecent().args[0]).toBe('Test error');
+        });
     });
 });
 /// <reference path="../TSCore.spec.ts" />
