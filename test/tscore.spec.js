@@ -890,6 +890,18 @@ describe("TSCore.Logger.Stream.Console", function () {
         });
     });
 });
+var TSCore;
+(function (TSCore) {
+    var Session;
+    (function (Session_1) {
+        var Session = (function () {
+            function Session() {
+            }
+            return Session;
+        })();
+        Session_1.Session = Session;
+    })(Session = TSCore.Session || (TSCore.Session = {}));
+})(TSCore || (TSCore = {}));
 /// <reference path="../TSCore.spec.ts" />
 describe("TSCore.Text.URL", function () {
     var host = "www.example.com";
