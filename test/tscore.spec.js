@@ -1,4 +1,48 @@
 /// <reference path="../../build/tscore.d.ts" /> 
+/// <reference path="../TSCore.spec.ts" />
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
+var Mocks;
+(function (Mocks) {
+    var Bootstrap = (function (_super) {
+        __extends(Bootstrap, _super);
+        function Bootstrap() {
+            _super.call(this);
+            this.configSpy = jasmine.createSpy();
+            this.loggerSpy = jasmine.createSpy();
+            this.authManagerSpy = jasmine.createSpy();
+        }
+        Bootstrap.prototype._initConfig = function () {
+            this.configSpy();
+        };
+        Bootstrap.prototype._initLogger = function () {
+            this.loggerSpy();
+        };
+        Bootstrap.prototype._initAuthManager = function () {
+            this.authManagerSpy();
+        };
+        return Bootstrap;
+    })(TSCore.Bootstrap);
+    Mocks.Bootstrap = Bootstrap;
+})(Mocks || (Mocks = {}));
+/// <reference path="TSCore.spec.ts" />
+/// <reference path="./Mocks/Bootstrap.ts" />
+describe("TSCore.Config", function () {
+    it("should call each method starting with '_init'", function () {
+        var bootstrap = new Mocks.Bootstrap();
+        expect(bootstrap.configSpy).not.toHaveBeenCalled();
+        expect(bootstrap.loggerSpy).not.toHaveBeenCalled();
+        expect(bootstrap.authManagerSpy).not.toHaveBeenCalled();
+        bootstrap.init();
+        expect(bootstrap.configSpy).toHaveBeenCalled();
+        expect(bootstrap.loggerSpy).toHaveBeenCalled();
+        expect(bootstrap.authManagerSpy).toHaveBeenCalled();
+    });
+});
 /// <reference path="TSCore.spec.ts" />
 describe("TSCore.Config", function () {
     var config = new TSCore.Config();
@@ -887,6 +931,33 @@ describe("TSCore.Logger.Stream.Console", function () {
             logger.error('Test error');
             expect(errorSpy).toHaveBeenCalled();
             expect(errorSpy.calls.mostRecent().args[0]).toBe('Test error');
+        });
+    });
+});
+/// <reference path="../TSCore.spec.ts" />
+describe("TSCore.Text.Format", function () {
+    describe("startsWith()", function () {
+        it("should return true when source string starts with search string", function () {
+            expect(TSCore.Text.Format.startsWith("Hello world", "Hello")).toBe(true);
+            expect(TSCore.Text.Format.startsWith("Hello world", "Hello worl")).toBe(true);
+            expect(TSCore.Text.Format.startsWith("Hello world", "Hello world")).toBe(true);
+        });
+        it("should return false when source string does not start with search string", function () {
+            expect(TSCore.Text.Format.startsWith("Hell world", "Hello")).toBe(false);
+            expect(TSCore.Text.Format.startsWith("Hell' world", "Hello worl")).toBe(false);
+            expect(TSCore.Text.Format.startsWith("Hello forld", "Hello world")).toBe(false);
+        });
+    });
+    describe("endsWith()", function () {
+        it("should return true when source string ends with search string", function () {
+            expect(TSCore.Text.Format.endsWith("Hello world", "rld")).toBe(true);
+            expect(TSCore.Text.Format.endsWith("Hello world", "world")).toBe(true);
+            expect(TSCore.Text.Format.endsWith("Hello&*world", "&*world")).toBe(true);
+        });
+        it("should return false when source string does not end with search string", function () {
+            expect(TSCore.Text.Format.endsWith("Hell world", "al")).toBe(false);
+            expect(TSCore.Text.Format.endsWith("Hell world", "srld")).toBe(false);
+            expect(TSCore.Text.Format.endsWith("Hello forld", "Hello sl")).toBe(false);
         });
     });
 });

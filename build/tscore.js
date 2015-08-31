@@ -217,6 +217,22 @@ var TSCore;
         Auth.Session = Session;
     })(Auth = TSCore.Auth || (TSCore.Auth = {}));
 })(TSCore || (TSCore = {}));
+var TSCore;
+(function (TSCore) {
+    var Bootstrap = (function () {
+        function Bootstrap() {
+        }
+        Bootstrap.prototype.init = function () {
+            for (var method in this) {
+                if (TSCore.Text.Format.startsWith(method, "_init")) {
+                    this[method]();
+                }
+            }
+        };
+        return Bootstrap;
+    })();
+    TSCore.Bootstrap = Bootstrap;
+})(TSCore || (TSCore = {}));
 /// <reference path="Events/EventEmitter.ts" />
 var TSCore;
 (function (TSCore) {
@@ -1353,6 +1369,12 @@ var TSCore;
                 }
                 return input.charAt(0).toUpperCase() + input.slice(1);
             };
+            Format.startsWith = function (source, search) {
+                return source.slice(0, search.length) == search;
+            };
+            Format.endsWith = function (source, search) {
+                return source.slice(-search.length) == search;
+            };
             Format.HtmlEntityMap = {
                 "&": "&amp;",
                 "<": "&lt;",
@@ -1435,6 +1457,7 @@ var TSCore;
 /// <reference path="TSCore/Auth/AuthManager.ts" />
 /// <reference path="TSCore/Auth/AuthMethod.ts" />
 /// <reference path="TSCore/Auth/Session.ts" />
+/// <reference path="TSCore/Bootstrap.ts" />
 /// <reference path="TSCore/Config.ts" />
 /// <reference path="TSCore/DI.ts" />
 /// <reference path="TSCore/Data/Collection.ts" />

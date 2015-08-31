@@ -4,6 +4,7 @@
 /// <reference path="TSCore/Auth/AuthManager.ts" />
 /// <reference path="TSCore/Auth/AuthMethod.ts" />
 /// <reference path="TSCore/Auth/Session.ts" />
+/// <reference path="TSCore/Bootstrap.ts" />
 /// <reference path="TSCore/Config.ts" />
 /// <reference path="TSCore/DI.ts" />
 /// <reference path="TSCore/Data/Collection.ts" />

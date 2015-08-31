@@ -76,6 +76,12 @@ declare module TSCore.Auth {
     }
 }
 declare module TSCore {
+    class Bootstrap {
+        constructor();
+        init(): void;
+    }
+}
+declare module TSCore {
     class Config extends Events.EventEmitter {
         private _cache;
         private _data;
@@ -474,6 +480,8 @@ declare module TSCore.Text {
         static concatenate(parts: any[], seperator?: string, lastSeparator?: string): string;
         static zeroPad(input: string, width: number, zero?: string): string;
         static ucFirst(input: string): string;
+        static startsWith(source: String, search: String): boolean;
+        static endsWith(source: String, search: String): boolean;
     }
 }
 declare module TSCore.Text {

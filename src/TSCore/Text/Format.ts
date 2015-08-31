@@ -101,5 +101,27 @@ module TSCore.Text {
 
             return input.charAt(0).toUpperCase() + input.slice(1);
         }
+
+        /**
+         * Check if string starts with a certain string.
+         *
+         * @param input     String to check for.
+         * @returns {boolean}
+         */
+        public static startsWith(source: String, search: String): boolean {
+
+            return source.slice(0, search.length) == search;
+        }
+
+        /**
+         * Check if string ends with a certain string.
+         *
+         * @param input     String to check for.
+         * @returns {boolean}
+         */
+        public static endsWith(source: String, search: String): boolean {
+
+            return source.slice(-search.length) == search;
+        }
     }
 }
