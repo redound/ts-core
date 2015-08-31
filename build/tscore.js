@@ -1119,8 +1119,6 @@ var TSCore;
                 }
                 Console.prototype.exec = function (options) {
                     var method;
-                    console.log('options.level', options.level);
-                    console.log('this.level', this.level);
                     if (this.level > options.level) {
                         return;
                     }

@@ -7,6 +7,9 @@
   "installed": {
     "underscore/underscore.d.ts": {
       "commit": "38fb591c6eba840e0b53d1110302b8e4fb04651c"
+    },
+    "angular-ui-router/angular-ui-router.d.ts": {
+      "commit": "72585f339c91f64b7765c20bc4ebf045bcef4739"
     }
   }
 }
