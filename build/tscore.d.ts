@@ -77,7 +77,6 @@ declare module TSCore.Auth {
 }
 declare module TSCore {
     class Bootstrap {
-        constructor();
         init(): void;
     }
 }
