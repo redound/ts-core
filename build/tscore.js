@@ -1,5 +1,21 @@
 var TSCore;
 (function (TSCore) {
+    var Bootstrap = (function () {
+        function Bootstrap() {
+        }
+        Bootstrap.prototype.init = function () {
+            for (var method in this) {
+                if (TSCore.Text.Format.startsWith(method, "_init")) {
+                    this[method]();
+                }
+            }
+        };
+        return Bootstrap;
+    })();
+    TSCore.Bootstrap = Bootstrap;
+})(TSCore || (TSCore = {}));
+var TSCore;
+(function (TSCore) {
     var Events;
     (function (Events) {
         var Event = (function () {
@@ -1209,6 +1225,12 @@ var TSCore;
                 }
                 return input.charAt(0).toUpperCase() + input.slice(1);
             };
+            Format.startsWith = function (source, search) {
+                return source.slice(0, search.length) == search;
+            };
+            Format.endsWith = function (source, search) {
+                return source.slice(-search.length) == search;
+            };
             Format.HtmlEntityMap = {
                 "&": "&amp;",
                 "<": "&lt;",
@@ -1288,6 +1310,7 @@ var TSCore;
     })(Text = TSCore.Text || (TSCore.Text = {}));
 })(TSCore || (TSCore = {}));
 /// <reference path="../typings/tsd.d.ts" />
+/// <reference path="TSCore/Bootstrap.ts" />
 /// <reference path="TSCore/Config.ts" />
 /// <reference path="TSCore/DI.ts" />
 /// <reference path="TSCore/Data/Collection.ts" />

@@ -1,4 +1,10 @@
 /// <reference path="../typings/tsd.d.ts" />
+declare module TSCore {
+    class Bootstrap {
+        constructor();
+        init(): void;
+    }
+}
 declare module TSCore.Events {
     class Event<T> {
         topic: string;
@@ -406,6 +412,8 @@ declare module TSCore.Text {
         static concatenate(parts: any[], seperator?: string, lastSeparator?: string): string;
         static zeroPad(input: string, width: number, zero?: string): string;
         static ucFirst(input: string): string;
+        static startsWith(source: String, search: String): boolean;
+        static endsWith(source: String, search: String): boolean;
     }
 }
 declare module TSCore.Text {

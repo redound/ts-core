@@ -1,6 +1,7 @@
 /// <reference path="../typings/tsd.d.ts" />
 
 //grunt-start
+/// <reference path="TSCore/Bootstrap.ts" />
 /// <reference path="TSCore/Config.ts" />
 /// <reference path="TSCore/DI.ts" />
 /// <reference path="TSCore/Data/Collection.ts" />
