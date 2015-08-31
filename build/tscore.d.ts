@@ -24,6 +24,57 @@ declare module TSCore.Events {
         resetEvents(): TSCore.Events.EventEmitter;
     }
 }
+declare module TSCore.Auth {
+    interface IAuthAttemptError {
+        message: string;
+    }
+    interface IAuthAttempt {
+        (error: IAuthAttemptError, session: Session): any;
+    }
+    class AuthManager extends TSCore.Events.EventEmitter {
+        protected _authMethods: TSCore.Data.Dictionary<string, AuthMethod>;
+        protected _session: Session;
+        constructor();
+        login(method: string, credentials: {}, done: IAuthAttempt): void;
+        setMethod(method: string, authMethod: AuthMethod): TSCore.Auth.AuthManager;
+        removeMethod(method: string): TSCore.Auth.AuthManager;
+        check(): boolean;
+        getSession(): Session;
+        isSession(method: string): boolean;
+    }
+}
+declare module TSCore.Auth {
+    class AuthMethod {
+        name: string;
+        login(credentials: any, done: IAuthAttempt): void;
+    }
+}
+declare module TSCore.Auth {
+    interface IUserEmail {
+        value: string;
+        type: string;
+    }
+    interface IUserName {
+        familyName: string;
+        givenName: string;
+        middleName: string;
+    }
+    interface IUser {
+        provider: string;
+        id: number;
+        displayName: IUserName;
+        emails: IUserEmail[];
+    }
+    class Session {
+        protected _method: string;
+        protected _user: IUser;
+        constructor(_method?: string, _user?: IUser);
+        getUser(): IUser;
+        setUser(user: IUser): TSCore.Auth.Session;
+        getMethod(): string;
+        setMethod(method: string): TSCore.Auth.Session;
+    }
+}
 declare module TSCore {
     class Config extends Events.EventEmitter {
         private _cache;
@@ -237,6 +288,23 @@ declare module TSCore.Data {
         get(index: number): T;
         indexOf(item: T): number;
         sort(): void;
+    }
+}
+declare module TSCore.Data {
+    interface IRemoteStorage {
+        getItem(key: any): any;
+        setItem(key: string, value: any): void;
+        removeItem(key: string): void;
+        clear(): void;
+    }
+    class Store extends TSCore.Data.Dictionary<string, any> {
+        protected _storage: IRemoteStorage;
+        constructor(_storage: IRemoteStorage, data?: IDictionaryData);
+        load(): void;
+        get(key: string): any;
+        set(key: string, value: any): void;
+        remove(key: string): void;
+        clear(): void;
     }
 }
 declare module TSCore.DateTime {

@@ -104,13 +104,120 @@ var TSCore;
         Events.EventEmitter = EventEmitter;
     })(Events = TSCore.Events || (TSCore.Events = {}));
 })(TSCore || (TSCore = {}));
-/// <reference path="Events/EventEmitter.ts" />
+/// <reference path="../Events/EventEmitter.ts" />
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+var TSCore;
+(function (TSCore) {
+    var Auth;
+    (function (Auth) {
+        var AuthEvents;
+        (function (AuthEvents) {
+            AuthEvents.ATTEMPT_FAIL = "attempt-fail";
+            AuthEvents.ATTEMPT_SUCCESS = "attempt-success";
+            AuthEvents.LOGIN = "login";
+            AuthEvents.LOGOUT = "logout";
+        })(AuthEvents || (AuthEvents = {}));
+        var AuthManager = (function (_super) {
+            __extends(AuthManager, _super);
+            function AuthManager() {
+                _super.call(this);
+            }
+            AuthManager.prototype.login = function (method, credentials, done) {
+                var _this = this;
+                var authMethod = this._authMethods.get(method);
+                if (!authMethod) {
+                    done({ message: 'AuthMethod does not exist' }, null);
+                }
+                authMethod.login(credentials, function (error, session) {
+                    if (error) {
+                        _this.trigger(AuthEvents.ATTEMPT_FAIL, { credentials: credentials, method: method });
+                        return done(error, null);
+                    }
+                    _this.trigger(AuthEvents.ATTEMPT_SUCCESS, { credentials: credentials, method: method, session: session });
+                    _this.trigger(AuthEvents.LOGIN, { credentials: credentials, method: method, session: session });
+                    done(error, session);
+                });
+            };
+            AuthManager.prototype.setMethod = function (method, authMethod) {
+                this._authMethods.set(method, authMethod);
+                return this;
+            };
+            AuthManager.prototype.removeMethod = function (method) {
+                this._authMethods.remove(method);
+                return this;
+            };
+            AuthManager.prototype.check = function () {
+                return !!this._session;
+            };
+            AuthManager.prototype.getSession = function () {
+                return this._session;
+            };
+            AuthManager.prototype.isSession = function (method) {
+                var session = this.getSession();
+                if (!session) {
+                    return false;
+                }
+                return (session.getMethod() === method);
+            };
+            return AuthManager;
+        })(TSCore.Events.EventEmitter);
+        Auth.AuthManager = AuthManager;
+    })(Auth = TSCore.Auth || (TSCore.Auth = {}));
+})(TSCore || (TSCore = {}));
+var TSCore;
+(function (TSCore) {
+    var Auth;
+    (function (Auth) {
+        var AuthMethod = (function () {
+            function AuthMethod() {
+            }
+            AuthMethod.prototype.login = function (credentials, done) {
+                if (false) {
+                    done(null, new Auth.Session());
+                }
+                else {
+                    done({ message: 'Failed to authenticate' }, null);
+                }
+            };
+            return AuthMethod;
+        })();
+        Auth.AuthMethod = AuthMethod;
+    })(Auth = TSCore.Auth || (TSCore.Auth = {}));
+})(TSCore || (TSCore = {}));
+var TSCore;
+(function (TSCore) {
+    var Auth;
+    (function (Auth) {
+        var Session = (function () {
+            function Session(_method, _user) {
+                this._method = _method;
+                this._user = _user;
+            }
+            Session.prototype.getUser = function () {
+                return this._user;
+            };
+            Session.prototype.setUser = function (user) {
+                this._user = user;
+                return this;
+            };
+            Session.prototype.getMethod = function () {
+                return this._method;
+            };
+            Session.prototype.setMethod = function (method) {
+                this._method = method;
+                return this;
+            };
+            return Session;
+        })();
+        Auth.Session = Session;
+    })(Auth = TSCore.Auth || (TSCore.Auth = {}));
+})(TSCore || (TSCore = {}));
+/// <reference path="Events/EventEmitter.ts" />
 var TSCore;
 (function (TSCore) {
     var Config = (function (_super) {
@@ -698,6 +805,43 @@ var TSCore;
             return SortedCollection;
         })(Data.Set);
         Data.SortedCollection = SortedCollection;
+    })(Data = TSCore.Data || (TSCore.Data = {}));
+})(TSCore || (TSCore = {}));
+/// <reference path="./Dictionary.ts" />
+var TSCore;
+(function (TSCore) {
+    var Data;
+    (function (Data) {
+        var Store = (function (_super) {
+            __extends(Store, _super);
+            function Store(_storage, data) {
+                _super.call(this, data);
+                this._storage = _storage;
+                this.load();
+            }
+            Store.prototype.load = function () {
+                for (var key in this._storage) {
+                    this.set(key, this._storage[key]);
+                }
+            };
+            Store.prototype.get = function (key) {
+                _super.prototype.get.call(this, key);
+            };
+            Store.prototype.set = function (key, value) {
+                _super.prototype.set.call(this, key, value);
+                this._storage.setItem(key, value);
+            };
+            Store.prototype.remove = function (key) {
+                _super.prototype.remove.call(this, key);
+                this._storage.removeItem(key);
+            };
+            Store.prototype.clear = function () {
+                _super.prototype.clear.call(this);
+                this._storage.clear();
+            };
+            return Store;
+        })(TSCore.Data.Dictionary);
+        Data.Store = Store;
     })(Data = TSCore.Data || (TSCore.Data = {}));
 })(TSCore || (TSCore = {}));
 var TSCore;
@@ -1288,6 +1432,9 @@ var TSCore;
     })(Text = TSCore.Text || (TSCore.Text = {}));
 })(TSCore || (TSCore = {}));
 /// <reference path="../typings/tsd.d.ts" />
+/// <reference path="TSCore/Auth/AuthManager.ts" />
+/// <reference path="TSCore/Auth/AuthMethod.ts" />
+/// <reference path="TSCore/Auth/Session.ts" />
 /// <reference path="TSCore/Config.ts" />
 /// <reference path="TSCore/DI.ts" />
 /// <reference path="TSCore/Data/Collection.ts" />
@@ -1299,6 +1446,7 @@ var TSCore;
 /// <reference path="TSCore/Data/RemoteModelCollection.ts" />
 /// <reference path="TSCore/Data/Set.ts" />
 /// <reference path="TSCore/Data/SortedCollection.ts" />
+/// <reference path="TSCore/Data/Store.ts" />
 /// <reference path="TSCore/DateTime/DateFormatter.ts" />
 /// <reference path="TSCore/DateTime/DateTime.ts" />
 /// <reference path="TSCore/DateTime/Timer.ts" />
