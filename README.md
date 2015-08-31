@@ -27,3 +27,4 @@ Read the full [documentation](http://ts-core.readme.io)
 
 ## Contributing ##
 Please file issues under GitHub, or submit a pull request if you'd like to directly contribute.
+
