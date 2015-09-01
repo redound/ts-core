@@ -973,39 +973,39 @@ describe("TSCore.Logger.Stream.Console", function () {
     });
 });
 /// <reference path="../TSCore.spec.ts" />
-describe("TSCore.Text.Format", function () {
+describe("TSCore.Utils.String", function () {
     describe("startsWith()", function () {
         it("should return true when source string starts with search string", function () {
-            expect(TSCore.Text.Format.startsWith("Hello world", "Hello")).toBe(true);
-            expect(TSCore.Text.Format.startsWith("Hello world", "Hello worl")).toBe(true);
-            expect(TSCore.Text.Format.startsWith("Hello world", "Hello world")).toBe(true);
+            expect(TSCore.Utils.String.startsWith("Hello world", "Hello")).toBe(true);
+            expect(TSCore.Utils.String.startsWith("Hello world", "Hello worl")).toBe(true);
+            expect(TSCore.Utils.String.startsWith("Hello world", "Hello world")).toBe(true);
         });
         it("should return false when source string does not start with search string", function () {
-            expect(TSCore.Text.Format.startsWith("Hell world", "Hello")).toBe(false);
-            expect(TSCore.Text.Format.startsWith("Hell' world", "Hello worl")).toBe(false);
-            expect(TSCore.Text.Format.startsWith("Hello forld", "Hello world")).toBe(false);
+            expect(TSCore.Utils.String.startsWith("Hell world", "Hello")).toBe(false);
+            expect(TSCore.Utils.String.startsWith("Hell' world", "Hello worl")).toBe(false);
+            expect(TSCore.Utils.String.startsWith("Hello forld", "Hello world")).toBe(false);
         });
     });
     describe("endsWith()", function () {
         it("should return true when source string ends with search string", function () {
-            expect(TSCore.Text.Format.endsWith("Hello world", "rld")).toBe(true);
-            expect(TSCore.Text.Format.endsWith("Hello world", "world")).toBe(true);
-            expect(TSCore.Text.Format.endsWith("Hello&*world", "&*world")).toBe(true);
+            expect(TSCore.Utils.String.endsWith("Hello world", "rld")).toBe(true);
+            expect(TSCore.Utils.String.endsWith("Hello world", "world")).toBe(true);
+            expect(TSCore.Utils.String.endsWith("Hello&*world", "&*world")).toBe(true);
         });
         it("should return false when source string does not end with search string", function () {
-            expect(TSCore.Text.Format.endsWith("Hell world", "al")).toBe(false);
-            expect(TSCore.Text.Format.endsWith("Hell world", "srld")).toBe(false);
-            expect(TSCore.Text.Format.endsWith("Hello forld", "Hello sl")).toBe(false);
+            expect(TSCore.Utils.String.endsWith("Hell world", "al")).toBe(false);
+            expect(TSCore.Utils.String.endsWith("Hell world", "srld")).toBe(false);
+            expect(TSCore.Utils.String.endsWith("Hello forld", "Hello sl")).toBe(false);
         });
     });
 });
 /// <reference path="../TSCore.spec.ts" />
-describe("TSCore.Text.URL", function () {
+describe("TSCore.Utils.URL", function () {
     var host = "www.example.com";
     var basePath = "http://" + host + "/";
     var relativePath = "home/index";
     var path = basePath + relativePath;
-    var url = new TSCore.Text.URL(path);
+    var url = new TSCore.Utils.URL(path);
     it("should return valid host", function () {
         expect(url.host).toBe(host);
     });

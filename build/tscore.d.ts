@@ -61,13 +61,6 @@ declare module TSCore.Auth {
     }
 }
 declare module TSCore {
-    class Base64 {
-        private static keyStr;
-        static encode(input: string): string;
-        static decode(input: string): string;
-    }
-}
-declare module TSCore {
     class Bootstrap {
         init(): void;
     }
@@ -396,6 +389,10 @@ declare module TSCore.Geometry {
         halfHeight(): number;
     }
 }
+declare module TSCore.Text {
+    class Language {
+    }
+}
 declare module TSCore.Logger {
     interface IStream {
         level: LogLevel;
@@ -463,8 +460,19 @@ declare module TSCore {
         value: any;
     }
 }
-declare module TSCore.Text {
-    class Format {
+declare module TSCore {
+    class Base64 {
+        private static keyStr;
+        static encode(input: string): string;
+        static decode(input: string): string;
+    }
+}
+declare module TSCore.Utils {
+    class Random {
+    }
+}
+declare module TSCore.Utils {
+    class String {
         private static HtmlEntityMap;
         static escapeHtml(input: string): string;
         static truncate(input: string, maxLength: number, suffix?: string): string;
@@ -475,15 +483,7 @@ declare module TSCore.Text {
         static endsWith(source: string, search: string): boolean;
     }
 }
-declare module TSCore.Text {
-    class Language {
-    }
-}
-declare module TSCore.Text {
-    class Random {
-    }
-}
-declare module TSCore.Text {
+declare module TSCore.Utils {
     class URL {
         private _absoluteString;
         private _absoluteUrl;

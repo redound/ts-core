@@ -1,4 +1,4 @@
-module TSCore.Text {
+module TSCore.Utils {
 
     export class Random {
 

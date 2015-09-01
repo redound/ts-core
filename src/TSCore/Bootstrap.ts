@@ -16,7 +16,7 @@ module TSCore {
 
             for (var method in this) {
 
-                if (TSCore.Text.Format.startsWith(method, "_init")) {
+                if (TSCore.Utils.String.startsWith(method, "_init")) {
                     this[method]();
                 }
             }

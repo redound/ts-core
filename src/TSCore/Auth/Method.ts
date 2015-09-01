@@ -3,7 +3,7 @@ module TSCore.Auth {
     export class Method {
 
         static name: string;
-
+        
         /**
          * Authenticate user
          * @param credentials

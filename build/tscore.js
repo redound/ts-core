@@ -213,89 +213,12 @@ var TSCore;
 })(TSCore || (TSCore = {}));
 var TSCore;
 (function (TSCore) {
-    var Base64 = (function () {
-        function Base64() {
-        }
-        Base64.encode = function (input) {
-            var keyStr = Base64.keyStr;
-            var output = "";
-            var chr1, chr2, chr3 = "";
-            var enc1, enc2, enc3, enc4 = "";
-            var i = 0;
-            do {
-                chr1 = input.charCodeAt(i++);
-                chr2 = input.charCodeAt(i++);
-                chr3 = input.charCodeAt(i++);
-                enc1 = chr1 >> 2;
-                enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
-                enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
-                enc4 = chr3 & 63;
-                if (isNaN(chr2)) {
-                    enc3 = enc4 = 64;
-                }
-                else if (isNaN(chr3)) {
-                    enc4 = 64;
-                }
-                output = output +
-                    keyStr.charAt(enc1) +
-                    keyStr.charAt(enc2) +
-                    keyStr.charAt(enc3) +
-                    keyStr.charAt(enc4);
-                chr1 = chr2 = chr3 = "";
-                enc1 = enc2 = enc3 = enc4 = "";
-            } while (i < input.length);
-            return output;
-        };
-        Base64.decode = function (input) {
-            var keyStr = Base64.keyStr;
-            var output = "";
-            var chr1, chr2, chr3 = "";
-            var enc1, enc2, enc3, enc4 = "";
-            var i = 0;
-            var base64test = /[^A-Za-z0-9\+\/\=]/g;
-            if (base64test.exec(input)) {
-                alert("There were invalid base64 characters in the input text.\n" +
-                    "Valid base64 characters are A-Z, a-z, 0-9, '+', '/',and '='\n" +
-                    "Expect errors in decoding.");
-            }
-            input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
-            do {
-                enc1 = keyStr.indexOf(input.charAt(i++));
-                enc2 = keyStr.indexOf(input.charAt(i++));
-                enc3 = keyStr.indexOf(input.charAt(i++));
-                enc4 = keyStr.indexOf(input.charAt(i++));
-                chr1 = (enc1 << 2) | (enc2 >> 4);
-                chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
-                chr3 = ((enc3 & 3) << 6) | enc4;
-                output = output + String.fromCharCode(chr1);
-                if (enc3 != 64) {
-                    output = output + String.fromCharCode(chr2);
-                }
-                if (enc4 != 64) {
-                    output = output + String.fromCharCode(chr3);
-                }
-                chr1 = chr2 = chr3 = "";
-                enc1 = enc2 = enc3 = enc4 = "";
-            } while (i < input.length);
-            return output;
-        };
-        Base64.keyStr = 'ABCDEFGHIJKLMNOP' +
-            'QRSTUVWXYZabcdef' +
-            'ghijklmnopqrstuv' +
-            'wxyz0123456789+/' +
-            '=';
-        return Base64;
-    })();
-    TSCore.Base64 = Base64;
-})(TSCore || (TSCore = {}));
-var TSCore;
-(function (TSCore) {
     var Bootstrap = (function () {
         function Bootstrap() {
         }
         Bootstrap.prototype.init = function () {
             for (var method in this) {
-                if (TSCore.Text.Format.startsWith(method, "_init")) {
+                if (TSCore.Utils.String.startsWith(method, "_init")) {
                     this[method]();
                 }
             }
@@ -1238,6 +1161,18 @@ var TSCore;
         Geometry.Size = Size;
     })(Geometry = TSCore.Geometry || (TSCore.Geometry = {}));
 })(TSCore || (TSCore = {}));
+var TSCore;
+(function (TSCore) {
+    var Text;
+    (function (Text) {
+        var Language = (function () {
+            function Language() {
+            }
+            return Language;
+        })();
+        Text.Language = Language;
+    })(Text = TSCore.Text || (TSCore.Text = {}));
+})(TSCore || (TSCore = {}));
 /// <reference path="Stream/IStream.ts" />
 var TSCore;
 (function (TSCore) {
@@ -1395,25 +1330,114 @@ var TSCore;
 })(TSCore || (TSCore = {}));
 var TSCore;
 (function (TSCore) {
-    var Text;
-    (function (Text) {
-        var Format = (function () {
-            function Format() {
+    var Base64 = (function () {
+        function Base64() {
+        }
+        Base64.encode = function (input) {
+            var keyStr = Base64.keyStr;
+            var output = "";
+            var chr1, chr2, chr3 = "";
+            var enc1, enc2, enc3, enc4 = "";
+            var i = 0;
+            do {
+                chr1 = input.charCodeAt(i++);
+                chr2 = input.charCodeAt(i++);
+                chr3 = input.charCodeAt(i++);
+                enc1 = chr1 >> 2;
+                enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+                enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+                enc4 = chr3 & 63;
+                if (isNaN(chr2)) {
+                    enc3 = enc4 = 64;
+                }
+                else if (isNaN(chr3)) {
+                    enc4 = 64;
+                }
+                output = output +
+                    keyStr.charAt(enc1) +
+                    keyStr.charAt(enc2) +
+                    keyStr.charAt(enc3) +
+                    keyStr.charAt(enc4);
+                chr1 = chr2 = chr3 = "";
+                enc1 = enc2 = enc3 = enc4 = "";
+            } while (i < input.length);
+            return output;
+        };
+        Base64.decode = function (input) {
+            var keyStr = Base64.keyStr;
+            var output = "";
+            var chr1, chr2, chr3 = "";
+            var enc1, enc2, enc3, enc4 = "";
+            var i = 0;
+            var base64test = /[^A-Za-z0-9\+\/\=]/g;
+            if (base64test.exec(input)) {
+                alert("There were invalid base64 characters in the input text.\n" +
+                    "Valid base64 characters are A-Z, a-z, 0-9, '+', '/',and '='\n" +
+                    "Expect errors in decoding.");
             }
-            Format.escapeHtml = function (input) {
-                var entityMap = Format.HtmlEntityMap;
-                return String(input).replace(/[&<>"'\/]/g, function (s) {
+            input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+            do {
+                enc1 = keyStr.indexOf(input.charAt(i++));
+                enc2 = keyStr.indexOf(input.charAt(i++));
+                enc3 = keyStr.indexOf(input.charAt(i++));
+                enc4 = keyStr.indexOf(input.charAt(i++));
+                chr1 = (enc1 << 2) | (enc2 >> 4);
+                chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
+                chr3 = ((enc3 & 3) << 6) | enc4;
+                output = output + String.fromCharCode(chr1);
+                if (enc3 != 64) {
+                    output = output + String.fromCharCode(chr2);
+                }
+                if (enc4 != 64) {
+                    output = output + String.fromCharCode(chr3);
+                }
+                chr1 = chr2 = chr3 = "";
+                enc1 = enc2 = enc3 = enc4 = "";
+            } while (i < input.length);
+            return output;
+        };
+        Base64.keyStr = 'ABCDEFGHIJKLMNOP' +
+            'QRSTUVWXYZabcdef' +
+            'ghijklmnopqrstuv' +
+            'wxyz0123456789+/' +
+            '=';
+        return Base64;
+    })();
+    TSCore.Base64 = Base64;
+})(TSCore || (TSCore = {}));
+var TSCore;
+(function (TSCore) {
+    var Utils;
+    (function (Utils) {
+        var Random = (function () {
+            function Random() {
+            }
+            return Random;
+        })();
+        Utils.Random = Random;
+    })(Utils = TSCore.Utils || (TSCore.Utils = {}));
+})(TSCore || (TSCore = {}));
+var TSCore;
+(function (TSCore) {
+    var Utils;
+    (function (Utils) {
+        var String = (function () {
+            function String() {
+            }
+            String.escapeHtml = function (input) {
+                var entityMap = String.HtmlEntityMap;
+                return input.replace(/[&<>"'\/]/g, function (s) {
                     return entityMap[s];
                 });
             };
-            Format.truncate = function (input, maxLength, suffix) {
+            String.truncate = function (input, maxLength, suffix) {
                 if (suffix === void 0) { suffix = '...'; }
                 if (input.length <= length) {
                     return input;
                 }
                 return input.substring(0, length) + suffix;
             };
-            Format.concatenate = function (parts, seperator, lastSeparator) {
+            String.concatenate = function (parts, seperator, lastSeparator) {
                 if (seperator === void 0) { seperator = ', '; }
                 if (lastSeparator === void 0) { lastSeparator = seperator; }
                 var result = '';
@@ -1430,23 +1454,23 @@ var TSCore;
                 });
                 return result;
             };
-            Format.zeroPad = function (input, width, zero) {
+            String.zeroPad = function (input, width, zero) {
                 if (zero === void 0) { zero = '0'; }
                 return input.length >= width ? input : new Array(width - input.length + 1).join(zero) + input;
             };
-            Format.ucFirst = function (input) {
+            String.ucFirst = function (input) {
                 if (input == '') {
                     return input;
                 }
                 return input.charAt(0).toUpperCase() + input.slice(1);
             };
-            Format.startsWith = function (source, search) {
+            String.startsWith = function (source, search) {
                 return source.slice(0, search.length) == search;
             };
-            Format.endsWith = function (source, search) {
+            String.endsWith = function (source, search) {
                 return source.slice(-search.length) == search;
             };
-            Format.HtmlEntityMap = {
+            String.HtmlEntityMap = {
                 "&": "&amp;",
                 "<": "&lt;",
                 ">": "&gt;",
@@ -1454,39 +1478,15 @@ var TSCore;
                 "'": '&#39;',
                 "/": '&#x2F;'
             };
-            return Format;
+            return String;
         })();
-        Text.Format = Format;
-    })(Text = TSCore.Text || (TSCore.Text = {}));
+        Utils.String = String;
+    })(Utils = TSCore.Utils || (TSCore.Utils = {}));
 })(TSCore || (TSCore = {}));
 var TSCore;
 (function (TSCore) {
-    var Text;
-    (function (Text) {
-        var Language = (function () {
-            function Language() {
-            }
-            return Language;
-        })();
-        Text.Language = Language;
-    })(Text = TSCore.Text || (TSCore.Text = {}));
-})(TSCore || (TSCore = {}));
-var TSCore;
-(function (TSCore) {
-    var Text;
-    (function (Text) {
-        var Random = (function () {
-            function Random() {
-            }
-            return Random;
-        })();
-        Text.Random = Random;
-    })(Text = TSCore.Text || (TSCore.Text = {}));
-})(TSCore || (TSCore = {}));
-var TSCore;
-(function (TSCore) {
-    var Text;
-    (function (Text) {
+    var Utils;
+    (function (Utils) {
         var URL = (function () {
             function URL(path) {
                 this._path = path;
@@ -1521,14 +1521,13 @@ var TSCore;
             });
             return URL;
         })();
-        Text.URL = URL;
-    })(Text = TSCore.Text || (TSCore.Text = {}));
+        Utils.URL = URL;
+    })(Utils = TSCore.Utils || (TSCore.Utils = {}));
 })(TSCore || (TSCore = {}));
 /// <reference path="../typings/tsd.d.ts" />
 /// <reference path="TSCore/Auth/Manager.ts" />
 /// <reference path="TSCore/Auth/Method.ts" />
 /// <reference path="TSCore/Auth/Session.ts" />
-/// <reference path="TSCore/Base64.ts" />
 /// <reference path="TSCore/Bootstrap.ts" />
 /// <reference path="TSCore/Config.ts" />
 /// <reference path="TSCore/DI.ts" />
@@ -1552,13 +1551,14 @@ var TSCore;
 /// <reference path="TSCore/Geometry/Point.ts" />
 /// <reference path="TSCore/Geometry/Rect.ts" />
 /// <reference path="TSCore/Geometry/Size.ts" />
+/// <reference path="TSCore/Language.ts" />
 /// <reference path="TSCore/Logger/Logger.ts" />
 /// <reference path="TSCore/Logger/Stream/Console.ts" />
 /// <reference path="TSCore/Logger/Stream/IStream.ts" />
 /// <reference path="TSCore/Logger/Stream/Toastr.ts" />
 /// <reference path="TSCore/TSCore.ts" />
-/// <reference path="TSCore/Text/Format.ts" />
-/// <reference path="TSCore/Text/Language.ts" />
-/// <reference path="TSCore/Text/Random.ts" />
-/// <reference path="TSCore/Text/URL.ts" />
+/// <reference path="TSCore/Utils/Base64.ts" />
+/// <reference path="TSCore/Utils/Random.ts" />
+/// <reference path="TSCore/Utils/String.ts" />
+/// <reference path="TSCore/Utils/URL.ts" />
 //# sourceMappingURL=tscore.js.map

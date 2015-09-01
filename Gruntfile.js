@@ -7,12 +7,13 @@ module.exports = function(grunt) {
         // For compiling our TypeScript/JavaScript
         ts: {
             build: {
-                src: ['src/tscore.r.ts', 'src/**/*.ts', '!node_modules/**/*.ts'],
+                src: ['src/TSCore/**/*.ts', '!node_modules/**/*.ts'],
                 out: 'build/tscore.js',
                 reference: 'src/tscore.r.ts',
                 options: {
                     fast: 'never',
-                    declaration: true
+                    declaration: true,
+                    //noResolve: true
                 }
             },
             test: {
