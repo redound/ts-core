@@ -1,9 +1,10 @@
 /// <reference path="../typings/tsd.d.ts" />
 
 //grunt-start
-/// <reference path="TSCore/Auth/AuthManager.ts" />
-/// <reference path="TSCore/Auth/AuthMethod.ts" />
+/// <reference path="TSCore/Auth/Manager.ts" />
+/// <reference path="TSCore/Auth/Method.ts" />
 /// <reference path="TSCore/Auth/Session.ts" />
+/// <reference path="TSCore/Base64.ts" />
 /// <reference path="TSCore/Bootstrap.ts" />
 /// <reference path="TSCore/Config.ts" />
 /// <reference path="TSCore/DI.ts" />

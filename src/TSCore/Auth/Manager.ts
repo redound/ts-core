@@ -2,19 +2,19 @@
 
 module TSCore.Auth {
 
-    module AuthEvents {
+    module ManagerEvents {
 
-        export const ATTEMPT_FAIL: string = "attempt-fail";
-        export const ATTEMPT_SUCCESS: string = "attempt-success";
+        export const LOGIN_ATTEMPT_FAIL: string = "login-attempt-fail";
+        export const LOGIN_ATTEMPT_SUCCESS: string = "login-attempt-success";
         export const LOGIN: string = "login";
         export const LOGOUT: string = "logout";
 
-        export interface IAttemptFailParams<T> {
+        export interface ILoginAttemptFailParams<T> {
             credentials: T,
             method: string
         }
 
-        export interface IAttemptSuccessParams<T> {
+        export interface ILoginAttemptSuccessParams<T> {
             credentials: T,
             method: string,
             session: Session
@@ -30,15 +30,15 @@ module TSCore.Auth {
         }
     }
 
-    export interface IAuthAttemptError {
+    export interface ILoginAttemptError {
         message: string;
     }
 
-    export interface IAuthAttempt {
+    export interface ILoginAttempt {
         (error: IAuthAttemptError, session: Session);
     }
 
-    export class AuthManager extends TSCore.Events.EventEmitter {
+    export class Manager extends TSCore.Events.EventEmitter {
 
         protected _authMethods: TSCore.Data.Dictionary<string, AuthMethod>;
         protected _session: Session;
@@ -54,7 +54,7 @@ module TSCore.Auth {
          * @param credentials       Object containing the required credentials.
          * @param done              Callback that will be called when authentication attempt has completed.
          */
-        public login(method: string, credentials: {}, done: IAuthAttempt) {
+        public login(method: string, credentials: {}, done?: ILoginAttempt) {
 
             var authMethod:AuthMethod = this._authMethods.get(method);
 
@@ -65,12 +65,12 @@ module TSCore.Auth {
             authMethod.login(credentials, (error: IAuthAttemptError, session: Session) => {
 
                 if (error) {
-                    this.trigger(AuthEvents.ATTEMPT_FAIL, { credentials: credentials, method: method });
+                    this.trigger(ManagerEvents.LOGIN_ATTEMPT_FAIL, { credentials: credentials, method: method });
                     return done(error, null);
                 }
 
-                this.trigger(AuthEvents.ATTEMPT_SUCCESS, { credentials: credentials, method: method, session: session });
-                this.trigger(AuthEvents.LOGIN, { credentials: credentials, method: method, session: session });
+                this.trigger(ManagerEvents.LOGIN_ATTEMPT_SUCCESS, { credentials: credentials, method: method, session: session });
+                this.trigger(ManagerEvents.LOGIN, { credentials: credentials, method: method, session: session });
                 done(error, session);
             });
         }
@@ -82,7 +82,7 @@ module TSCore.Auth {
          * @param authMethod    AuthMethod instance.
          * @returns {TSCore.Auth.AuthManager}
          */
-        public setMethod(method: string, authMethod: AuthMethod): TSCore.Auth.AuthManager {
+        public addMethod(method: string, authMethod: Method): TSCore.Auth.Manager {
 
             this._authMethods.set(method, authMethod);
 
@@ -95,7 +95,7 @@ module TSCore.Auth {
          * @param method        Name of the method.
          * @returns {TSCore.Auth.AuthManager}
          */
-        public removeMethod(method: string): TSCore.Auth.AuthManager {
+        public removeMethod(method: string): TSCore.Auth.Manager {
 
             this._authMethods.remove(method);
 

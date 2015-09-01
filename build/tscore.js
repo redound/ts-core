@@ -115,19 +115,19 @@ var TSCore;
 (function (TSCore) {
     var Auth;
     (function (Auth) {
-        var AuthEvents;
-        (function (AuthEvents) {
-            AuthEvents.ATTEMPT_FAIL = "attempt-fail";
-            AuthEvents.ATTEMPT_SUCCESS = "attempt-success";
-            AuthEvents.LOGIN = "login";
-            AuthEvents.LOGOUT = "logout";
-        })(AuthEvents || (AuthEvents = {}));
-        var AuthManager = (function (_super) {
-            __extends(AuthManager, _super);
-            function AuthManager() {
+        var ManagerEvents;
+        (function (ManagerEvents) {
+            ManagerEvents.LOGIN_ATTEMPT_FAIL = "login-attempt-fail";
+            ManagerEvents.LOGIN_ATTEMPT_SUCCESS = "login-attempt-success";
+            ManagerEvents.LOGIN = "login";
+            ManagerEvents.LOGOUT = "logout";
+        })(ManagerEvents || (ManagerEvents = {}));
+        var Manager = (function (_super) {
+            __extends(Manager, _super);
+            function Manager() {
                 _super.call(this);
             }
-            AuthManager.prototype.login = function (method, credentials, done) {
+            Manager.prototype.login = function (method, credentials, done) {
                 var _this = this;
                 var authMethod = this._authMethods.get(method);
                 if (!authMethod) {
@@ -135,58 +135,52 @@ var TSCore;
                 }
                 authMethod.login(credentials, function (error, session) {
                     if (error) {
-                        _this.trigger(AuthEvents.ATTEMPT_FAIL, { credentials: credentials, method: method });
+                        _this.trigger(ManagerEvents.LOGIN_ATTEMPT_FAIL, { credentials: credentials, method: method });
                         return done(error, null);
                     }
-                    _this.trigger(AuthEvents.ATTEMPT_SUCCESS, { credentials: credentials, method: method, session: session });
-                    _this.trigger(AuthEvents.LOGIN, { credentials: credentials, method: method, session: session });
+                    _this.trigger(ManagerEvents.LOGIN_ATTEMPT_SUCCESS, { credentials: credentials, method: method, session: session });
+                    _this.trigger(ManagerEvents.LOGIN, { credentials: credentials, method: method, session: session });
                     done(error, session);
                 });
             };
-            AuthManager.prototype.setMethod = function (method, authMethod) {
+            Manager.prototype.addMethod = function (method, authMethod) {
                 this._authMethods.set(method, authMethod);
                 return this;
             };
-            AuthManager.prototype.removeMethod = function (method) {
+            Manager.prototype.removeMethod = function (method) {
                 this._authMethods.remove(method);
                 return this;
             };
-            AuthManager.prototype.check = function () {
+            Manager.prototype.check = function () {
                 return !!this._session;
             };
-            AuthManager.prototype.getSession = function () {
+            Manager.prototype.getSession = function () {
                 return this._session;
             };
-            AuthManager.prototype.isSession = function (method) {
+            Manager.prototype.isSession = function (method) {
                 var session = this.getSession();
                 if (!session) {
                     return false;
                 }
                 return (session.getMethod() === method);
             };
-            return AuthManager;
+            return Manager;
         })(TSCore.Events.EventEmitter);
-        Auth.AuthManager = AuthManager;
+        Auth.Manager = Manager;
     })(Auth = TSCore.Auth || (TSCore.Auth = {}));
 })(TSCore || (TSCore = {}));
 var TSCore;
 (function (TSCore) {
     var Auth;
     (function (Auth) {
-        var AuthMethod = (function () {
-            function AuthMethod() {
+        var Method = (function () {
+            function Method() {
             }
-            AuthMethod.prototype.login = function (credentials, done) {
-                if (false) {
-                    done(null, new Auth.Session());
-                }
-                else {
-                    done({ message: 'Failed to authenticate' }, null);
-                }
+            Method.prototype.login = function (credentials, done) {
             };
-            return AuthMethod;
+            return Method;
         })();
-        Auth.AuthMethod = AuthMethod;
+        Auth.Method = Method;
     })(Auth = TSCore.Auth || (TSCore.Auth = {}));
 })(TSCore || (TSCore = {}));
 var TSCore;
@@ -194,15 +188,15 @@ var TSCore;
     var Auth;
     (function (Auth) {
         var Session = (function () {
-            function Session(_method, _user) {
+            function Session(_method, _identity) {
                 this._method = _method;
-                this._user = _user;
+                this._identity = _identity;
             }
-            Session.prototype.getUser = function () {
-                return this._user;
+            Session.prototype.getIdentity = function () {
+                return this._identity;
             };
-            Session.prototype.setUser = function (user) {
-                this._user = user;
+            Session.prototype.setIdentity = function (identity) {
+                this._identity = identity;
                 return this;
             };
             Session.prototype.getMethod = function () {
@@ -216,6 +210,83 @@ var TSCore;
         })();
         Auth.Session = Session;
     })(Auth = TSCore.Auth || (TSCore.Auth = {}));
+})(TSCore || (TSCore = {}));
+var TSCore;
+(function (TSCore) {
+    var Base64 = (function () {
+        function Base64() {
+        }
+        Base64.encode = function (input) {
+            var keyStr = Base64.keyStr;
+            var output = "";
+            var chr1, chr2, chr3 = "";
+            var enc1, enc2, enc3, enc4 = "";
+            var i = 0;
+            do {
+                chr1 = input.charCodeAt(i++);
+                chr2 = input.charCodeAt(i++);
+                chr3 = input.charCodeAt(i++);
+                enc1 = chr1 >> 2;
+                enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+                enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+                enc4 = chr3 & 63;
+                if (isNaN(chr2)) {
+                    enc3 = enc4 = 64;
+                }
+                else if (isNaN(chr3)) {
+                    enc4 = 64;
+                }
+                output = output +
+                    keyStr.charAt(enc1) +
+                    keyStr.charAt(enc2) +
+                    keyStr.charAt(enc3) +
+                    keyStr.charAt(enc4);
+                chr1 = chr2 = chr3 = "";
+                enc1 = enc2 = enc3 = enc4 = "";
+            } while (i < input.length);
+            return output;
+        };
+        Base64.decode = function (input) {
+            var keyStr = Base64.keyStr;
+            var output = "";
+            var chr1, chr2, chr3 = "";
+            var enc1, enc2, enc3, enc4 = "";
+            var i = 0;
+            var base64test = /[^A-Za-z0-9\+\/\=]/g;
+            if (base64test.exec(input)) {
+                alert("There were invalid base64 characters in the input text.\n" +
+                    "Valid base64 characters are A-Z, a-z, 0-9, '+', '/',and '='\n" +
+                    "Expect errors in decoding.");
+            }
+            input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+            do {
+                enc1 = keyStr.indexOf(input.charAt(i++));
+                enc2 = keyStr.indexOf(input.charAt(i++));
+                enc3 = keyStr.indexOf(input.charAt(i++));
+                enc4 = keyStr.indexOf(input.charAt(i++));
+                chr1 = (enc1 << 2) | (enc2 >> 4);
+                chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
+                chr3 = ((enc3 & 3) << 6) | enc4;
+                output = output + String.fromCharCode(chr1);
+                if (enc3 != 64) {
+                    output = output + String.fromCharCode(chr2);
+                }
+                if (enc4 != 64) {
+                    output = output + String.fromCharCode(chr3);
+                }
+                chr1 = chr2 = chr3 = "";
+                enc1 = enc2 = enc3 = enc4 = "";
+            } while (i < input.length);
+            return output;
+        };
+        Base64.keyStr = 'ABCDEFGHIJKLMNOP' +
+            'QRSTUVWXYZabcdef' +
+            'ghijklmnopqrstuv' +
+            'wxyz0123456789+/' +
+            '=';
+        return Base64;
+    })();
+    TSCore.Base64 = Base64;
 })(TSCore || (TSCore = {}));
 var TSCore;
 (function (TSCore) {
@@ -1454,9 +1525,10 @@ var TSCore;
     })(Text = TSCore.Text || (TSCore.Text = {}));
 })(TSCore || (TSCore = {}));
 /// <reference path="../typings/tsd.d.ts" />
-/// <reference path="TSCore/Auth/AuthManager.ts" />
-/// <reference path="TSCore/Auth/AuthMethod.ts" />
+/// <reference path="TSCore/Auth/Manager.ts" />
+/// <reference path="TSCore/Auth/Method.ts" />
 /// <reference path="TSCore/Auth/Session.ts" />
+/// <reference path="TSCore/Base64.ts" />
 /// <reference path="TSCore/Bootstrap.ts" />
 /// <reference path="TSCore/Config.ts" />
 /// <reference path="TSCore/DI.ts" />

@@ -1,47 +1,30 @@
 module TSCore.Auth {
 
-    export interface IUserEmail {
-        value: string;
-        type: string;
-    }
-
-    export interface IUserName {
-        familyName: string;
-        givenName: string;
-        middleName: string;
-    }
-
-    export interface IUser {
-        provider: string;
-        id: number;
-        displayName: IUserName;
-        emails: IUserEmail[];
-    }
-
     export class Session {
 
-        constructor(protected _method?: string, protected _user?: IUser) {
+        constructor(protected _method?: string, protected _identity?: {}) {
 
         }
 
         /**
-         * Get the authenticated user.
-         * @returns {IUser}
-         */
-        getUser(): IUser {
-
-            return this._user;
-        }
-
-        /**
-         * Set the authenticated user.
+         * Get the authenticated identity.
          *
-         * @param user User profile.
+         * @returns {{}}
+         */
+        getIdentity(): {} {
+
+            return this._identity;
+        }
+
+        /**
+         * Set the authenticated identity.
+         *
+         * @param identity Identity object.
          * @returns {TSCore.Auth.Session}
          */
-        setUser(user: IUser): TSCore.Auth.Session {
+        setIdentity(identity: {}): TSCore.Auth.Session {
 
-            this._user = user;
+            this._identity = identity;
 
             return this;
         }
