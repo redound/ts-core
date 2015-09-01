@@ -1,4 +1,3 @@
-/// <reference path="../typings/tsd.d.ts" />
 declare module TSCore.Events {
     class Event<T> {
         topic: string;

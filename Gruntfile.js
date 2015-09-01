@@ -1,5 +1,3 @@
-var semver = require('semver');
-
 module.exports = function(grunt) {
 
     grunt.initConfig({
@@ -60,10 +58,21 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-ts');
 
+    /** Dirty-hack **/
+    grunt.registerTask('stripref', function() {
+
+
+        var contents = grunt.file.read('./build/tscore.d.ts');
+        contents = contents.replace("/// <reference path=\"../typings/tsd.d.ts\" />\n", "");
+        grunt.file.write('./build/tscore.d.ts', contents);
+        console.log(contents);
+    });
+
     /** Development **/
     grunt.registerTask('compile', [
         'ts:build',
-        'ts:test'
+        'ts:test',
+        'stripref'
     ]);
 
     grunt.registerTask('test', [
