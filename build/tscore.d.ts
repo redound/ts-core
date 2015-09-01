@@ -25,54 +25,46 @@ declare module TSCore.Events {
     }
 }
 declare module TSCore.Auth {
-    interface IAuthAttemptError {
+    interface ILoginAttemptError {
         message: string;
     }
-    interface IAuthAttempt {
-        (error: IAuthAttemptError, session: Session): any;
+    interface ILoginAttempt {
+        (error: ILoginAttemptError, session: Session): any;
     }
-    class AuthManager extends TSCore.Events.EventEmitter {
-        protected _authMethods: TSCore.Data.Dictionary<string, AuthMethod>;
+    class Manager extends TSCore.Events.EventEmitter {
+        protected _authMethods: TSCore.Data.Dictionary<string, Method>;
         protected _session: Session;
         constructor();
-        login(method: string, credentials: {}, done: IAuthAttempt): void;
-        setMethod(method: string, authMethod: AuthMethod): TSCore.Auth.AuthManager;
-        removeMethod(method: string): TSCore.Auth.AuthManager;
+        login(method: string, credentials: {}, done?: ILoginAttempt): void;
+        addMethod(method: string, authMethod: Method): TSCore.Auth.Manager;
+        removeMethod(method: string): TSCore.Auth.Manager;
         check(): boolean;
         getSession(): Session;
         isSession(method: string): boolean;
     }
 }
 declare module TSCore.Auth {
-    class AuthMethod {
-        name: string;
-        login(credentials: any, done: IAuthAttempt): void;
+    class Method {
+        static name: string;
+        login(credentials: any, done: ILoginAttempt): void;
     }
 }
 declare module TSCore.Auth {
-    interface IUserEmail {
-        value: string;
-        type: string;
-    }
-    interface IUserName {
-        familyName: string;
-        givenName: string;
-        middleName: string;
-    }
-    interface IUser {
-        provider: string;
-        id: number;
-        displayName: IUserName;
-        emails: IUserEmail[];
-    }
     class Session {
         protected _method: string;
-        protected _user: IUser;
-        constructor(_method?: string, _user?: IUser);
-        getUser(): IUser;
-        setUser(user: IUser): TSCore.Auth.Session;
+        protected _identity: {};
+        constructor(_method?: string, _identity?: {});
+        getIdentity(): {};
+        setIdentity(identity: {}): TSCore.Auth.Session;
         getMethod(): string;
         setMethod(method: string): TSCore.Auth.Session;
+    }
+}
+declare module TSCore {
+    class Base64 {
+        private static keyStr;
+        static encode(input: string): string;
+        static decode(input: string): string;
     }
 }
 declare module TSCore {
@@ -479,8 +471,8 @@ declare module TSCore.Text {
         static concatenate(parts: any[], seperator?: string, lastSeparator?: string): string;
         static zeroPad(input: string, width: number, zero?: string): string;
         static ucFirst(input: string): string;
-        static startsWith(source: String, search: String): boolean;
-        static endsWith(source: String, search: String): boolean;
+        static startsWith(source: string, search: string): boolean;
+        static endsWith(source: string, search: string): boolean;
     }
 }
 declare module TSCore.Text {

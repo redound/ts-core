@@ -35,12 +35,12 @@ module TSCore.Auth {
     }
 
     export interface ILoginAttempt {
-        (error: IAuthAttemptError, session: Session);
+        (error: ILoginAttemptError, session: Session);
     }
 
     export class Manager extends TSCore.Events.EventEmitter {
 
-        protected _authMethods: TSCore.Data.Dictionary<string, AuthMethod>;
+        protected _authMethods: TSCore.Data.Dictionary<string, Method>;
         protected _session: Session;
 
         constructor() {
@@ -56,13 +56,13 @@ module TSCore.Auth {
          */
         public login(method: string, credentials: {}, done?: ILoginAttempt) {
 
-            var authMethod:AuthMethod = this._authMethods.get(method);
+            var authMethod:Method = this._authMethods.get(method);
 
             if (!authMethod) {
                 done({ message: 'AuthMethod does not exist' }, null);
             }
 
-            authMethod.login(credentials, (error: IAuthAttemptError, session: Session) => {
+            authMethod.login(credentials, (error: ILoginAttemptError, session: Session) => {
 
                 if (error) {
                     this.trigger(ManagerEvents.LOGIN_ATTEMPT_FAIL, { credentials: credentials, method: method });

@@ -31,7 +31,7 @@ var Mocks;
 })(Mocks || (Mocks = {}));
 /// <reference path="TSCore.spec.ts" />
 /// <reference path="./Mocks/Bootstrap.ts" />
-describe("TSCore.Config", function () {
+describe("TSCore.Bootstrap", function () {
     it("should call each method starting with '_init'", function () {
         var bootstrap = new Mocks.Bootstrap();
         expect(bootstrap.configSpy).not.toHaveBeenCalled();
@@ -879,6 +879,44 @@ describe("TSCore.Events.EventEmitter", function () {
         emitter.off(topicC, topicCCallback, topicCContext);
         emitter.trigger(topicC);
         expect(counter).toBe(13);
+    });
+});
+/// <reference path="../TSCore.spec.ts" />
+describe("TSCore.Geometry.Point", function () {
+    describe("constructor()", function () {
+    });
+    describe("translate()", function () {
+    });
+});
+/// <reference path="../TSCore.spec.ts" />
+describe("TSCore.Geometry.Rect", function () {
+    describe("center()", function () {
+    });
+    describe("topLeft()", function () {
+    });
+    describe("bottomLeft()", function () {
+    });
+    describe("topRight()", function () {
+    });
+    describe("bottomRight()", function () {
+    });
+    describe("halfWidth()", function () {
+    });
+    describe("halfHeight()", function () {
+    });
+    describe("containsPoint()", function () {
+    });
+    describe("containsRect()", function () {
+    });
+    describe("intersectsRect()", function () {
+    });
+    describe("inset()", function () {
+    });
+    describe("insetCenter()", function () {
+    });
+    describe("expand()", function () {
+    });
+    describe("reduce()", function () {
     });
 });
 /// <reference path="../TSCore.spec.ts" />

@@ -9,7 +9,7 @@ module TSCore.Auth {
          * @param credentials
          * @param done
          */
-        public login(credentials: any, done: IAuthAttempt): void {
+        public login(credentials: any, done: ILoginAttempt): void {
 
         }
     }
