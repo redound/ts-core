@@ -45,7 +45,7 @@ module TSCore.Auth {
 
         constructor() {
             super();
-            this._authMethods = TSCore.Data.Dictionary<string, Method>;
+            this._authMethods = new TSCore.Data.Dictionary<string, Method>();
         }
 
         /**

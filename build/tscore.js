@@ -126,6 +126,7 @@ var TSCore;
             __extends(Manager, _super);
             function Manager() {
                 _super.call(this);
+                this._authMethods = new TSCore.Data.Dictionary();
             }
             Manager.prototype.login = function (method, credentials, done) {
                 var _this = this;

@@ -1,5 +1,15 @@
 /// <reference path="../../build/tscore.d.ts" /> 
 /// <reference path="../TSCore.spec.ts" />
+describe("TSCore.Auth.Manager", function () {
+    describe("addMethod()", function () {
+        it("should add an auth method", function () {
+            var authManager = new TSCore.Auth.Manager();
+            authManager.addMethod('email', new TSCore.Auth.Method());
+            console.log('authManager', authManager);
+        });
+    });
+});
+/// <reference path="../TSCore.spec.ts" />
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
