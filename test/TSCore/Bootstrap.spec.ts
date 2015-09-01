@@ -3,7 +3,7 @@
 
 declare var describe, it, expect, jasmine, beforeEach;
 
-describe("TSCore.Config", () => {
+describe("TSCore.Bootstrap", () => {
 
 
     it("should call each method starting with '_init'", () => {
