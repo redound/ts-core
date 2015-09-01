@@ -1,21 +1,5 @@
 var TSCore;
 (function (TSCore) {
-    var Bootstrap = (function () {
-        function Bootstrap() {
-        }
-        Bootstrap.prototype.init = function () {
-            for (var method in this) {
-                if (TSCore.Text.Format.startsWith(method, "_init")) {
-                    this[method]();
-                }
-            }
-        };
-        return Bootstrap;
-    })();
-    TSCore.Bootstrap = Bootstrap;
-})(TSCore || (TSCore = {}));
-var TSCore;
-(function (TSCore) {
     var Events;
     (function (Events) {
         var Event = (function () {
@@ -120,13 +104,207 @@ var TSCore;
         Events.EventEmitter = EventEmitter;
     })(Events = TSCore.Events || (TSCore.Events = {}));
 })(TSCore || (TSCore = {}));
-/// <reference path="Events/EventEmitter.ts" />
+/// <reference path="../Events/EventEmitter.ts" />
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+var TSCore;
+(function (TSCore) {
+    var Auth;
+    (function (Auth) {
+        var ManagerEvents;
+        (function (ManagerEvents) {
+            ManagerEvents.LOGIN_ATTEMPT_FAIL = "login-attempt-fail";
+            ManagerEvents.LOGIN_ATTEMPT_SUCCESS = "login-attempt-success";
+            ManagerEvents.LOGIN = "login";
+            ManagerEvents.LOGOUT = "logout";
+        })(ManagerEvents || (ManagerEvents = {}));
+        var Manager = (function (_super) {
+            __extends(Manager, _super);
+            function Manager() {
+                _super.call(this);
+            }
+            Manager.prototype.login = function (method, credentials, done) {
+                var _this = this;
+                var authMethod = this._authMethods.get(method);
+                if (!authMethod) {
+                    done({ message: 'AuthMethod does not exist' }, null);
+                }
+                authMethod.login(credentials, function (error, session) {
+                    if (error) {
+                        _this.trigger(ManagerEvents.LOGIN_ATTEMPT_FAIL, { credentials: credentials, method: method });
+                        return done(error, null);
+                    }
+                    _this.trigger(ManagerEvents.LOGIN_ATTEMPT_SUCCESS, { credentials: credentials, method: method, session: session });
+                    _this.trigger(ManagerEvents.LOGIN, { credentials: credentials, method: method, session: session });
+                    done(error, session);
+                });
+            };
+            Manager.prototype.addMethod = function (method, authMethod) {
+                this._authMethods.set(method, authMethod);
+                return this;
+            };
+            Manager.prototype.removeMethod = function (method) {
+                this._authMethods.remove(method);
+                return this;
+            };
+            Manager.prototype.check = function () {
+                return !!this._session;
+            };
+            Manager.prototype.getSession = function () {
+                return this._session;
+            };
+            Manager.prototype.isSession = function (method) {
+                var session = this.getSession();
+                if (!session) {
+                    return false;
+                }
+                return (session.getMethod() === method);
+            };
+            return Manager;
+        })(TSCore.Events.EventEmitter);
+        Auth.Manager = Manager;
+    })(Auth = TSCore.Auth || (TSCore.Auth = {}));
+})(TSCore || (TSCore = {}));
+var TSCore;
+(function (TSCore) {
+    var Auth;
+    (function (Auth) {
+        var Method = (function () {
+            function Method() {
+            }
+            Method.prototype.login = function (credentials, done) {
+            };
+            return Method;
+        })();
+        Auth.Method = Method;
+    })(Auth = TSCore.Auth || (TSCore.Auth = {}));
+})(TSCore || (TSCore = {}));
+var TSCore;
+(function (TSCore) {
+    var Auth;
+    (function (Auth) {
+        var Session = (function () {
+            function Session(_method, _identity) {
+                this._method = _method;
+                this._identity = _identity;
+            }
+            Session.prototype.getIdentity = function () {
+                return this._identity;
+            };
+            Session.prototype.setIdentity = function (identity) {
+                this._identity = identity;
+                return this;
+            };
+            Session.prototype.getMethod = function () {
+                return this._method;
+            };
+            Session.prototype.setMethod = function (method) {
+                this._method = method;
+                return this;
+            };
+            return Session;
+        })();
+        Auth.Session = Session;
+    })(Auth = TSCore.Auth || (TSCore.Auth = {}));
+})(TSCore || (TSCore = {}));
+var TSCore;
+(function (TSCore) {
+    var Base64 = (function () {
+        function Base64() {
+        }
+        Base64.encode = function (input) {
+            var keyStr = Base64.keyStr;
+            var output = "";
+            var chr1, chr2, chr3 = "";
+            var enc1, enc2, enc3, enc4 = "";
+            var i = 0;
+            do {
+                chr1 = input.charCodeAt(i++);
+                chr2 = input.charCodeAt(i++);
+                chr3 = input.charCodeAt(i++);
+                enc1 = chr1 >> 2;
+                enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+                enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+                enc4 = chr3 & 63;
+                if (isNaN(chr2)) {
+                    enc3 = enc4 = 64;
+                }
+                else if (isNaN(chr3)) {
+                    enc4 = 64;
+                }
+                output = output +
+                    keyStr.charAt(enc1) +
+                    keyStr.charAt(enc2) +
+                    keyStr.charAt(enc3) +
+                    keyStr.charAt(enc4);
+                chr1 = chr2 = chr3 = "";
+                enc1 = enc2 = enc3 = enc4 = "";
+            } while (i < input.length);
+            return output;
+        };
+        Base64.decode = function (input) {
+            var keyStr = Base64.keyStr;
+            var output = "";
+            var chr1, chr2, chr3 = "";
+            var enc1, enc2, enc3, enc4 = "";
+            var i = 0;
+            var base64test = /[^A-Za-z0-9\+\/\=]/g;
+            if (base64test.exec(input)) {
+                alert("There were invalid base64 characters in the input text.\n" +
+                    "Valid base64 characters are A-Z, a-z, 0-9, '+', '/',and '='\n" +
+                    "Expect errors in decoding.");
+            }
+            input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+            do {
+                enc1 = keyStr.indexOf(input.charAt(i++));
+                enc2 = keyStr.indexOf(input.charAt(i++));
+                enc3 = keyStr.indexOf(input.charAt(i++));
+                enc4 = keyStr.indexOf(input.charAt(i++));
+                chr1 = (enc1 << 2) | (enc2 >> 4);
+                chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
+                chr3 = ((enc3 & 3) << 6) | enc4;
+                output = output + String.fromCharCode(chr1);
+                if (enc3 != 64) {
+                    output = output + String.fromCharCode(chr2);
+                }
+                if (enc4 != 64) {
+                    output = output + String.fromCharCode(chr3);
+                }
+                chr1 = chr2 = chr3 = "";
+                enc1 = enc2 = enc3 = enc4 = "";
+            } while (i < input.length);
+            return output;
+        };
+        Base64.keyStr = 'ABCDEFGHIJKLMNOP' +
+            'QRSTUVWXYZabcdef' +
+            'ghijklmnopqrstuv' +
+            'wxyz0123456789+/' +
+            '=';
+        return Base64;
+    })();
+    TSCore.Base64 = Base64;
+})(TSCore || (TSCore = {}));
+var TSCore;
+(function (TSCore) {
+    var Bootstrap = (function () {
+        function Bootstrap() {
+        }
+        Bootstrap.prototype.init = function () {
+            for (var method in this) {
+                if (TSCore.Text.Format.startsWith(method, "_init")) {
+                    this[method]();
+                }
+            }
+        };
+        return Bootstrap;
+    })();
+    TSCore.Bootstrap = Bootstrap;
+})(TSCore || (TSCore = {}));
+/// <reference path="Events/EventEmitter.ts" />
 var TSCore;
 (function (TSCore) {
     var Config = (function (_super) {
@@ -714,6 +892,43 @@ var TSCore;
             return SortedCollection;
         })(Data.Set);
         Data.SortedCollection = SortedCollection;
+    })(Data = TSCore.Data || (TSCore.Data = {}));
+})(TSCore || (TSCore = {}));
+/// <reference path="./Dictionary.ts" />
+var TSCore;
+(function (TSCore) {
+    var Data;
+    (function (Data) {
+        var Store = (function (_super) {
+            __extends(Store, _super);
+            function Store(_storage, data) {
+                _super.call(this, data);
+                this._storage = _storage;
+                this.load();
+            }
+            Store.prototype.load = function () {
+                for (var key in this._storage) {
+                    this.set(key, this._storage[key]);
+                }
+            };
+            Store.prototype.get = function (key) {
+                _super.prototype.get.call(this, key);
+            };
+            Store.prototype.set = function (key, value) {
+                _super.prototype.set.call(this, key, value);
+                this._storage.setItem(key, value);
+            };
+            Store.prototype.remove = function (key) {
+                _super.prototype.remove.call(this, key);
+                this._storage.removeItem(key);
+            };
+            Store.prototype.clear = function () {
+                _super.prototype.clear.call(this);
+                this._storage.clear();
+            };
+            return Store;
+        })(TSCore.Data.Dictionary);
+        Data.Store = Store;
     })(Data = TSCore.Data || (TSCore.Data = {}));
 })(TSCore || (TSCore = {}));
 var TSCore;
@@ -1310,6 +1525,10 @@ var TSCore;
     })(Text = TSCore.Text || (TSCore.Text = {}));
 })(TSCore || (TSCore = {}));
 /// <reference path="../typings/tsd.d.ts" />
+/// <reference path="TSCore/Auth/Manager.ts" />
+/// <reference path="TSCore/Auth/Method.ts" />
+/// <reference path="TSCore/Auth/Session.ts" />
+/// <reference path="TSCore/Base64.ts" />
 /// <reference path="TSCore/Bootstrap.ts" />
 /// <reference path="TSCore/Config.ts" />
 /// <reference path="TSCore/DI.ts" />
@@ -1322,6 +1541,7 @@ var TSCore;
 /// <reference path="TSCore/Data/RemoteModelCollection.ts" />
 /// <reference path="TSCore/Data/Set.ts" />
 /// <reference path="TSCore/Data/SortedCollection.ts" />
+/// <reference path="TSCore/Data/Store.ts" />
 /// <reference path="TSCore/DateTime/DateFormatter.ts" />
 /// <reference path="TSCore/DateTime/DateTime.ts" />
 /// <reference path="TSCore/DateTime/Timer.ts" />

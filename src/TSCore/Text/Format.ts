@@ -105,10 +105,11 @@ module TSCore.Text {
         /**
          * Check if string starts with a certain string.
          *
-         * @param input     String to check for.
+         * @param source    Source string.
+         * @param search    String to search for.
          * @returns {boolean}
          */
-        public static startsWith(source: String, search: String): boolean {
+        public static startsWith(source: string, search: string): boolean {
 
             return source.slice(0, search.length) == search;
         }
@@ -116,10 +117,11 @@ module TSCore.Text {
         /**
          * Check if string ends with a certain string.
          *
-         * @param input     String to check for.
+         * @param source    Source string.
+         * @param search    String to search for.
          * @returns {boolean}
          */
-        public static endsWith(source: String, search: String): boolean {
+        public static endsWith(source: string, search: string): boolean {
 
             return source.slice(-search.length) == search;
         }

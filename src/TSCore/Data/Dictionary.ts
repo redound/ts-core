@@ -91,6 +91,7 @@ module TSCore.Data {
 
         /**
          * Remove value for key in dictionary.
+         *
          * @param key   Key to remove item for.
          * @returns {null}
          */

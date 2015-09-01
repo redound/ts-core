@@ -6,10 +6,6 @@ module TSCore {
      */
     export class Bootstrap {
 
-        constructor() {
-
-        }
-
         /**
          * Executes all methods on this class
          * starting with '_init'

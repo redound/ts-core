@@ -1,6 +1,10 @@
 /// <reference path="../typings/tsd.d.ts" />
 
 //grunt-start
+/// <reference path="TSCore/Auth/Manager.ts" />
+/// <reference path="TSCore/Auth/Method.ts" />
+/// <reference path="TSCore/Auth/Session.ts" />
+/// <reference path="TSCore/Base64.ts" />
 /// <reference path="TSCore/Bootstrap.ts" />
 /// <reference path="TSCore/Config.ts" />
 /// <reference path="TSCore/DI.ts" />
@@ -13,6 +17,7 @@
 /// <reference path="TSCore/Data/RemoteModelCollection.ts" />
 /// <reference path="TSCore/Data/Set.ts" />
 /// <reference path="TSCore/Data/SortedCollection.ts" />
+/// <reference path="TSCore/Data/Store.ts" />
 /// <reference path="TSCore/DateTime/DateFormatter.ts" />
 /// <reference path="TSCore/DateTime/DateTime.ts" />
 /// <reference path="TSCore/DateTime/Timer.ts" />

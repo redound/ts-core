@@ -1,10 +1,4 @@
 /// <reference path="../typings/tsd.d.ts" />
-declare module TSCore {
-    class Bootstrap {
-        constructor();
-        init(): void;
-    }
-}
 declare module TSCore.Events {
     class Event<T> {
         topic: string;
@@ -28,6 +22,54 @@ declare module TSCore.Events {
         off(topics: string, callback?: Function, context?: any): TSCore.Events.EventEmitter;
         trigger(topic: string, params?: {}, caller?: any): TSCore.Events.EventEmitter;
         resetEvents(): TSCore.Events.EventEmitter;
+    }
+}
+declare module TSCore.Auth {
+    interface ILoginAttemptError {
+        message: string;
+    }
+    interface ILoginAttempt {
+        (error: ILoginAttemptError, session: Session): any;
+    }
+    class Manager extends TSCore.Events.EventEmitter {
+        protected _authMethods: TSCore.Data.Dictionary<string, Method>;
+        protected _session: Session;
+        constructor();
+        login(method: string, credentials: {}, done?: ILoginAttempt): void;
+        addMethod(method: string, authMethod: Method): TSCore.Auth.Manager;
+        removeMethod(method: string): TSCore.Auth.Manager;
+        check(): boolean;
+        getSession(): Session;
+        isSession(method: string): boolean;
+    }
+}
+declare module TSCore.Auth {
+    class Method {
+        static name: string;
+        login(credentials: any, done: ILoginAttempt): void;
+    }
+}
+declare module TSCore.Auth {
+    class Session {
+        protected _method: string;
+        protected _identity: {};
+        constructor(_method?: string, _identity?: {});
+        getIdentity(): {};
+        setIdentity(identity: {}): TSCore.Auth.Session;
+        getMethod(): string;
+        setMethod(method: string): TSCore.Auth.Session;
+    }
+}
+declare module TSCore {
+    class Base64 {
+        private static keyStr;
+        static encode(input: string): string;
+        static decode(input: string): string;
+    }
+}
+declare module TSCore {
+    class Bootstrap {
+        init(): void;
     }
 }
 declare module TSCore {
@@ -245,6 +287,23 @@ declare module TSCore.Data {
         sort(): void;
     }
 }
+declare module TSCore.Data {
+    interface IRemoteStorage {
+        getItem(key: any): any;
+        setItem(key: string, value: any): void;
+        removeItem(key: string): void;
+        clear(): void;
+    }
+    class Store extends TSCore.Data.Dictionary<string, any> {
+        protected _storage: IRemoteStorage;
+        constructor(_storage: IRemoteStorage, data?: IDictionaryData);
+        load(): void;
+        get(key: string): any;
+        set(key: string, value: any): void;
+        remove(key: string): void;
+        clear(): void;
+    }
+}
 declare module TSCore.DateTime {
     class DateFormatter {
     }
@@ -412,8 +471,8 @@ declare module TSCore.Text {
         static concatenate(parts: any[], seperator?: string, lastSeparator?: string): string;
         static zeroPad(input: string, width: number, zero?: string): string;
         static ucFirst(input: string): string;
-        static startsWith(source: String, search: String): boolean;
-        static endsWith(source: String, search: String): boolean;
+        static startsWith(source: string, search: string): boolean;
+        static endsWith(source: string, search: string): boolean;
     }
 }
 declare module TSCore.Text {
