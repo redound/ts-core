@@ -44,8 +44,8 @@ module TSCore.Auth {
         protected _session: Session;
 
         constructor() {
-
             super();
+            this._authMethods = TSCore.Data.Dictionary<string, Method>;
         }
 
         /**
@@ -80,7 +80,7 @@ module TSCore.Auth {
          *
          * @param method        Name of the method.
          * @param authMethod    AuthMethod instance.
-         * @returns {TSCore.Auth.AuthManager}
+         * @returns {TSCore.Auth.Manager}
          */
         public addMethod(method: string, authMethod: Method): TSCore.Auth.Manager {
 
@@ -93,7 +93,7 @@ module TSCore.Auth {
          * Remove an authentication method from the manager.
          *
          * @param method        Name of the method.
-         * @returns {TSCore.Auth.AuthManager}
+         * @returns {TSCore.Auth.Manager}
          */
         public removeMethod(method: string): TSCore.Auth.Manager {
 
