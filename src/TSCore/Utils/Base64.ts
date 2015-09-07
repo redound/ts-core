@@ -4,9 +4,10 @@
  */
 module TSCore.Utils {
 
+
     export class Base64 {
 
-        private static keyStr: string = 'ABCDEFGHIJKLMNOP' +
+        private static keyStr: any = 'ABCDEFGHIJKLMNOP' +
                                 'QRSTUVWXYZabcdef' +
                                 'ghijklmnopqrstuv' +
                                 'wxyz0123456789+/' +
@@ -16,7 +17,7 @@ module TSCore.Utils {
 
         }
 
-        public encode(input: string): string {
+        public encode(input: any): string {
 
             var keyStr = Base64.keyStr;
             var output: any = "";
@@ -52,7 +53,7 @@ module TSCore.Utils {
             return output;
         }
 
-        public decode(input: string): string {
+        public decode(input: any): string {
 
             var keyStr = Base64.keyStr;
             var output: any = "";

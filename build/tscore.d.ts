@@ -1,4 +1,3 @@
-/// <reference path="../typings/tsd.d.ts" />
 declare module TSCore.Events {
     class Event<T> {
         topic: string;
@@ -25,15 +24,38 @@ declare module TSCore.Events {
     }
 }
 declare module TSCore.Auth {
+    module ManagerEvents {
+        const LOGIN_ATTEMPT_FAIL: string;
+        const LOGIN_ATTEMPT_SUCCESS: string;
+        const LOGIN: string;
+        const LOGOUT: string;
+        interface ILoginAttemptFailParams<T> {
+            credentials: T;
+            method: string;
+        }
+        interface ILoginAttemptSuccessParams<T> {
+            credentials: T;
+            method: string;
+            session: Session;
+        }
+        interface ILoginParams<T> {
+            method: string;
+            session: Session;
+        }
+        interface ILogoutParams<T> {
+            method: string;
+        }
+    }
     interface ILoginAttemptError {
         message: string;
     }
     interface ILoginAttempt {
         (error: ILoginAttemptError, session: Session): any;
     }
-    class Manager extends TSCore.Events.EventEmitter {
+    class Manager {
         protected _authMethods: TSCore.Data.Dictionary<string, Method>;
         protected _session: Session;
+        events: TSCore.Events.EventEmitter;
         constructor();
         login(method: string, credentials: {}, done?: ILoginAttempt): void;
         addMethod(method: string, authMethod: Method): TSCore.Auth.Manager;
@@ -463,8 +485,9 @@ declare module TSCore {
 declare module TSCore.Utils {
     class Base64 {
         private static keyStr;
-        static encode(input: string): string;
-        static decode(input: string): string;
+        constructor();
+        encode(input: any): string;
+        decode(input: any): string;
     }
 }
 declare module TSCore.Utils {
@@ -472,7 +495,7 @@ declare module TSCore.Utils {
     }
 }
 declare module TSCore.Utils {
-    class String {
+    class Text {
         private static HtmlEntityMap;
         static escapeHtml(input: string): string;
         static truncate(input: string, maxLength: number, suffix?: string): string;

@@ -35,6 +35,6 @@
 /// <reference path="TSCore/TSCore.ts" />
 /// <reference path="TSCore/Utils/Base64.ts" />
 /// <reference path="TSCore/Utils/Random.ts" />
-/// <reference path="TSCore/Utils/String.ts" />
+/// <reference path="TSCore/Utils/Text.ts" />
 /// <reference path="TSCore/Utils/URL.ts" />
 //grunt-end

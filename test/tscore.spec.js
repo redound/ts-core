@@ -983,29 +983,29 @@ describe("TSCore.Logger.Stream.Console", function () {
     });
 });
 /// <reference path="../TSCore.spec.ts" />
-describe("TSCore.Utils.String", function () {
+describe("TSCore.Utils.Text", function () {
     describe("startsWith()", function () {
-        it("should return true when source string starts with search string", function () {
-            expect(TSCore.Utils.String.startsWith("Hello world", "Hello")).toBe(true);
-            expect(TSCore.Utils.String.startsWith("Hello world", "Hello worl")).toBe(true);
-            expect(TSCore.Utils.String.startsWith("Hello world", "Hello world")).toBe(true);
+        it("should return true when source Text starts with search Text", function () {
+            expect(TSCore.Utils.Text.startsWith("Hello world", "Hello")).toBe(true);
+            expect(TSCore.Utils.Text.startsWith("Hello world", "Hello worl")).toBe(true);
+            expect(TSCore.Utils.Text.startsWith("Hello world", "Hello world")).toBe(true);
         });
-        it("should return false when source string does not start with search string", function () {
-            expect(TSCore.Utils.String.startsWith("Hell world", "Hello")).toBe(false);
-            expect(TSCore.Utils.String.startsWith("Hell' world", "Hello worl")).toBe(false);
-            expect(TSCore.Utils.String.startsWith("Hello forld", "Hello world")).toBe(false);
+        it("should return false when source Text does not start with search Text", function () {
+            expect(TSCore.Utils.Text.startsWith("Hell world", "Hello")).toBe(false);
+            expect(TSCore.Utils.Text.startsWith("Hell' world", "Hello worl")).toBe(false);
+            expect(TSCore.Utils.Text.startsWith("Hello forld", "Hello world")).toBe(false);
         });
     });
     describe("endsWith()", function () {
-        it("should return true when source string ends with search string", function () {
-            expect(TSCore.Utils.String.endsWith("Hello world", "rld")).toBe(true);
-            expect(TSCore.Utils.String.endsWith("Hello world", "world")).toBe(true);
-            expect(TSCore.Utils.String.endsWith("Hello&*world", "&*world")).toBe(true);
+        it("should return true when source Text ends with search Text", function () {
+            expect(TSCore.Utils.Text.endsWith("Hello world", "rld")).toBe(true);
+            expect(TSCore.Utils.Text.endsWith("Hello world", "world")).toBe(true);
+            expect(TSCore.Utils.Text.endsWith("Hello&*world", "&*world")).toBe(true);
         });
-        it("should return false when source string does not end with search string", function () {
-            expect(TSCore.Utils.String.endsWith("Hell world", "al")).toBe(false);
-            expect(TSCore.Utils.String.endsWith("Hell world", "srld")).toBe(false);
-            expect(TSCore.Utils.String.endsWith("Hello forld", "Hello sl")).toBe(false);
+        it("should return false when source Text does not end with search Text", function () {
+            expect(TSCore.Utils.Text.endsWith("Hell world", "al")).toBe(false);
+            expect(TSCore.Utils.Text.endsWith("Hell world", "srld")).toBe(false);
+            expect(TSCore.Utils.Text.endsWith("Hello forld", "Hello sl")).toBe(false);
         });
     });
 });

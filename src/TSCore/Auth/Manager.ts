@@ -45,7 +45,6 @@ module TSCore.Auth {
         public events: TSCore.Events.EventEmitter;
 
         constructor() {
-            super();
             this._authMethods = new TSCore.Data.Dictionary<string, Method>();
             this.events = new TSCore.Events.EventEmitter;
         }

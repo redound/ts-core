@@ -1,6 +1,6 @@
 module TSCore.Utils {
 
-    export class String {
+    export class Text {
 
         private static HtmlEntityMap = {
             "&": "&amp;",
@@ -19,7 +19,7 @@ module TSCore.Utils {
          */
         public static escapeHtml(input:string):string {
 
-            var entityMap = String.HtmlEntityMap;
+            var entityMap = Text.HtmlEntityMap;
 
             return input.replace(/[&<>"'\/]/g, function (s) {
                 return entityMap[s];

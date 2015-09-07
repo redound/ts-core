@@ -105,12 +105,6 @@ var TSCore;
     })(Events = TSCore.Events || (TSCore.Events = {}));
 })(TSCore || (TSCore = {}));
 /// <reference path="../Events/EventEmitter.ts" />
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
-};
 var TSCore;
 (function (TSCore) {
     var Auth;
@@ -121,12 +115,11 @@ var TSCore;
             ManagerEvents.LOGIN_ATTEMPT_SUCCESS = "login-attempt-success";
             ManagerEvents.LOGIN = "login";
             ManagerEvents.LOGOUT = "logout";
-        })(ManagerEvents || (ManagerEvents = {}));
-        var Manager = (function (_super) {
-            __extends(Manager, _super);
+        })(ManagerEvents = Auth.ManagerEvents || (Auth.ManagerEvents = {}));
+        var Manager = (function () {
             function Manager() {
-                _super.call(this);
                 this._authMethods = new TSCore.Data.Dictionary();
+                this.events = new TSCore.Events.EventEmitter;
             }
             Manager.prototype.login = function (method, credentials, done) {
                 var _this = this;
@@ -136,11 +129,11 @@ var TSCore;
                 }
                 authMethod.login(credentials, function (error, session) {
                     if (error) {
-                        _this.trigger(ManagerEvents.LOGIN_ATTEMPT_FAIL, { credentials: credentials, method: method });
+                        _this.events.trigger(ManagerEvents.LOGIN_ATTEMPT_FAIL, { credentials: credentials, method: method });
                         return done(error, null);
                     }
-                    _this.trigger(ManagerEvents.LOGIN_ATTEMPT_SUCCESS, { credentials: credentials, method: method, session: session });
-                    _this.trigger(ManagerEvents.LOGIN, { credentials: credentials, method: method, session: session });
+                    _this.events.trigger(ManagerEvents.LOGIN_ATTEMPT_SUCCESS, { credentials: credentials, method: method, session: session });
+                    _this.events.trigger(ManagerEvents.LOGIN, { credentials: credentials, method: method, session: session });
                     done(error, session);
                 });
             };
@@ -166,7 +159,7 @@ var TSCore;
                 return (session.getMethod() === method);
             };
             return Manager;
-        })(TSCore.Events.EventEmitter);
+        })();
         Auth.Manager = Manager;
     })(Auth = TSCore.Auth || (TSCore.Auth = {}));
 })(TSCore || (TSCore = {}));
@@ -219,7 +212,7 @@ var TSCore;
         }
         Bootstrap.prototype.init = function () {
             for (var method in this) {
-                if (TSCore.Utils.String.startsWith(method, "_init")) {
+                if (TSCore.Utils.Text.startsWith(method, "_init")) {
                     this[method]();
                 }
             }
@@ -229,6 +222,12 @@ var TSCore;
     TSCore.Bootstrap = Bootstrap;
 })(TSCore || (TSCore = {}));
 /// <reference path="Events/EventEmitter.ts" />
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
 var TSCore;
 (function (TSCore) {
     var Config = (function (_super) {
@@ -1336,7 +1335,7 @@ var TSCore;
         var Base64 = (function () {
             function Base64() {
             }
-            Base64.encode = function (input) {
+            Base64.prototype.encode = function (input) {
                 var keyStr = Base64.keyStr;
                 var output = "";
                 var chr1, chr2, chr3 = "";
@@ -1366,7 +1365,7 @@ var TSCore;
                 } while (i < input.length);
                 return output;
             };
-            Base64.decode = function (input) {
+            Base64.prototype.decode = function (input) {
                 var keyStr = Base64.keyStr;
                 var output = "";
                 var chr1, chr2, chr3 = "";
@@ -1387,12 +1386,12 @@ var TSCore;
                     chr1 = (enc1 << 2) | (enc2 >> 4);
                     chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
                     chr3 = ((enc3 & 3) << 6) | enc4;
-                    output = output + Utils.String.fromCharCode(chr1);
+                    output = output + String.fromCharCode(chr1);
                     if (enc3 != 64) {
-                        output = output + Utils.String.fromCharCode(chr2);
+                        output = output + String.fromCharCode(chr2);
                     }
                     if (enc4 != 64) {
-                        output = output + Utils.String.fromCharCode(chr3);
+                        output = output + String.fromCharCode(chr3);
                     }
                     chr1 = chr2 = chr3 = "";
                     enc1 = enc2 = enc3 = enc4 = "";
@@ -1425,23 +1424,23 @@ var TSCore;
 (function (TSCore) {
     var Utils;
     (function (Utils) {
-        var String = (function () {
-            function String() {
+        var Text = (function () {
+            function Text() {
             }
-            String.escapeHtml = function (input) {
-                var entityMap = String.HtmlEntityMap;
+            Text.escapeHtml = function (input) {
+                var entityMap = Text.HtmlEntityMap;
                 return input.replace(/[&<>"'\/]/g, function (s) {
                     return entityMap[s];
                 });
             };
-            String.truncate = function (input, maxLength, suffix) {
+            Text.truncate = function (input, maxLength, suffix) {
                 if (suffix === void 0) { suffix = '...'; }
                 if (input.length <= length) {
                     return input;
                 }
                 return input.substring(0, length) + suffix;
             };
-            String.concatenate = function (parts, seperator, lastSeparator) {
+            Text.concatenate = function (parts, seperator, lastSeparator) {
                 if (seperator === void 0) { seperator = ', '; }
                 if (lastSeparator === void 0) { lastSeparator = seperator; }
                 var result = '';
@@ -1458,23 +1457,23 @@ var TSCore;
                 });
                 return result;
             };
-            String.zeroPad = function (input, width, zero) {
+            Text.zeroPad = function (input, width, zero) {
                 if (zero === void 0) { zero = '0'; }
                 return input.length >= width ? input : new Array(width - input.length + 1).join(zero) + input;
             };
-            String.ucFirst = function (input) {
+            Text.ucFirst = function (input) {
                 if (input == '') {
                     return input;
                 }
                 return input.charAt(0).toUpperCase() + input.slice(1);
             };
-            String.startsWith = function (source, search) {
+            Text.startsWith = function (source, search) {
                 return source.slice(0, search.length) == search;
             };
-            String.endsWith = function (source, search) {
+            Text.endsWith = function (source, search) {
                 return source.slice(-search.length) == search;
             };
-            String.HtmlEntityMap = {
+            Text.HtmlEntityMap = {
                 "&": "&amp;",
                 "<": "&lt;",
                 ">": "&gt;",
@@ -1482,9 +1481,9 @@ var TSCore;
                 "'": '&#39;',
                 "/": '&#x2F;'
             };
-            return String;
+            return Text;
         })();
-        Utils.String = String;
+        Utils.Text = Text;
     })(Utils = TSCore.Utils || (TSCore.Utils = {}));
 })(TSCore || (TSCore = {}));
 var TSCore;
@@ -1563,6 +1562,6 @@ var TSCore;
 /// <reference path="TSCore/TSCore.ts" />
 /// <reference path="TSCore/Utils/Base64.ts" />
 /// <reference path="TSCore/Utils/Random.ts" />
-/// <reference path="TSCore/Utils/String.ts" />
+/// <reference path="TSCore/Utils/Text.ts" />
 /// <reference path="TSCore/Utils/URL.ts" />
 //# sourceMappingURL=tscore.js.map
