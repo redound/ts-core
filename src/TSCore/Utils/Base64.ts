@@ -12,7 +12,11 @@ module TSCore.Utils {
                                 'wxyz0123456789+/' +
                                 '=';
 
-        public static encode(input: string): string {
+        constructor() {
+
+        }
+
+        public encode(input: string): string {
 
             var keyStr = Base64.keyStr;
             var output: any = "";
@@ -48,7 +52,7 @@ module TSCore.Utils {
             return output;
         }
 
-        public static decode(input: string): string {
+        public decode(input: string): string {
 
             var keyStr = Base64.keyStr;
             var output: any = "";
