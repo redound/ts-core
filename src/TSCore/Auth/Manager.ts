@@ -2,7 +2,7 @@
 
 module TSCore.Auth {
 
-    module ManagerEvents {
+    export module ManagerEvents {
 
         export const LOGIN_ATTEMPT_FAIL: string = "login-attempt-fail";
         export const LOGIN_ATTEMPT_SUCCESS: string = "login-attempt-success";
