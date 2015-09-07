@@ -1,3 +1,4 @@
+/// <reference path="../typings/tsd.d.ts" />
 declare module TSCore.Events {
     class Event<T> {
         topic: string;
@@ -459,7 +460,7 @@ declare module TSCore {
         value: any;
     }
 }
-declare module TSCore {
+declare module TSCore.Utils {
     class Base64 {
         private static keyStr;
         static encode(input: string): string;

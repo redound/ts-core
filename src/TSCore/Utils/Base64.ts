@@ -2,7 +2,7 @@
  * @since 0.0.6
  * @author Olivier Andriessen <olivierandriessen@gmail.com>
  */
-module TSCore {
+module TSCore.Utils {
 
     export class Base64 {
 
