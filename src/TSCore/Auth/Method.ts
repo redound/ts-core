@@ -12,5 +12,9 @@ module TSCore.Auth {
         public login(credentials: any, done: ILoginAttempt): void {
 
         }
+
+        public logout(session: TSCore.Auth.Session, done: ILogoutAttempt): void {
+
+        }
     }
 }

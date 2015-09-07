@@ -30,12 +30,19 @@ module TSCore.Auth {
         }
     }
 
-    export interface ILoginAttemptError {
+    export interface IAttemptError {
         message: string;
     }
 
+    export interface ILoginAttemptError extends IAttemptError {}
+    export interface ILogoutAttemptError extends IAttemptError {}
+
     export interface ILoginAttempt {
         (error: ILoginAttemptError, session: Session);
+    }
+
+    export interface ILogoutAttempt {
+        (error?: ILogoutAttemptError);
     }
 
     export class Manager {
@@ -65,14 +72,50 @@ module TSCore.Auth {
 
             authMethod.login(credentials, (error: ILoginAttemptError, session: Session) => {
 
+                /**
+                 * Handle error with events then callback
+                 */
                 if (error) {
                     this.events.trigger(ManagerEvents.LOGIN_ATTEMPT_FAIL, { credentials: credentials, method: method });
-                    return done(error, null);
+                    done(error, null);
+                    return;
                 }
 
+                /**
+                 * Set Session
+                 */
+                this._session = session;
+
+                /**
+                 * Trigger login events
+                 */
                 this.events.trigger(ManagerEvents.LOGIN_ATTEMPT_SUCCESS, { credentials: credentials, method: method, session: session });
                 this.events.trigger(ManagerEvents.LOGIN, { credentials: credentials, method: method, session: session });
+
+                /**
+                 * Callback
+                 */
                 done(error, session);
+            });
+        }
+
+        public logout(method: string, done?: ILogoutAttempt) {
+
+            var authMethod:Method = this._authMethods.get(method);
+
+            if (!authMethod) {
+                done({ message: 'AuthMethod does not exist' });
+            }
+
+            authMethod.logout(this._session, (error: ILogoutAttemptError) => {
+
+                if (!error) {
+                    this._session = null;
+                }
+
+                if (done) {
+                    done(error);
+                }
             });
         }
 
@@ -119,23 +162,6 @@ module TSCore.Auth {
          */
         public getSession(): Session {
             return this._session;
-        }
-
-        /**
-         * Check if the session is created by
-         * the method name provided.
-         *
-         * @param method    Name of authentication method.
-         */
-        public isSession(method: string): boolean {
-
-            var session = this.getSession();
-
-            if (!session) {
-                return false;
-            }
-
-            return (session.getMethod() === method);
         }
     }
 }
