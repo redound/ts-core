@@ -38,14 +38,37 @@ module TSCore.Auth {
         (error: ILoginAttemptError, session: Session);
     }
 
-    export class Manager extends TSCore.Events.EventEmitter {
+    export class Manager {
 
         protected _authMethods: TSCore.Data.Dictionary<string, Method>;
         protected _session: Session;
+        protected _eventsManager: TSCore.Events.EventEmitter;
 
         constructor() {
             super();
             this._authMethods = new TSCore.Data.Dictionary<string, Method>();
+            this._eventsManager = new TSCore.Events.EventEmitter;
+        }
+
+        /**
+         * Attach different eventsManager.
+         *
+         * @param eventsManager
+         * @returns {TSCore.Auth.Manager}
+         */
+        public setEventsManager(eventsManager: TSCore.Events.EventEmitter): TSCore.Auth.Manager {
+            this._eventsManager = eventsManager;
+            return this;
+        }
+
+        /**
+         * Get the attached eventsManager.
+         *
+         * @returns {TSCore.Events.EventEmitter}
+         */
+        public getEventsManager(): TSCore.Events.EventEmitter {
+
+            return this._eventsManager;
         }
 
         /**
@@ -65,12 +88,12 @@ module TSCore.Auth {
             authMethod.login(credentials, (error: ILoginAttemptError, session: Session) => {
 
                 if (error) {
-                    this.trigger(ManagerEvents.LOGIN_ATTEMPT_FAIL, { credentials: credentials, method: method });
+                    this._eventsManager.trigger(ManagerEvents.LOGIN_ATTEMPT_FAIL, { credentials: credentials, method: method });
                     return done(error, null);
                 }
 
-                this.trigger(ManagerEvents.LOGIN_ATTEMPT_SUCCESS, { credentials: credentials, method: method, session: session });
-                this.trigger(ManagerEvents.LOGIN, { credentials: credentials, method: method, session: session });
+                this._eventsManager.trigger(ManagerEvents.LOGIN_ATTEMPT_SUCCESS, { credentials: credentials, method: method, session: session });
+                this._eventsManager.trigger(ManagerEvents.LOGIN, { credentials: credentials, method: method, session: session });
                 done(error, session);
             });
         }
