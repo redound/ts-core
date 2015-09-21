@@ -184,12 +184,12 @@ module TSCore.Data {
         }
 
         /**
-         * Find items using an iterator.
+         * Find items using an optional iterator.
          *
          * @param iterator Iterator to use.
          * @returns {T[]}
          */
-        public find(iterator:_.ListIterator<T, boolean>): T[] {
+        public find(iterator?:_.ListIterator<T, boolean>): T[] {
             return _.filter(this._data, iterator);
         }
 
@@ -199,7 +199,7 @@ module TSCore.Data {
          * @param iterator
          * @returns {T}
          */
-        public findFirst(iterator:_.ListIterator<T, boolean>): T {
+        public findFirst(iterator?:_.ListIterator<T, boolean>): T {
             return _.find(this._data, iterator);
         }
 

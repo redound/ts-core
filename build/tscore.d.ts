@@ -46,11 +46,18 @@ declare module TSCore.Auth {
             method: string;
         }
     }
-    interface ILoginAttemptError {
+    interface IAttemptError {
         message: string;
+    }
+    interface ILoginAttemptError extends IAttemptError {
+    }
+    interface ILogoutAttemptError extends IAttemptError {
     }
     interface ILoginAttempt {
         (error: ILoginAttemptError, session: Session): any;
+    }
+    interface ILogoutAttempt {
+        (error?: ILogoutAttemptError): any;
     }
     class Manager {
         protected _authMethods: TSCore.Data.Dictionary<string, Method>;
@@ -58,17 +65,18 @@ declare module TSCore.Auth {
         events: TSCore.Events.EventEmitter;
         constructor();
         login(method: string, credentials: {}, done?: ILoginAttempt): void;
+        logout(method: string, done?: ILogoutAttempt): void;
         addMethod(method: string, authMethod: Method): TSCore.Auth.Manager;
         removeMethod(method: string): TSCore.Auth.Manager;
         check(): boolean;
         getSession(): Session;
-        isSession(method: string): boolean;
     }
 }
 declare module TSCore.Auth {
     class Method {
         static name: string;
         login(credentials: any, done: ILoginAttempt): void;
+        logout(session: TSCore.Auth.Session, done: ILogoutAttempt): void;
     }
 }
 declare module TSCore.Auth {
@@ -136,8 +144,8 @@ declare module TSCore.Data {
         each(iterator: _.ListIterator<T, void>): void;
         pluck(propertyName: string): any[];
         isEmpty(): boolean;
-        find(iterator: _.ListIterator<T, boolean>): T[];
-        findFirst(iterator: _.ListIterator<T, boolean>): T;
+        find(iterator?: _.ListIterator<T, boolean>): T[];
+        findFirst(iterator?: _.ListIterator<T, boolean>): T;
         where(properties: {}): T[];
         whereFirst(properties: {}): T;
         contains(item: T): boolean;

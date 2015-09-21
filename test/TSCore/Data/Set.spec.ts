@@ -462,6 +462,25 @@ describe("TSCore.Data.Set", () => {
 
             expect(found.length).toBe(2);
         });
+
+        it("should be optional", () => {
+
+            basicSet.clear();
+            basicSet.addMany([{
+                id: 1,
+                name: 'Lion'
+            }, {
+                id: 2,
+                name: 'Panther'
+            }, {
+                id: 3,
+                name: 'Leopard'
+            }]);
+
+            // Test
+            var found = basicSet.find();
+            expect(found.length).toBe(3);
+        });
     });
 
     describe("findFirst()", () => {

@@ -712,6 +712,21 @@ describe("TSCore.Data.Set", function () {
             });
             expect(found.length).toBe(2);
         });
+        it("should be optional", function () {
+            basicSet.clear();
+            basicSet.addMany([{
+                    id: 1,
+                    name: 'Lion'
+                }, {
+                    id: 2,
+                    name: 'Panther'
+                }, {
+                    id: 3,
+                    name: 'Leopard'
+                }]);
+            var found = basicSet.find();
+            expect(found.length).toBe(3);
+        });
     });
     describe("findFirst()", function () {
         it("should return the first item that is allowed by listiterator", function () {

@@ -130,11 +130,28 @@ var TSCore;
                 authMethod.login(credentials, function (error, session) {
                     if (error) {
                         _this.events.trigger(ManagerEvents.LOGIN_ATTEMPT_FAIL, { credentials: credentials, method: method });
-                        return done(error, null);
+                        done(error, null);
+                        return;
                     }
+                    _this._session = session;
                     _this.events.trigger(ManagerEvents.LOGIN_ATTEMPT_SUCCESS, { credentials: credentials, method: method, session: session });
                     _this.events.trigger(ManagerEvents.LOGIN, { credentials: credentials, method: method, session: session });
                     done(error, session);
+                });
+            };
+            Manager.prototype.logout = function (method, done) {
+                var _this = this;
+                var authMethod = this._authMethods.get(method);
+                if (!authMethod) {
+                    done({ message: 'AuthMethod does not exist' });
+                }
+                authMethod.logout(this._session, function (error) {
+                    if (!error) {
+                        _this._session = null;
+                    }
+                    if (done) {
+                        done(error);
+                    }
                 });
             };
             Manager.prototype.addMethod = function (method, authMethod) {
@@ -151,13 +168,6 @@ var TSCore;
             Manager.prototype.getSession = function () {
                 return this._session;
             };
-            Manager.prototype.isSession = function (method) {
-                var session = this.getSession();
-                if (!session) {
-                    return false;
-                }
-                return (session.getMethod() === method);
-            };
             return Manager;
         })();
         Auth.Manager = Manager;
@@ -171,6 +181,8 @@ var TSCore;
             function Method() {
             }
             Method.prototype.login = function (credentials, done) {
+            };
+            Method.prototype.logout = function (session, done) {
             };
             return Method;
         })();
