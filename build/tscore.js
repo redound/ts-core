@@ -1,17 +1,5 @@
 var TSCore;
 (function (TSCore) {
-    var Auth;
-    (function (Auth) {
-        var Identity = (function () {
-            function Identity() {
-            }
-            return Identity;
-        })();
-        Auth.Identity = Identity;
-    })(Auth = TSCore.Auth || (TSCore.Auth = {}));
-})(TSCore || (TSCore = {}));
-var TSCore;
-(function (TSCore) {
     var Events;
     (function (Events) {
         var Event = (function () {
@@ -1573,7 +1561,6 @@ var TSCore;
     })(Utils = TSCore.Utils || (TSCore.Utils = {}));
 })(TSCore || (TSCore = {}));
 /// <reference path="../typings/tsd.d.ts" />
-/// <reference path="TSCore/Auth/Identity.ts" />
 /// <reference path="TSCore/Auth/Manager.ts" />
 /// <reference path="TSCore/Auth/Method.ts" />
 /// <reference path="TSCore/Auth/Session.ts" />

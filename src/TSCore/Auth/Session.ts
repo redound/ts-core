@@ -2,7 +2,7 @@ module TSCore.Auth {
 
     export class Session {
 
-        constructor(protected _method?: string, protected _identity?: {}) {
+        constructor(protected _method?: string, protected _identity?: IIdentity) {
 
         }
 
@@ -22,7 +22,7 @@ module TSCore.Auth {
          * @param identity
          * @returns {TSCore.Auth.Session}
          */
-        setIdentity(identity: Identity): TSCore.Auth.Session {
+        setIdentity(identity: IIdentity): TSCore.Auth.Session {
 
             this._identity = identity;
 

@@ -1,7 +1,6 @@
 /// <reference path="../typings/tsd.d.ts" />
 
 //grunt-start
-/// <reference path="TSCore/Auth/Identity.ts" />
 /// <reference path="TSCore/Auth/Manager.ts" />
 /// <reference path="TSCore/Auth/Method.ts" />
 /// <reference path="TSCore/Auth/Session.ts" />

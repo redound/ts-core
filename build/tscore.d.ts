@@ -1,7 +1,3 @@
-declare module TSCore.Auth {
-    class Identity {
-    }
-}
 declare module TSCore.Events {
     class Event<T> {
         topic: string;
@@ -50,6 +46,8 @@ declare module TSCore.Auth {
             method: string;
         }
     }
+    interface IIdentity {
+    }
     interface IAttemptError {
         message: string;
     }
@@ -86,10 +84,10 @@ declare module TSCore.Auth {
 declare module TSCore.Auth {
     class Session {
         protected _method: string;
-        protected _identity: {};
-        constructor(_method?: string, _identity?: {});
+        protected _identity: IIdentity;
+        constructor(_method?: string, _identity?: IIdentity);
         getIdentity(): {};
-        setIdentity(identity: Identity): TSCore.Auth.Session;
+        setIdentity(identity: IIdentity): TSCore.Auth.Session;
         getMethod(): string;
         setMethod(method: string): TSCore.Auth.Session;
     }

@@ -30,6 +30,10 @@ module TSCore.Auth {
         }
     }
 
+    export interface IIdentity {
+
+    }
+
     export interface IAttemptError {
         message: string;
     }
@@ -69,7 +73,7 @@ module TSCore.Auth {
                 done({ message: 'AuthMethod does not exist' }, null);
             }
 
-            authMethod.login(credentials, (error: ILoginAttemptError, identity: Identity) => {
+            authMethod.login(credentials, (error: ILoginAttemptError, identity: IIdentity) => {
 
                 if (error) {
                     this.events.trigger(ManagerEvents.LOGIN_ATTEMPT_FAIL, { credentials: credentials, method: method });
@@ -96,7 +100,7 @@ module TSCore.Auth {
             });
         }
 
-        private _setSessionForMethod(method: any, identity: Identity): Session {
+        private _setSessionForMethod(method: any, identity: IIdentity): Session {
 
             var session = new Session();
             session.setIdentity(identity);
