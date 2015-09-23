@@ -36,7 +36,7 @@ module TSCore.Data {
         private static _OBJECT_UNIQUE_ID_COUNTER = 1;
 
         protected _data: IDictionaryData;
-        protected _itemCount:number;
+        protected _itemCount:number = 0;
 
 
         constructor(data?: IDictionaryData){
@@ -138,6 +138,28 @@ module TSCore.Data {
             });
 
             return foundValue != null;
+        }
+
+        /**
+         * Get first item from dictionary
+         * @returns {any}
+         */
+        public first(): V {
+            for (var key in this._data) {
+                return this._data[key];
+            }
+            return null;
+        }
+
+        /**
+         * Return last item from dictionary
+         * @returns {IKeyValuePair|null}
+         */
+        public last(): V {
+            for (var key in this._data) {
+                var value = this._data[key];
+            }
+            return value || null;
         }
 
         /**

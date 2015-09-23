@@ -19,10 +19,10 @@ module TSCore.Auth {
         /**
          * Set the authenticated identity.
          *
-         * @param identity Identity object.
+         * @param identity
          * @returns {TSCore.Auth.Session}
          */
-        setIdentity(identity: {}): TSCore.Auth.Session {
+        setIdentity(identity: Identity): TSCore.Auth.Session {
 
             this._identity = identity;
 

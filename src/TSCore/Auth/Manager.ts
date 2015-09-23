@@ -48,7 +48,7 @@ module TSCore.Auth {
     export class Manager {
 
         protected _authMethods: TSCore.Data.Dictionary<any, Method> = new TSCore.Data.Dictionary<any, Method>();
-        protected _session: Session;
+        protected sessions: TSCore.Data.Dictionary<any, Session> = new TSCore.Data.Dictionary<any, Method>();
         public events: TSCore.Events.EventEmitter;
 
         constructor() {
@@ -69,47 +69,65 @@ module TSCore.Auth {
                 done({ message: 'AuthMethod does not exist' }, null);
             }
 
-            authMethod.login(credentials, (error: ILoginAttemptError, session: Session) => {
+            authMethod.login(credentials, (error: ILoginAttemptError, identity: Identity) => {
 
-                /**
-                 * Handle error with events then callback
-                 */
                 if (error) {
                     this.events.trigger(ManagerEvents.LOGIN_ATTEMPT_FAIL, { credentials: credentials, method: method });
                     done(error, null);
                     return;
                 }
 
-                /**
-                 * Set Session
-                 */
-                this._session = session;
+                var session = this._setSessionForMethod(method, identity);
 
-                /**
-                 * Trigger login events
-                 */
-                this.events.trigger(ManagerEvents.LOGIN_ATTEMPT_SUCCESS, { credentials: credentials, method: method, session: session });
-                this.events.trigger(ManagerEvents.LOGIN, { credentials: credentials, method: method, session: session });
 
-                /**
-                 * Callback
-                 */
+                this.events.trigger(ManagerEvents.LOGIN_ATTEMPT_SUCCESS, {
+                    credentials: credentials,
+                    method: method,
+                    session: session
+                });
+
+                this.events.trigger(ManagerEvents.LOGIN, {
+                    credentials: credentials,
+                    method: method,
+                    session: session
+                });
+
                 done(error, session);
             });
         }
 
+        private _setSessionForMethod(method: any, identity: Identity): Session {
+
+            var session = new Session();
+            session.setIdentity(identity);
+            this.sessions.set(method, session);
+            return session;
+        }
+
         public logout(method: any, done?: ILogoutAttempt) {
 
-            var authMethod:Method = this._authMethods.get(method);
+            var authMethod: Method = this._authMethods.get(method);
 
             if (!authMethod) {
-                done({ message: 'AuthMethod does not exist' });
+
+                done({
+                    message: 'AuthMethod does not exist'
+                });
             }
 
-            authMethod.logout(this._session, (error: ILogoutAttemptError) => {
+            var session: Session = this.sessions.get(method);
+
+            if (!session) {
+
+                done({
+                    message: 'Session does not exist'
+                });
+            }
+
+            authMethod.logout(session, (error: ILogoutAttemptError) => {
 
                 if (!error) {
-                    this._session = null;
+                    this.sessions.remove(method);
                 }
 
                 if (done) {
@@ -146,21 +164,12 @@ module TSCore.Auth {
         }
 
         /**
-         * Determine if the current user is authenticated.
+         * Check whether any sessions have been set
          *
          * @returns {boolean}
          */
-        public check(): boolean {
-            return !!this._session;
-        }
-
-        /**
-         * Get session of authenticated user.
-         *
-         * @returns {boolean}
-         */
-        public getSession(): Session {
-            return this._session;
+        public hasSessions(): boolean {
+            return !this.sessions.isEmpty();
         }
     }
 }
