@@ -141,28 +141,6 @@ module TSCore.Data {
         }
 
         /**
-         * Get first item from dictionary
-         * @returns {any}
-         */
-        public first(): V {
-            for (var key in this._data) {
-                return this._data[key];
-            }
-            return null;
-        }
-
-        /**
-         * Return last item from dictionary
-         * @returns {IKeyValuePair|null}
-         */
-        public last(): V {
-            for (var key in this._data) {
-                var value = this._data[key];
-            }
-            return value || null;
-        }
-
-        /**
          * Iterate over each key/value pair in dictionary.
          *
          * @param iterator

@@ -1,5 +1,17 @@
 var TSCore;
 (function (TSCore) {
+    var Auth;
+    (function (Auth) {
+        var Identity = (function () {
+            function Identity() {
+            }
+            return Identity;
+        })();
+        Auth.Identity = Identity;
+    })(Auth = TSCore.Auth || (TSCore.Auth = {}));
+})(TSCore || (TSCore = {}));
+var TSCore;
+(function (TSCore) {
     var Events;
     (function (Events) {
         var Event = (function () {
@@ -119,6 +131,7 @@ var TSCore;
         var Manager = (function () {
             function Manager() {
                 this._authMethods = new TSCore.Data.Dictionary();
+                this.sessions = new TSCore.Data.Dictionary();
                 this.events = new TSCore.Events.EventEmitter;
             }
             Manager.prototype.login = function (method, credentials, done) {
@@ -127,27 +140,49 @@ var TSCore;
                 if (!authMethod) {
                     done({ message: 'AuthMethod does not exist' }, null);
                 }
-                authMethod.login(credentials, function (error, session) {
+                authMethod.login(credentials, function (error, identity) {
                     if (error) {
                         _this.events.trigger(ManagerEvents.LOGIN_ATTEMPT_FAIL, { credentials: credentials, method: method });
                         done(error, null);
                         return;
                     }
-                    _this._session = session;
-                    _this.events.trigger(ManagerEvents.LOGIN_ATTEMPT_SUCCESS, { credentials: credentials, method: method, session: session });
-                    _this.events.trigger(ManagerEvents.LOGIN, { credentials: credentials, method: method, session: session });
+                    var session = _this._setSessionForMethod(method, identity);
+                    _this.events.trigger(ManagerEvents.LOGIN_ATTEMPT_SUCCESS, {
+                        credentials: credentials,
+                        method: method,
+                        session: session
+                    });
+                    _this.events.trigger(ManagerEvents.LOGIN, {
+                        credentials: credentials,
+                        method: method,
+                        session: session
+                    });
                     done(error, session);
                 });
+            };
+            Manager.prototype._setSessionForMethod = function (method, identity) {
+                var session = new Auth.Session();
+                session.setIdentity(identity);
+                this.sessions.set(method, session);
+                return session;
             };
             Manager.prototype.logout = function (method, done) {
                 var _this = this;
                 var authMethod = this._authMethods.get(method);
                 if (!authMethod) {
-                    done({ message: 'AuthMethod does not exist' });
+                    done({
+                        message: 'AuthMethod does not exist'
+                    });
                 }
-                authMethod.logout(this._session, function (error) {
+                var session = this.sessions.get(method);
+                if (!session) {
+                    done({
+                        message: 'Session does not exist'
+                    });
+                }
+                authMethod.logout(session, function (error) {
                     if (!error) {
-                        _this._session = null;
+                        _this.sessions.remove(method);
                     }
                     if (done) {
                         done(error);
@@ -162,11 +197,8 @@ var TSCore;
                 this._authMethods.remove(method);
                 return this;
             };
-            Manager.prototype.check = function () {
-                return !!this._session;
-            };
-            Manager.prototype.getSession = function () {
-                return this._session;
+            Manager.prototype.hasSessions = function () {
+                return !this.sessions.isEmpty();
             };
             return Manager;
         })();
@@ -444,6 +476,7 @@ var TSCore;
             __extends(Dictionary, _super);
             function Dictionary(data) {
                 _super.call(this);
+                this._itemCount = 0;
                 this._data = data || {};
             }
             Dictionary.prototype.get = function (key) {
@@ -1540,6 +1573,7 @@ var TSCore;
     })(Utils = TSCore.Utils || (TSCore.Utils = {}));
 })(TSCore || (TSCore = {}));
 /// <reference path="../typings/tsd.d.ts" />
+/// <reference path="TSCore/Auth/Identity.ts" />
 /// <reference path="TSCore/Auth/Manager.ts" />
 /// <reference path="TSCore/Auth/Method.ts" />
 /// <reference path="TSCore/Auth/Session.ts" />

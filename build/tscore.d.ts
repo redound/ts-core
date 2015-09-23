@@ -1,3 +1,7 @@
+declare module TSCore.Auth {
+    class Identity {
+    }
+}
 declare module TSCore.Events {
     class Event<T> {
         topic: string;
@@ -61,15 +65,15 @@ declare module TSCore.Auth {
     }
     class Manager {
         protected _authMethods: TSCore.Data.Dictionary<any, Method>;
-        protected _session: Session;
+        protected sessions: TSCore.Data.Dictionary<any, Session>;
         events: TSCore.Events.EventEmitter;
         constructor();
         login(method: any, credentials: {}, done?: ILoginAttempt): void;
+        private _setSessionForMethod(method, identity);
         logout(method: any, done?: ILogoutAttempt): void;
         addMethod(method: any, authMethod: Method): TSCore.Auth.Manager;
         removeMethod(method: any): TSCore.Auth.Manager;
-        check(): boolean;
-        getSession(): Session;
+        hasSessions(): boolean;
     }
 }
 declare module TSCore.Auth {
@@ -85,7 +89,7 @@ declare module TSCore.Auth {
         protected _identity: {};
         constructor(_method?: string, _identity?: {});
         getIdentity(): {};
-        setIdentity(identity: {}): TSCore.Auth.Session;
+        setIdentity(identity: Identity): TSCore.Auth.Session;
         getMethod(): string;
         setMethod(method: string): TSCore.Auth.Session;
     }

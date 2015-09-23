@@ -48,7 +48,7 @@ module TSCore.Auth {
     export class Manager {
 
         protected _authMethods: TSCore.Data.Dictionary<any, Method> = new TSCore.Data.Dictionary<any, Method>();
-        protected sessions: TSCore.Data.Dictionary<any, Session> = new TSCore.Data.Dictionary<any, Method>();
+        protected sessions: TSCore.Data.Dictionary<any, Session> = new TSCore.Data.Dictionary<any, Session>();
         public events: TSCore.Events.EventEmitter;
 
         constructor() {
