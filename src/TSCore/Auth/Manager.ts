@@ -42,7 +42,7 @@ module TSCore.Auth {
     export interface ILogoutAttemptError extends IAttemptError {}
 
     export interface ILoginAttempt {
-        (error: ILoginAttemptError, session: Session);
+        (error: ILoginAttemptError, identity: IIdentity);
     }
 
     export interface ILogoutAttempt {
