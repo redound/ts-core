@@ -56,7 +56,7 @@ declare module TSCore.Auth {
     interface ILogoutAttemptError extends IAttemptError {
     }
     interface ILoginAttempt {
-        (error: ILoginAttemptError, session: Session): any;
+        (error: ILoginAttemptError, identity: IIdentity): any;
     }
     interface ILogoutAttempt {
         (error?: ILogoutAttemptError): any;
@@ -86,7 +86,7 @@ declare module TSCore.Auth {
         protected _method: string;
         protected _identity: IIdentity;
         constructor(_method?: string, _identity?: IIdentity);
-        getIdentity(): {};
+        getIdentity(): TSCore.Auth.IIdentity;
         setIdentity(identity: IIdentity): TSCore.Auth.Session;
         getMethod(): string;
         setMethod(method: string): TSCore.Auth.Session;
