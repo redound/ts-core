@@ -9,9 +9,9 @@ module TSCore.Auth {
         /**
          * Get the authenticated identity.
          *
-         * @returns {{}}
+         * @returns {IIdentity}
          */
-        getIdentity(): {} {
+        getIdentity(): TSCore.Auth.IIdentity {
 
             return this._identity;
         }
