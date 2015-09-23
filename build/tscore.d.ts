@@ -60,14 +60,14 @@ declare module TSCore.Auth {
         (error?: ILogoutAttemptError): any;
     }
     class Manager {
-        protected _authMethods: TSCore.Data.Dictionary<string, Method>;
+        protected _authMethods: TSCore.Data.Dictionary<any, Method>;
         protected _session: Session;
         events: TSCore.Events.EventEmitter;
         constructor();
-        login(method: string, credentials: {}, done?: ILoginAttempt): void;
-        logout(method: string, done?: ILogoutAttempt): void;
-        addMethod(method: string, authMethod: Method): TSCore.Auth.Manager;
-        removeMethod(method: string): TSCore.Auth.Manager;
+        login(method: any, credentials: {}, done?: ILoginAttempt): void;
+        logout(method: any, done?: ILogoutAttempt): void;
+        addMethod(method: any, authMethod: Method): TSCore.Auth.Manager;
+        removeMethod(method: any): TSCore.Auth.Manager;
         check(): boolean;
         getSession(): Session;
     }
