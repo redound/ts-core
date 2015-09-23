@@ -47,12 +47,11 @@ module TSCore.Auth {
 
     export class Manager {
 
-        protected _authMethods: TSCore.Data.Dictionary<string, Method>;
+        protected _authMethods: TSCore.Data.Dictionary<any, Method> = new TSCore.Data.Dictionary<any, Method>();
         protected _session: Session;
         public events: TSCore.Events.EventEmitter;
 
         constructor() {
-            this._authMethods = new TSCore.Data.Dictionary<string, Method>();
             this.events = new TSCore.Events.EventEmitter;
         }
 
@@ -62,7 +61,7 @@ module TSCore.Auth {
          * @param credentials       Object containing the required credentials.
          * @param done              Callback that will be called when authentication attempt has completed.
          */
-        public login(method: string, credentials: {}, done?: ILoginAttempt) {
+        public login(method: any, credentials: {}, done?: ILoginAttempt) {
 
             var authMethod:Method = this._authMethods.get(method);
 
@@ -99,7 +98,7 @@ module TSCore.Auth {
             });
         }
 
-        public logout(method: string, done?: ILogoutAttempt) {
+        public logout(method: any, done?: ILogoutAttempt) {
 
             var authMethod:Method = this._authMethods.get(method);
 
@@ -126,7 +125,7 @@ module TSCore.Auth {
          * @param authMethod    AuthMethod instance.
          * @returns {TSCore.Auth.Manager}
          */
-        public addMethod(method: string, authMethod: Method): TSCore.Auth.Manager {
+        public addMethod(method: any, authMethod: Method): TSCore.Auth.Manager {
 
             this._authMethods.set(method, authMethod);
 
@@ -139,7 +138,7 @@ module TSCore.Auth {
          * @param method        Name of the method.
          * @returns {TSCore.Auth.Manager}
          */
-        public removeMethod(method: string): TSCore.Auth.Manager {
+        public removeMethod(method: any): TSCore.Auth.Manager {
 
             this._authMethods.remove(method);
 
