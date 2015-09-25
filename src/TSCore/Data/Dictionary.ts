@@ -162,6 +162,7 @@ module TSCore.Data {
         }
 
         /**
+         * TODO: Return right keys.
          * Get all keys in dictionary.
          *
          * @returns {any[]}

@@ -134,6 +134,10 @@ module TSCore.Auth {
                     this.sessions.remove(method);
                 }
 
+                this.events.trigger(ManagerEvents.LOGOUT, {
+                    method: method
+                });
+
                 if (done) {
                     done(error);
                 }

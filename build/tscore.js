@@ -172,6 +172,9 @@ var TSCore;
                     if (!error) {
                         _this.sessions.remove(method);
                     }
+                    _this.events.trigger(ManagerEvents.LOGOUT, {
+                        method: method
+                    });
                     if (done) {
                         done(error);
                     }
