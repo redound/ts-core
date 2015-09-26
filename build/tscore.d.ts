@@ -43,7 +43,6 @@ declare module TSCore.Auth {
         protected _authMethods: TSCore.Data.Dictionary<any, Method>;
         protected sessions: TSCore.Data.Dictionary<any, Session>;
         events: TSCore.Events.EventEmitter;
-        constructor();
         login(method: any, credentials: {}, done?: ILoginAttempt): void;
         private _setSessionForMethod(method, identity);
         logout(method: any, done?: ILogoutAttempt): void;

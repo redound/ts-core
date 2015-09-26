@@ -10,7 +10,7 @@ module TSCore.DateTime {
         public tickCallback: ITimerTickCallback;
         public repeats: boolean;
 
-        public events: TSCore.Events.EventEmitter;
+        public events: TSCore.Events.EventEmitter = new TSCore.Events.EventEmitter();
 
         public get tickCount(): number { return this._tickCount }
         public get elapsedTime(): number {
@@ -45,8 +45,6 @@ module TSCore.DateTime {
             this.timeout = timeout;
             this.tickCallback = tickCallback;
             this.repeats = repeats;
-
-            this.events = new TSCore.Events.EventEmitter();
         }
 
         /**

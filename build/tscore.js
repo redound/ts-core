@@ -113,7 +113,7 @@ var TSCore;
             function Manager() {
                 this._authMethods = new TSCore.Data.Dictionary();
                 this.sessions = new TSCore.Data.Dictionary();
-                this.events = new TSCore.Events.EventEmitter;
+                this.events = new TSCore.Events.EventEmitter();
             }
             Manager.prototype.login = function (method, credentials, done) {
                 var _this = this;
@@ -358,7 +358,7 @@ var TSCore;
     (function (Data) {
         var Set = (function () {
             function Set(data) {
-                this.events = new TSCore.Events.EventEmitter;
+                this.events = new TSCore.Events.EventEmitter();
                 this._data = data || [];
             }
             Object.defineProperty(Set.prototype, "length", {
@@ -466,7 +466,7 @@ var TSCore;
             function Dictionary(data) {
                 _super.call(this);
                 this._itemCount = 0;
-                this.events = new TSCore.Events.EventEmitter;
+                this.events = new TSCore.Events.EventEmitter();
                 this._data = data || {};
             }
             Dictionary.prototype.get = function (key) {
@@ -937,10 +937,10 @@ var TSCore;
             function Timer(timeout, tickCallback, repeats) {
                 if (tickCallback === void 0) { tickCallback = null; }
                 if (repeats === void 0) { repeats = false; }
+                this.events = new TSCore.Events.EventEmitter();
                 this.timeout = timeout;
                 this.tickCallback = tickCallback;
                 this.repeats = repeats;
-                this.events = new TSCore.Events.EventEmitter();
             }
             Object.defineProperty(Timer.prototype, "tickCount", {
                 get: function () { return this._tickCount; },

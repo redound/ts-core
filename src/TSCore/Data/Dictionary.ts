@@ -17,13 +17,12 @@ module TSCore.Data {
         protected _data: IDictionaryData;
         protected _itemCount:number = 0;
 
-        public events: TSCore.Events.EventEmitter;
+        public events: TSCore.Events.EventEmitter = new TSCore.Events.EventEmitter();
 
 
         constructor(data?: IDictionaryData){
 
             super();
-            this.events = new TSCore.Events.EventEmitter;
             this._data = data || {};
         }
 

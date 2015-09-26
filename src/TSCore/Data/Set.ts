@@ -5,11 +5,9 @@ module TSCore.Data {
     export class Set<T> {
 
         protected _data:T[];
-        public events: TSCore.Events.EventEmitter;
+        public events: TSCore.Events.EventEmitter = new TSCore.Events.EventEmitter();
 
         constructor(data?:T[]){
-
-            this.events = new TSCore.Events.EventEmitter;
             this._data = data || [];
         }
 

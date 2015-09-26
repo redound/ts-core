@@ -23,11 +23,7 @@ module TSCore.Auth {
 
         protected _authMethods: TSCore.Data.Dictionary<any, Method> = new TSCore.Data.Dictionary<any, Method>();
         protected sessions: TSCore.Data.Dictionary<any, Session> = new TSCore.Data.Dictionary<any, Session>();
-        public events: TSCore.Events.EventEmitter;
-
-        constructor() {
-            this.events = new TSCore.Events.EventEmitter;
-        }
+        public events: TSCore.Events.EventEmitter = new TSCore.Events.EventEmitter();
 
         /**
          * Try to authenticate a user.
