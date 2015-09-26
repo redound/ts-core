@@ -154,7 +154,7 @@ module TSCore.Events {
          *
          * @returns {TSCore.Events.EventEmitter}
          */
-        public resetEvents(): TSCore.Events.EventEmitter {
+        public reset(): TSCore.Events.EventEmitter {
             this._eventCallbacks = {};
 
             return this;

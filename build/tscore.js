@@ -95,7 +95,7 @@ var TSCore;
                 });
                 return this;
             };
-            EventEmitter.prototype.resetEvents = function () {
+            EventEmitter.prototype.reset = function () {
                 this._eventCallbacks = {};
                 return this;
             };
@@ -940,6 +940,7 @@ var TSCore;
                 this.timeout = timeout;
                 this.tickCallback = tickCallback;
                 this.repeats = repeats;
+                this.events = new TSCore.Events.EventEmitter();
             }
             Object.defineProperty(Timer.prototype, "tickCount", {
                 get: function () { return this._tickCount; },
@@ -972,6 +973,9 @@ var TSCore;
                 }
                 this._tickCount = 0;
                 this._startDate = new Date();
+                this.events.trigger(TSCore.DateTime.Timer.Events.START, {
+                    startDate: this._startDate
+                });
                 this.resume();
             };
             Timer.prototype.resume = function () {
@@ -981,6 +985,11 @@ var TSCore;
                 this._internalTimer = this.repeats ? setInterval(_.bind(this._timerTick, this), this.timeout) : setTimeout(_.bind(this._timerTick, this), this.timeout);
                 this._internalTimerIsInterval = this.repeats;
                 this._isStarted = true;
+                this.events.trigger(TSCore.DateTime.Timer.Events.RESUME, {
+                    startDate: this._startDate,
+                    tickCount: this._tickCount,
+                    elapsedTime: this.elapsedTime
+                });
             };
             Timer.prototype.pause = function () {
                 if (!this._isStarted) {
@@ -989,13 +998,24 @@ var TSCore;
                 (this._internalTimerIsInterval ? clearInterval : clearTimeout)(this._internalTimer);
                 this._internalTimer = null;
                 this._isStarted = false;
+                this.events.trigger(TSCore.DateTime.Timer.Events.PAUSE, {
+                    startDate: this._startDate,
+                    tickCount: this._tickCount,
+                    elapsedTime: this.elapsedTime
+                });
             };
             Timer.prototype.restart = function () {
                 this.stop();
                 this.start();
             };
             Timer.prototype.stop = function () {
+                var eventParams = {
+                    startDate: this._startDate,
+                    tickCount: this._tickCount,
+                    elapsedTime: this.elapsedTime
+                };
                 this.reset();
+                this.events.trigger(TSCore.DateTime.Timer.Events.STOP, eventParams);
             };
             Timer.prototype.reset = function () {
                 if (this._isStarted) {
@@ -1016,10 +1036,26 @@ var TSCore;
                 if (this.tickCallback) {
                     this.tickCallback(this._tickCount, this.elapsedTime);
                 }
+                this.events.trigger(TSCore.DateTime.Timer.Events.TICK, {
+                    startDate: this._startDate,
+                    tickCount: this._tickCount,
+                    elapsedTime: this.elapsedTime
+                });
             };
             return Timer;
         })();
         DateTime.Timer = Timer;
+        var Timer;
+        (function (Timer) {
+            var Events;
+            (function (Events) {
+                Events.START = "start";
+                Events.PAUSE = "pause";
+                Events.RESUME = "resume";
+                Events.STOP = "stop";
+                Events.TICK = "tick";
+            })(Events = Timer.Events || (Timer.Events = {}));
+        })(Timer = DateTime.Timer || (DateTime.Timer = {}));
     })(DateTime = TSCore.DateTime || (TSCore.DateTime = {}));
 })(TSCore || (TSCore = {}));
 var TSCore;

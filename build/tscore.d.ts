@@ -20,7 +20,7 @@ declare module TSCore.Events {
         once(topics: string, callback: IEventEmitterCallback, context?: any): TSCore.Events.EventEmitter;
         off(topics: string, callback?: Function, context?: any): TSCore.Events.EventEmitter;
         trigger(topic: string, params?: {}, caller?: any): TSCore.Events.EventEmitter;
-        resetEvents(): TSCore.Events.EventEmitter;
+        reset(): TSCore.Events.EventEmitter;
     }
 }
 declare module TSCore.Auth {
@@ -347,6 +347,7 @@ declare module TSCore.DateTime {
         timeout: number;
         tickCallback: ITimerTickCallback;
         repeats: boolean;
+        events: TSCore.Events.EventEmitter;
         tickCount: number;
         elapsedTime: number;
         startDate: Date;
@@ -365,6 +366,36 @@ declare module TSCore.DateTime {
         reset(): void;
         static start(timeout: number, tickCallback?: ITimerTickCallback, repeats?: boolean): Timer;
         private _timerTick();
+    }
+    module Timer.Events {
+        const START: string;
+        const PAUSE: string;
+        const RESUME: string;
+        const STOP: string;
+        const TICK: string;
+        interface IStartParams {
+            startDate: Date;
+        }
+        interface IPauseParams {
+            startDate: Date;
+            tickCount: number;
+            elapsedTime: number;
+        }
+        interface IResumeParams {
+            startDate: Date;
+            tickCount: number;
+            elapsedTime: number;
+        }
+        interface IStopParams {
+            startDate: Date;
+            tickCount: number;
+            elapsedTime: number;
+        }
+        interface ITickParams {
+            startDate: Date;
+            tickCount: number;
+            elapsedTime: number;
+        }
     }
 }
 declare module TSCore.Exception {

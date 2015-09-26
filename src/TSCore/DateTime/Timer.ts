@@ -6,11 +6,13 @@ module TSCore.DateTime {
 
     export class Timer {
 
-        public timeout:number;
-        public tickCallback:ITimerTickCallback;
-        public repeats:boolean;
+        public timeout: number;
+        public tickCallback: ITimerTickCallback;
+        public repeats: boolean;
 
-        public get tickCount():number { return this._tickCount }
+        public events: TSCore.Events.EventEmitter;
+
+        public get tickCount(): number { return this._tickCount }
         public get elapsedTime(): number {
 
             if(!this._startDate){
@@ -20,16 +22,16 @@ module TSCore.DateTime {
             return new Date().getTime() - this._startDate.getTime();
         }
 
-        public get startDate():Date { return this._startDate }
-        public get isStarted():boolean { return this._isStarted }
+        public get startDate(): Date { return this._startDate }
+        public get isStarted(): boolean { return this._isStarted }
 
 
-        private _isStarted:boolean;
-        private _tickCount:number;
-        private _startDate:Date;
+        private _isStarted: boolean;
+        private _tickCount: number;
+        private _startDate: Date;
 
-        private _internalTimer:number;
-        private _internalTimerIsInterval:boolean;
+        private _internalTimer: number;
+        private _internalTimerIsInterval: boolean;
 
         /**
          * Constructor function
@@ -38,11 +40,13 @@ module TSCore.DateTime {
          * @param tickCallback Callback to call when timer gets executed.
          * @param repeats Whether the timer should repeat.
          */
-        constructor(timeout:number, tickCallback:ITimerTickCallback=null, repeats:boolean=false){
+        constructor(timeout:number, tickCallback: ITimerTickCallback = null, repeats: boolean = false){
 
             this.timeout = timeout;
             this.tickCallback = tickCallback;
             this.repeats = repeats;
+
+            this.events = new TSCore.Events.EventEmitter();
         }
 
         /**
@@ -58,6 +62,10 @@ module TSCore.DateTime {
 
             this._tickCount = 0;
             this._startDate = new Date();
+
+            this.events.trigger(TSCore.DateTime.Timer.Events.START, {
+                startDate: this._startDate
+            });
 
             this.resume();
         }
@@ -77,6 +85,12 @@ module TSCore.DateTime {
             this._internalTimerIsInterval = this.repeats;
 
             this._isStarted = true;
+
+            this.events.trigger(TSCore.DateTime.Timer.Events.RESUME, {
+                startDate: this._startDate,
+                tickCount: this._tickCount,
+                elapsedTime: this.elapsedTime
+            });
         }
 
         /**
@@ -94,6 +108,12 @@ module TSCore.DateTime {
             this._internalTimer = null;
 
             this._isStarted = false;
+
+            this.events.trigger(TSCore.DateTime.Timer.Events.PAUSE, {
+                startDate: this._startDate,
+                tickCount: this._tickCount,
+                elapsedTime: this.elapsedTime
+            });
         }
 
         /**
@@ -114,7 +134,15 @@ module TSCore.DateTime {
          */
         public stop(){
 
+            var eventParams = {
+                startDate: this._startDate,
+                tickCount: this._tickCount,
+                elapsedTime: this.elapsedTime
+            };
+
             this.reset();
+
+            this.events.trigger(TSCore.DateTime.Timer.Events.STOP, eventParams);
         }
 
         /**
@@ -140,7 +168,7 @@ module TSCore.DateTime {
          * @param repeats   Whether the timer should repeat.
          * @returns {TSCore.DateTime.Timer}
          */
-        public static start(timeout:number, tickCallback:ITimerTickCallback=null, repeats:boolean=false) : Timer {
+        public static start(timeout:number, tickCallback: ITimerTickCallback = null, repeats: boolean = false) : Timer {
 
             var timer = new Timer(timeout, tickCallback, repeats);
             timer.start();
@@ -161,6 +189,49 @@ module TSCore.DateTime {
             if(this.tickCallback){
                 this.tickCallback(this._tickCount, this.elapsedTime);
             }
+
+            this.events.trigger(TSCore.DateTime.Timer.Events.TICK, {
+                startDate: this._startDate,
+                tickCount: this._tickCount,
+                elapsedTime: this.elapsedTime
+            });
+        }
+    }
+
+    export module Timer.Events {
+
+        export const START: string = "start";
+        export const PAUSE: string = "pause";
+        export const RESUME: string = "resume";
+        export const STOP: string = "stop";
+        export const TICK: string = "tick";
+
+        export interface IStartParams {
+            startDate: Date,
+        }
+
+        export interface IPauseParams {
+            startDate: Date,
+            tickCount: number,
+            elapsedTime: number
+        }
+
+        export interface IResumeParams {
+            startDate: Date,
+            tickCount: number,
+            elapsedTime: number
+        }
+
+        export interface IStopParams {
+            startDate: Date,
+            tickCount: number,
+            elapsedTime: number
+        }
+
+        export interface ITickParams {
+            startDate: Date,
+            tickCount: number,
+            elapsedTime: number
         }
     }
 }
