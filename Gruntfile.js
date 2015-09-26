@@ -65,7 +65,6 @@ module.exports = function(grunt) {
         var contents = grunt.file.read('./build/tscore.d.ts');
         contents = contents.replace("/// <reference path=\"../typings/tsd.d.ts\" />\n", "");
         grunt.file.write('./build/tscore.d.ts', contents);
-        console.log(contents);
     });
 
     /** Development **/

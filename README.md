@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/ts-core/ts-core.svg?branch=development)](https://travis-ci.org/ts-core/ts-core) [![npm version](https://badge.fury.io/js/ts-core.svg)](http://badge.fury.io/js/ts-core) [![Bower version](https://badge.fury.io/bo/ts-core.svg)](http://badge.fury.io/bo/ts-core)
+[![Build Status](https://travis-ci.org/ts-core/ts-core.svg?branch=development)](https://travis-ci.org/ts-core/ts-core) [![npm version](https://badge.fury.io/js/ts-core.svg)](http://badge.fury.io/js/ts-core) [![Bower version](https://badge.fury.io/bo/ts-core.svg)](http://badge.fury.io/bo/ts-core) [![Coverage Status](https://coveralls.io/repos/ts-core/ts-core/badge.svg?branch=development&service=github)](https://coveralls.io/github/ts-core/ts-core?branch=development)
 
 TSCore 
 =========
