@@ -9,27 +9,6 @@ module TSCore.Data {
         (key:K, value:V);
     }
 
-    export module DictionaryEvents {
-
-        export const ADD:string = "add";
-        export const CHANGE:string = "change";
-        export const REMOVE:string = "remove";
-        export const CLEAR:string = "clear";
-
-        export interface IChangeParams {}
-        export interface IClearParams {}
-
-        export interface IAddParams<K, V> {
-            key: K,
-            value: V
-        }
-
-        export interface IRemoveParams<K, V> {
-            key: K,
-            value: V
-        }
-    }
-
     export class Dictionary<K, V> extends TSCore.Events.EventEmitter {
 
         private static _OBJECT_UNIQUE_ID_KEY = '__TSCore_Object_Unique_ID';
@@ -38,10 +17,13 @@ module TSCore.Data {
         protected _data: IDictionaryData;
         protected _itemCount:number = 0;
 
+        public events: TSCore.Events.EventEmitter;
+
 
         constructor(data?: IDictionaryData){
 
             super();
+            this.events = new TSCore.Events.EventEmitter;
             this._data = data || {};
         }
 
@@ -85,8 +67,8 @@ module TSCore.Data {
                 this._itemCount++;
             }
 
-            this.trigger(DictionaryEvents.ADD, { key: key, value: value });
-            this.trigger(DictionaryEvents.CHANGE);
+            this.events.trigger(TSCore.Data.Dictionary.Events.ADD, { key: key, value: value });
+            this.events.trigger(TSCore.Data.Dictionary.Events.CHANGE);
         }
 
         /**
@@ -107,8 +89,8 @@ module TSCore.Data {
 
                 this._itemCount--;
 
-                this.trigger(DictionaryEvents.REMOVE, { key: key, value: removedItem });
-                this.trigger(DictionaryEvents.CHANGE);
+                this.events.trigger(TSCore.Data.Dictionary.Events.REMOVE, { key: key, value: removedItem });
+                this.events.trigger(TSCore.Data.Dictionary.Events.CHANGE);
             }
 
             return removedItem;
@@ -199,8 +181,8 @@ module TSCore.Data {
             this._data = {};
             this._itemCount = 0;
 
-            this.trigger(DictionaryEvents.CLEAR);
-            this.trigger(DictionaryEvents.CHANGE);
+            this.events.trigger(TSCore.Data.Dictionary.Events.CLEAR);
+            this.events.trigger(TSCore.Data.Dictionary.Events.CHANGE);
         }
 
         /**
@@ -256,6 +238,27 @@ module TSCore.Data {
 
             object[Dictionary._OBJECT_UNIQUE_ID_KEY] = '_' + Dictionary._OBJECT_UNIQUE_ID_COUNTER;
             Dictionary._OBJECT_UNIQUE_ID_COUNTER++;
+        }
+    }
+
+    export module Dictionary.Events {
+
+        export const ADD:string = "add";
+        export const CHANGE:string = "change";
+        export const REMOVE:string = "remove";
+        export const CLEAR:string = "clear";
+
+        export interface IChangeParams {}
+        export interface IClearParams {}
+
+        export interface IAddParams<K, V> {
+            key: K,
+            value: V
+        }
+
+        export interface IRemoveParams<K, V> {
+            key: K,
+            value: V
         }
     }
 }

@@ -2,21 +2,6 @@
 
 module TSCore.Data {
 
-    export module CollectionEvents {
-
-        export const ADD:string = SetEvents.ADD;
-        export const CHANGE:string = SetEvents.CHANGE;
-        export const REMOVE:string = SetEvents.REMOVE;
-        export const REPLACE:string = SetEvents.REPLACE;
-        export const CLEAR:string = SetEvents.CLEAR;
-
-        export interface IChangeParams<T> extends SetEvents.IChangeParams<T> {}
-        export interface IClearParams<T> extends SetEvents.IClearParams<T> {}
-        export interface IAddParams<T> extends SetEvents.IAddParams<T> {}
-        export interface IRemoveParams<T> extends SetEvents.IRemoveParams<T> {}
-        export interface IReplaceParams<T> extends SetEvents.IReplaceParams<T> {}
-    }
-
     export class Collection<T> extends Set<T> {
 
         public get length():number {
@@ -43,8 +28,8 @@ module TSCore.Data {
 
             this._data = items.concat(this._data);
 
-            this.trigger(CollectionEvents.ADD, { items: items });
-            this.trigger(CollectionEvents.CHANGE);
+            this.events.trigger(TSCore.Data.Collection.Events.ADD, { items: items });
+            this.events.trigger(TSCore.Data.Collection.Events.CHANGE);
         }
 
         /**
@@ -57,8 +42,8 @@ module TSCore.Data {
 
             this._data.splice(index, 0, item);
 
-            this.trigger(CollectionEvents.ADD, { items: [item] });
-            this.trigger(CollectionEvents.CHANGE);
+            this.events.trigger(TSCore.Data.Collection.Events.ADD, { items: [item] });
+            this.events.trigger(TSCore.Data.Collection.Events.CHANGE);
         }
 
         /**
@@ -88,8 +73,8 @@ module TSCore.Data {
             var currentItem = this._data[index];
             this._data[index] = replacement;
 
-            this.trigger(CollectionEvents.REPLACE, { source: currentItem, replacement: replacement });
-            this.trigger(CollectionEvents.CHANGE);
+            this.events.trigger(TSCore.Data.Collection.Events.REPLACE, { source: currentItem, replacement: replacement });
+            this.events.trigger(TSCore.Data.Collection.Events.CHANGE);
 
             return currentItem;
         }
@@ -130,5 +115,20 @@ module TSCore.Data {
         public indexOf(item:T): number {
             return _.indexOf(this._data, item);
         }
+    }
+
+    export module Collection.Events {
+
+        export const ADD:string = Set.Events.ADD;
+        export const CHANGE:string = Set.Events.CHANGE;
+        export const REMOVE:string = Set.Events.REMOVE;
+        export const REPLACE:string = Set.Events.REPLACE;
+        export const CLEAR:string = Set.Events.CLEAR;
+
+        export interface IChangeParams<T> extends Set.Events.IChangeParams<T> {}
+        export interface IClearParams<T> extends Set.Events.IClearParams<T> {}
+        export interface IAddParams<T> extends Set.Events.IAddParams<T> {}
+        export interface IRemoveParams<T> extends Set.Events.IRemoveParams<T> {}
+        export interface IReplaceParams<T> extends Set.Events.IReplaceParams<T> {}
     }
 }

@@ -2,23 +2,6 @@
 
 module TSCore.Data {
 
-    export module SortedCollectionEvents {
-
-        export const ADD:string = SetEvents.ADD;
-        export const CHANGE:string = SetEvents.CHANGE;
-        export const REMOVE:string = SetEvents.REMOVE;
-        export const REPLACE:string = SetEvents.REPLACE;
-        export const CLEAR:string = SetEvents.CLEAR;
-        export const SORT:string = "sort";
-
-        export interface IChangeParams<T> extends SetEvents.IChangeParams<T> {}
-        export interface IClearParams<T> extends SetEvents.IClearParams<T> {}
-        export interface IAddParams<T> extends SetEvents.IAddParams<T> {}
-        export interface IRemoveParams<T> extends SetEvents.IRemoveParams<T> {}
-        export interface IReplaceParams<T> extends SetEvents.IReplaceParams<T> {}
-        export interface ISortParams<T> {}
-    }
-
     export class SortedCollection<T> extends Set<T> {
 
         protected _sortPredicate;
@@ -167,8 +150,25 @@ module TSCore.Data {
 
             this._data = _.sortBy(this._data, this._sortPredicate);
 
-            this.trigger(SortedCollectionEvents.SORT);
-            this.trigger(SortedCollectionEvents.CHANGE);
+            this.events.trigger(TSCore.Data.SortedCollection.Events.SORT);
+            this.events.trigger(TSCore.Data.SortedCollection.Events.CHANGE);
         }
+    }
+
+    export module SortedCollection.Events {
+
+        export const ADD:string = Set.Events.ADD;
+        export const CHANGE:string = Set.Events.CHANGE;
+        export const REMOVE:string = Set.Events.REMOVE;
+        export const REPLACE:string = Set.Events.REPLACE;
+        export const CLEAR:string = Set.Events.CLEAR;
+        export const SORT:string = "sort";
+
+        export interface IChangeParams<T> extends Set.Events.IChangeParams<T> {}
+        export interface IClearParams<T> extends Set.Events.IClearParams<T> {}
+        export interface IAddParams<T> extends Set.Events.IAddParams<T> {}
+        export interface IRemoveParams<T> extends Set.Events.IRemoveParams<T> {}
+        export interface IReplaceParams<T> extends Set.Events.IReplaceParams<T> {}
+        export interface ISortParams<T> {}
     }
 }

@@ -30,23 +30,23 @@ describe("TSCore.Data.Collection", () => {
 
     // Setup for testing CollectionEvents.ADD
     var addListener = jasmine.createSpy("CollectionEvents.ADD listener");
-    collection.on(TSCore.Data.CollectionEvents.ADD, addListener);
+    collection.events.on(TSCore.Data.Collection.Events.ADD, addListener);
 
     // Setup for testing CollectionEvents.ADD
     var changeListener = jasmine.createSpy("CollectionEvents.CHANGE listener");
-    collection.on(TSCore.Data.CollectionEvents.CHANGE, changeListener);
+    collection.events.on(TSCore.Data.Collection.Events.CHANGE, changeListener);
 
     // Setup for testing CollectionEvents.REMOVE
     var removeListener = jasmine.createSpy("CollectionEvents.REMOVE listener");
-    collection.on(TSCore.Data.CollectionEvents.REMOVE, removeListener);
+    collection.events.on(TSCore.Data.Collection.Events.REMOVE, removeListener);
 
     // Setup for testing CollectionEvents.REPLACE
     var replaceListener = jasmine.createSpy("CollectionEvents.REPLACE listener");
-    collection.on(TSCore.Data.CollectionEvents.REPLACE, replaceListener);
+    collection.events.on(TSCore.Data.Collection.Events.REPLACE, replaceListener);
 
     // Setup for testing CollectionEvents.REMOVE
     var clearListener = jasmine.createSpy("CollectionEvents.CLEAR listener");
-    collection.on(TSCore.Data.CollectionEvents.CLEAR, clearListener);
+    collection.events.on(TSCore.Data.Collection.Events.CLEAR, clearListener);
 
     beforeEach(() => {
 

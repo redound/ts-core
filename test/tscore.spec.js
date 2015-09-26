@@ -261,15 +261,15 @@ describe("TSCore.Data.Collection", function () {
     };
     var collection = new TSCore.Data.Collection();
     var addListener = jasmine.createSpy("CollectionEvents.ADD listener");
-    collection.on(TSCore.Data.CollectionEvents.ADD, addListener);
+    collection.events.on(TSCore.Data.Collection.Events.ADD, addListener);
     var changeListener = jasmine.createSpy("CollectionEvents.CHANGE listener");
-    collection.on(TSCore.Data.CollectionEvents.CHANGE, changeListener);
+    collection.events.on(TSCore.Data.Collection.Events.CHANGE, changeListener);
     var removeListener = jasmine.createSpy("CollectionEvents.REMOVE listener");
-    collection.on(TSCore.Data.CollectionEvents.REMOVE, removeListener);
+    collection.events.on(TSCore.Data.Collection.Events.REMOVE, removeListener);
     var replaceListener = jasmine.createSpy("CollectionEvents.REPLACE listener");
-    collection.on(TSCore.Data.CollectionEvents.REPLACE, replaceListener);
+    collection.events.on(TSCore.Data.Collection.Events.REPLACE, replaceListener);
     var clearListener = jasmine.createSpy("CollectionEvents.CLEAR listener");
-    collection.on(TSCore.Data.CollectionEvents.CLEAR, clearListener);
+    collection.events.on(TSCore.Data.Collection.Events.CLEAR, clearListener);
     beforeEach(function () {
         collection.clear();
         addListener.calls.reset();
@@ -461,15 +461,15 @@ describe("TSCore.Data.Set", function () {
     var basicSet = new TSCore.Data.Set();
     var eventSet = new TSCore.Data.Set();
     var addListener = jasmine.createSpy("SetEvents.ADD listener");
-    eventSet.on(TSCore.Data.SetEvents.ADD, addListener);
+    eventSet.events.on(TSCore.Data.Set.Events.ADD, addListener);
     var changeListener = jasmine.createSpy("SetEvents.CHANGE listener");
-    eventSet.on(TSCore.Data.SetEvents.CHANGE, changeListener);
+    eventSet.events.on(TSCore.Data.Set.Events.CHANGE, changeListener);
     var removeListener = jasmine.createSpy("SetEvents.REMOVE listener");
-    eventSet.on(TSCore.Data.SetEvents.REMOVE, removeListener);
+    eventSet.events.on(TSCore.Data.Set.Events.REMOVE, removeListener);
     var replaceListener = jasmine.createSpy("SetEvents.REPLACE listener");
-    eventSet.on(TSCore.Data.SetEvents.REPLACE, replaceListener);
+    eventSet.events.on(TSCore.Data.Set.Events.REPLACE, replaceListener);
     var clearListener = jasmine.createSpy("SetEvents.CLEAR listener");
-    eventSet.on(TSCore.Data.SetEvents.CLEAR, clearListener);
+    eventSet.events.on(TSCore.Data.Set.Events.CLEAR, clearListener);
     describe("General", function () {
         it("can contain same objects (allows duplicates)", function () {
             basicSet.clear();

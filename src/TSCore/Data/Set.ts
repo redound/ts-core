@@ -2,38 +2,14 @@
 
 module TSCore.Data {
 
-    export module SetEvents {
-
-        export const ADD: string = "add";
-        export const CHANGE: string = "change";
-        export const REMOVE: string = "remove";
-        export const REPLACE: string = "replace";
-        export const CLEAR: string = "clear";
-
-        export interface IChangeParams<T> {}
-        export interface IClearParams<T> {}
-
-        export interface IAddParams<T> {
-            items: T[]
-        }
-
-        export interface IRemoveParams<T> {
-            items: T[]
-        }
-
-        export interface IReplaceParams<T> {
-            source: T,
-            replacement: T
-        }
-    }
-
-    export class Set<T> extends TSCore.Events.EventEmitter {
+    export class Set<T> {
 
         protected _data:T[];
+        public events: TSCore.Events.EventEmitter;
 
         constructor(data?:T[]){
 
-            super();
+            this.events = new TSCore.Events.EventEmitter;
             this._data = data || [];
         }
 
@@ -64,8 +40,8 @@ module TSCore.Data {
 
             this._data.push(item);
 
-            this.trigger(SetEvents.ADD, { items: [item] });
-            this.trigger(SetEvents.CHANGE);
+            this.events.trigger(TSCore.Data.Set.Events.ADD, { items: [item] });
+            this.events.trigger(TSCore.Data.Set.Events.CHANGE);
         }
 
         /**
@@ -77,8 +53,8 @@ module TSCore.Data {
 
             this._data = this._data.concat(items);
 
-            this.trigger(SetEvents.ADD, { items: items });
-            this.trigger(SetEvents.CHANGE);
+            this.events.trigger(TSCore.Data.Set.Events.ADD, { items: items });
+            this.events.trigger(TSCore.Data.Set.Events.CHANGE);
         }
 
         /**
@@ -90,8 +66,8 @@ module TSCore.Data {
 
             this._data = _.without(this._data, item);
 
-            this.trigger(SetEvents.REMOVE, { items: [item] });
-            this.trigger(SetEvents.CHANGE);
+            this.events.trigger(TSCore.Data.Set.Events.REMOVE, { items: [item] });
+            this.events.trigger(TSCore.Data.Set.Events.CHANGE);
         }
 
         /**
@@ -103,8 +79,8 @@ module TSCore.Data {
 
             this._data = _.difference(this._data, items);
 
-            this.trigger(SetEvents.REMOVE, { items: items });
-            this.trigger(SetEvents.CHANGE);
+            this.events.trigger(TSCore.Data.Set.Events.REMOVE, { items: items });
+            this.events.trigger(TSCore.Data.Set.Events.CHANGE);
         }
 
         /**
@@ -136,8 +112,8 @@ module TSCore.Data {
             var currentItem = this._data[index];
             this._data[index] = replacement;
 
-            this.trigger(SetEvents.REPLACE, { source: source, replacement: replacement });
-            this.trigger(SetEvents.CHANGE);
+            this.events.trigger(TSCore.Data.Set.Events.REPLACE, { source: source, replacement: replacement });
+            this.events.trigger(TSCore.Data.Set.Events.CHANGE);
 
             return currentItem;
         }
@@ -149,9 +125,9 @@ module TSCore.Data {
 
             this._data = [];
 
-            this.trigger(SetEvents.REMOVE, { items: this.toArray() });
-            this.trigger(SetEvents.CLEAR);
-            this.trigger(SetEvents.CHANGE);
+            this.events.trigger(TSCore.Data.Set.Events.REMOVE, { items: this.toArray() });
+            this.events.trigger(TSCore.Data.Set.Events.CLEAR);
+            this.events.trigger(TSCore.Data.Set.Events.CHANGE);
         }
 
         /**
@@ -247,6 +223,31 @@ module TSCore.Data {
          */
         public toArray():T[] {
             return _.clone(this._data);
+        }
+    }
+
+    export module Set.Events {
+
+        export const ADD:string = "add";
+        export const CHANGE:string = "change";
+        export const REMOVE:string = "remove";
+        export const REPLACE:string = "replace";
+        export const CLEAR:string = "clear";
+
+        export interface IChangeParams<T> {}
+        export interface IClearParams<T> {}
+
+        export interface IAddParams<T> {
+            items: T[]
+        }
+
+        export interface IRemoveParams<T> {
+            items: T[]
+        }
+
+        export interface IReplaceParams<T> {
+            source: T,
+            replacement: T
         }
     }
 }

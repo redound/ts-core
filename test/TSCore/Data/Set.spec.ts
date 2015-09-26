@@ -33,23 +33,23 @@ describe("TSCore.Data.Set", () => {
 
     // Setup for testing SetEvents.ADD
     var addListener = jasmine.createSpy("SetEvents.ADD listener");
-    eventSet.on(TSCore.Data.SetEvents.ADD, addListener);
+    eventSet.events.on(TSCore.Data.Set.Events.ADD, addListener);
 
     // Setup for testing SetEvents.ADD
     var changeListener = jasmine.createSpy("SetEvents.CHANGE listener");
-    eventSet.on(TSCore.Data.SetEvents.CHANGE, changeListener);
+    eventSet.events.on(TSCore.Data.Set.Events.CHANGE, changeListener);
 
     // Setup for testing SetEvents.REMOVE
     var removeListener = jasmine.createSpy("SetEvents.REMOVE listener");
-    eventSet.on(TSCore.Data.SetEvents.REMOVE, removeListener);
+    eventSet.events.on(TSCore.Data.Set.Events.REMOVE, removeListener);
 
     // Setup for testing SetEvents.REPLACE
     var replaceListener = jasmine.createSpy("SetEvents.REPLACE listener");
-    eventSet.on(TSCore.Data.SetEvents.REPLACE, replaceListener);
+    eventSet.events.on(TSCore.Data.Set.Events.REPLACE, replaceListener);
 
     // Setup for testing SetEvents.REMOVE
     var clearListener = jasmine.createSpy("SetEvents.CLEAR listener");
-    eventSet.on(TSCore.Data.SetEvents.CLEAR, clearListener);
+    eventSet.events.on(TSCore.Data.Set.Events.CLEAR, clearListener);
 
     describe("General", () => {
 

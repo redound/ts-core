@@ -24,28 +24,6 @@ declare module TSCore.Events {
     }
 }
 declare module TSCore.Auth {
-    module ManagerEvents {
-        const LOGIN_ATTEMPT_FAIL: string;
-        const LOGIN_ATTEMPT_SUCCESS: string;
-        const LOGIN: string;
-        const LOGOUT: string;
-        interface ILoginAttemptFailParams<T> {
-            credentials: T;
-            method: string;
-        }
-        interface ILoginAttemptSuccessParams<T> {
-            credentials: T;
-            method: string;
-            session: Session;
-        }
-        interface ILoginParams<T> {
-            method: string;
-            session: Session;
-        }
-        interface ILogoutParams<T> {
-            method: string;
-        }
-    }
     interface IIdentity {
     }
     interface IAttemptError {
@@ -72,6 +50,28 @@ declare module TSCore.Auth {
         addMethod(method: any, authMethod: Method): TSCore.Auth.Manager;
         removeMethod(method: any): TSCore.Auth.Manager;
         hasSessions(): boolean;
+    }
+    module Manager.Events {
+        const LOGIN_ATTEMPT_FAIL: string;
+        const LOGIN_ATTEMPT_SUCCESS: string;
+        const LOGIN: string;
+        const LOGOUT: string;
+        interface ILoginAttemptFailParams<T> {
+            credentials: T;
+            method: string;
+        }
+        interface ILoginAttemptSuccessParams<T> {
+            credentials: T;
+            method: string;
+            session: Session;
+        }
+        interface ILoginParams<T> {
+            method: string;
+            session: Session;
+        }
+        interface ILogoutParams<T> {
+            method: string;
+        }
     }
 }
 declare module TSCore.Auth {
@@ -110,29 +110,9 @@ declare module TSCore {
     }
 }
 declare module TSCore.Data {
-    module SetEvents {
-        const ADD: string;
-        const CHANGE: string;
-        const REMOVE: string;
-        const REPLACE: string;
-        const CLEAR: string;
-        interface IChangeParams<T> {
-        }
-        interface IClearParams<T> {
-        }
-        interface IAddParams<T> {
-            items: T[];
-        }
-        interface IRemoveParams<T> {
-            items: T[];
-        }
-        interface IReplaceParams<T> {
-            source: T;
-            replacement: T;
-        }
-    }
-    class Set<T> extends TSCore.Events.EventEmitter {
+    class Set<T> {
         protected _data: T[];
+        events: TSCore.Events.EventEmitter;
         constructor(data?: T[]);
         length: number;
         count(): number;
@@ -153,6 +133,27 @@ declare module TSCore.Data {
         contains(item: T): boolean;
         toArray(): T[];
     }
+    module Set.Events {
+        const ADD: string;
+        const CHANGE: string;
+        const REMOVE: string;
+        const REPLACE: string;
+        const CLEAR: string;
+        interface IChangeParams<T> {
+        }
+        interface IClearParams<T> {
+        }
+        interface IAddParams<T> {
+            items: T[];
+        }
+        interface IRemoveParams<T> {
+            items: T[];
+        }
+        interface IReplaceParams<T> {
+            source: T;
+            replacement: T;
+        }
+    }
 }
 declare module TSCore.Data {
     interface IDictionaryData {
@@ -161,7 +162,29 @@ declare module TSCore.Data {
     interface IDictionaryIterator<K, V> {
         (key: K, value: V): any;
     }
-    module DictionaryEvents {
+    class Dictionary<K, V> extends TSCore.Events.EventEmitter {
+        private static _OBJECT_UNIQUE_ID_KEY;
+        private static _OBJECT_UNIQUE_ID_COUNTER;
+        protected _data: IDictionaryData;
+        protected _itemCount: number;
+        events: TSCore.Events.EventEmitter;
+        constructor(data?: IDictionaryData);
+        get(key: K): V;
+        set(key: K, value: V): void;
+        remove(key: K): V;
+        contains(key: K): boolean;
+        containsValue(value: V): boolean;
+        each(iterator: IDictionaryIterator<K, V>): void;
+        values(): K[];
+        keys(): K[];
+        count(): number;
+        isEmpty(): boolean;
+        clear(): void;
+        protected _getPair(key: K): IKeyValuePair;
+        protected _getKeyString(key: K): string;
+        protected _assignUniqueID(object: Object): void;
+    }
+    module Dictionary.Events {
         const ADD: string;
         const CHANGE: string;
         const REMOVE: string;
@@ -178,27 +201,6 @@ declare module TSCore.Data {
             key: K;
             value: V;
         }
-    }
-    class Dictionary<K, V> extends TSCore.Events.EventEmitter {
-        private static _OBJECT_UNIQUE_ID_KEY;
-        private static _OBJECT_UNIQUE_ID_COUNTER;
-        protected _data: IDictionaryData;
-        protected _itemCount: number;
-        constructor(data?: IDictionaryData);
-        get(key: K): V;
-        set(key: K, value: V): void;
-        remove(key: K): V;
-        contains(key: K): boolean;
-        containsValue(value: V): boolean;
-        each(iterator: IDictionaryIterator<K, V>): void;
-        values(): K[];
-        keys(): K[];
-        count(): number;
-        isEmpty(): boolean;
-        clear(): void;
-        protected _getPair(key: K): IKeyValuePair;
-        protected _getKeyString(key: K): string;
-        protected _assignUniqueID(object: Object): void;
     }
 }
 declare module TSCore {
@@ -222,23 +224,6 @@ declare module TSCore {
     }
 }
 declare module TSCore.Data {
-    module CollectionEvents {
-        const ADD: string;
-        const CHANGE: string;
-        const REMOVE: string;
-        const REPLACE: string;
-        const CLEAR: string;
-        interface IChangeParams<T> extends SetEvents.IChangeParams<T> {
-        }
-        interface IClearParams<T> extends SetEvents.IClearParams<T> {
-        }
-        interface IAddParams<T> extends SetEvents.IAddParams<T> {
-        }
-        interface IRemoveParams<T> extends SetEvents.IRemoveParams<T> {
-        }
-        interface IReplaceParams<T> extends SetEvents.IReplaceParams<T> {
-        }
-    }
     class Collection<T> extends Set<T> {
         length: number;
         protected _data: T[];
@@ -251,6 +236,23 @@ declare module TSCore.Data {
         last(): T;
         get(index: number): T;
         indexOf(item: T): number;
+    }
+    module Collection.Events {
+        const ADD: string;
+        const CHANGE: string;
+        const REMOVE: string;
+        const REPLACE: string;
+        const CLEAR: string;
+        interface IChangeParams<T> extends Set.Events.IChangeParams<T> {
+        }
+        interface IClearParams<T> extends Set.Events.IClearParams<T> {
+        }
+        interface IAddParams<T> extends Set.Events.IAddParams<T> {
+        }
+        interface IRemoveParams<T> extends Set.Events.IRemoveParams<T> {
+        }
+        interface IReplaceParams<T> extends Set.Events.IReplaceParams<T> {
+        }
     }
 }
 declare module TSCore.Data {
@@ -276,26 +278,6 @@ declare module TSCore.Data {
     }
 }
 declare module TSCore.Data {
-    module SortedCollectionEvents {
-        const ADD: string;
-        const CHANGE: string;
-        const REMOVE: string;
-        const REPLACE: string;
-        const CLEAR: string;
-        const SORT: string;
-        interface IChangeParams<T> extends SetEvents.IChangeParams<T> {
-        }
-        interface IClearParams<T> extends SetEvents.IClearParams<T> {
-        }
-        interface IAddParams<T> extends SetEvents.IAddParams<T> {
-        }
-        interface IRemoveParams<T> extends SetEvents.IRemoveParams<T> {
-        }
-        interface IReplaceParams<T> extends SetEvents.IReplaceParams<T> {
-        }
-        interface ISortParams<T> {
-        }
-    }
     class SortedCollection<T> extends Set<T> {
         protected _sortPredicate: any;
         sortPredicate: any;
@@ -310,6 +292,26 @@ declare module TSCore.Data {
         get(index: number): T;
         indexOf(item: T): number;
         sort(): void;
+    }
+    module SortedCollection.Events {
+        const ADD: string;
+        const CHANGE: string;
+        const REMOVE: string;
+        const REPLACE: string;
+        const CLEAR: string;
+        const SORT: string;
+        interface IChangeParams<T> extends Set.Events.IChangeParams<T> {
+        }
+        interface IClearParams<T> extends Set.Events.IClearParams<T> {
+        }
+        interface IAddParams<T> extends Set.Events.IAddParams<T> {
+        }
+        interface IRemoveParams<T> extends Set.Events.IRemoveParams<T> {
+        }
+        interface IReplaceParams<T> extends Set.Events.IReplaceParams<T> {
+        }
+        interface ISortParams<T> {
+        }
     }
 }
 declare module TSCore.Data {

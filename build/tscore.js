@@ -109,13 +109,6 @@ var TSCore;
 (function (TSCore) {
     var Auth;
     (function (Auth) {
-        var ManagerEvents;
-        (function (ManagerEvents) {
-            ManagerEvents.LOGIN_ATTEMPT_FAIL = "login-attempt-fail";
-            ManagerEvents.LOGIN_ATTEMPT_SUCCESS = "login-attempt-success";
-            ManagerEvents.LOGIN = "login";
-            ManagerEvents.LOGOUT = "logout";
-        })(ManagerEvents = Auth.ManagerEvents || (Auth.ManagerEvents = {}));
         var Manager = (function () {
             function Manager() {
                 this._authMethods = new TSCore.Data.Dictionary();
@@ -130,17 +123,17 @@ var TSCore;
                 }
                 authMethod.login(credentials, function (error, identity) {
                     if (error) {
-                        _this.events.trigger(ManagerEvents.LOGIN_ATTEMPT_FAIL, { credentials: credentials, method: method });
+                        _this.events.trigger(TSCore.Auth.Manager.Events.LOGIN_ATTEMPT_FAIL, { credentials: credentials, method: method });
                         done(error, null);
                         return;
                     }
                     var session = _this._setSessionForMethod(method, identity);
-                    _this.events.trigger(ManagerEvents.LOGIN_ATTEMPT_SUCCESS, {
+                    _this.events.trigger(TSCore.Auth.Manager.Events.LOGIN_ATTEMPT_SUCCESS, {
                         credentials: credentials,
                         method: method,
                         session: session
                     });
-                    _this.events.trigger(ManagerEvents.LOGIN, {
+                    _this.events.trigger(TSCore.Auth.Manager.Events.LOGIN, {
                         credentials: credentials,
                         method: method,
                         session: session
@@ -172,7 +165,7 @@ var TSCore;
                     if (!error) {
                         _this.sessions.remove(method);
                     }
-                    _this.events.trigger(ManagerEvents.LOGOUT, {
+                    _this.events.trigger(TSCore.Auth.Manager.Events.LOGOUT, {
                         method: method
                     });
                     if (done) {
@@ -194,6 +187,16 @@ var TSCore;
             return Manager;
         })();
         Auth.Manager = Manager;
+        var Manager;
+        (function (Manager) {
+            var Events;
+            (function (Events) {
+                Events.LOGIN_ATTEMPT_FAIL = "login-attempt-fail";
+                Events.LOGIN_ATTEMPT_SUCCESS = "login-attempt-success";
+                Events.LOGIN = "login";
+                Events.LOGOUT = "logout";
+            })(Events = Manager.Events || (Manager.Events = {}));
+        })(Manager = Auth.Manager || (Auth.Manager = {}));
     })(Auth = TSCore.Auth || (TSCore.Auth = {}));
 })(TSCore || (TSCore = {}));
 var TSCore;
@@ -353,18 +356,9 @@ var TSCore;
 (function (TSCore) {
     var Data;
     (function (Data) {
-        var SetEvents;
-        (function (SetEvents) {
-            SetEvents.ADD = "add";
-            SetEvents.CHANGE = "change";
-            SetEvents.REMOVE = "remove";
-            SetEvents.REPLACE = "replace";
-            SetEvents.CLEAR = "clear";
-        })(SetEvents = Data.SetEvents || (Data.SetEvents = {}));
-        var Set = (function (_super) {
-            __extends(Set, _super);
+        var Set = (function () {
             function Set(data) {
-                _super.call(this);
+                this.events = new TSCore.Events.EventEmitter;
                 this._data = data || [];
             }
             Object.defineProperty(Set.prototype, "length", {
@@ -379,24 +373,24 @@ var TSCore;
             };
             Set.prototype.add = function (item) {
                 this._data.push(item);
-                this.trigger(SetEvents.ADD, { items: [item] });
-                this.trigger(SetEvents.CHANGE);
+                this.events.trigger(TSCore.Data.Set.Events.ADD, { items: [item] });
+                this.events.trigger(TSCore.Data.Set.Events.CHANGE);
             };
             Set.prototype.addMany = function (items) {
                 if (items === void 0) { items = []; }
                 this._data = this._data.concat(items);
-                this.trigger(SetEvents.ADD, { items: items });
-                this.trigger(SetEvents.CHANGE);
+                this.events.trigger(TSCore.Data.Set.Events.ADD, { items: items });
+                this.events.trigger(TSCore.Data.Set.Events.CHANGE);
             };
             Set.prototype.remove = function (item) {
                 this._data = _.without(this._data, item);
-                this.trigger(SetEvents.REMOVE, { items: [item] });
-                this.trigger(SetEvents.CHANGE);
+                this.events.trigger(TSCore.Data.Set.Events.REMOVE, { items: [item] });
+                this.events.trigger(TSCore.Data.Set.Events.CHANGE);
             };
             Set.prototype.removeMany = function (items) {
                 this._data = _.difference(this._data, items);
-                this.trigger(SetEvents.REMOVE, { items: items });
-                this.trigger(SetEvents.CHANGE);
+                this.events.trigger(TSCore.Data.Set.Events.REMOVE, { items: items });
+                this.events.trigger(TSCore.Data.Set.Events.CHANGE);
             };
             Set.prototype.removeWhere = function (properties) {
                 this.removeMany(this.where(properties));
@@ -408,15 +402,15 @@ var TSCore;
                 }
                 var currentItem = this._data[index];
                 this._data[index] = replacement;
-                this.trigger(SetEvents.REPLACE, { source: source, replacement: replacement });
-                this.trigger(SetEvents.CHANGE);
+                this.events.trigger(TSCore.Data.Set.Events.REPLACE, { source: source, replacement: replacement });
+                this.events.trigger(TSCore.Data.Set.Events.CHANGE);
                 return currentItem;
             };
             Set.prototype.clear = function () {
                 this._data = [];
-                this.trigger(SetEvents.REMOVE, { items: this.toArray() });
-                this.trigger(SetEvents.CLEAR);
-                this.trigger(SetEvents.CHANGE);
+                this.events.trigger(TSCore.Data.Set.Events.REMOVE, { items: this.toArray() });
+                this.events.trigger(TSCore.Data.Set.Events.CLEAR);
+                this.events.trigger(TSCore.Data.Set.Events.CHANGE);
             };
             Set.prototype.each = function (iterator) {
                 _.each(this._data, iterator);
@@ -446,8 +440,19 @@ var TSCore;
                 return _.clone(this._data);
             };
             return Set;
-        })(TSCore.Events.EventEmitter);
+        })();
         Data.Set = Set;
+        var Set;
+        (function (Set) {
+            var Events;
+            (function (Events) {
+                Events.ADD = "add";
+                Events.CHANGE = "change";
+                Events.REMOVE = "remove";
+                Events.REPLACE = "replace";
+                Events.CLEAR = "clear";
+            })(Events = Set.Events || (Set.Events = {}));
+        })(Set = Data.Set || (Data.Set = {}));
     })(Data = TSCore.Data || (TSCore.Data = {}));
 })(TSCore || (TSCore = {}));
 /// <reference path="../Events/EventEmitter.ts" />
@@ -456,18 +461,12 @@ var TSCore;
 (function (TSCore) {
     var Data;
     (function (Data) {
-        var DictionaryEvents;
-        (function (DictionaryEvents) {
-            DictionaryEvents.ADD = "add";
-            DictionaryEvents.CHANGE = "change";
-            DictionaryEvents.REMOVE = "remove";
-            DictionaryEvents.CLEAR = "clear";
-        })(DictionaryEvents = Data.DictionaryEvents || (Data.DictionaryEvents = {}));
         var Dictionary = (function (_super) {
             __extends(Dictionary, _super);
             function Dictionary(data) {
                 _super.call(this);
                 this._itemCount = 0;
+                this.events = new TSCore.Events.EventEmitter;
                 this._data = data || {};
             }
             Dictionary.prototype.get = function (key) {
@@ -490,8 +489,8 @@ var TSCore;
                 if (!alreadyExisted) {
                     this._itemCount++;
                 }
-                this.trigger(DictionaryEvents.ADD, { key: key, value: value });
-                this.trigger(DictionaryEvents.CHANGE);
+                this.events.trigger(TSCore.Data.Dictionary.Events.ADD, { key: key, value: value });
+                this.events.trigger(TSCore.Data.Dictionary.Events.CHANGE);
             };
             Dictionary.prototype.remove = function (key) {
                 var removedItem = null;
@@ -500,8 +499,8 @@ var TSCore;
                     delete this._data[foundPair.key];
                     removedItem = foundPair.value;
                     this._itemCount--;
-                    this.trigger(DictionaryEvents.REMOVE, { key: key, value: removedItem });
-                    this.trigger(DictionaryEvents.CHANGE);
+                    this.events.trigger(TSCore.Data.Dictionary.Events.REMOVE, { key: key, value: removedItem });
+                    this.events.trigger(TSCore.Data.Dictionary.Events.CHANGE);
                 }
                 return removedItem;
             };
@@ -538,8 +537,8 @@ var TSCore;
             Dictionary.prototype.clear = function () {
                 this._data = {};
                 this._itemCount = 0;
-                this.trigger(DictionaryEvents.CLEAR);
-                this.trigger(DictionaryEvents.CHANGE);
+                this.events.trigger(TSCore.Data.Dictionary.Events.CLEAR);
+                this.events.trigger(TSCore.Data.Dictionary.Events.CHANGE);
             };
             Dictionary.prototype._getPair = function (key) {
                 var keyString = this._getKeyString(key);
@@ -572,6 +571,16 @@ var TSCore;
             return Dictionary;
         })(TSCore.Events.EventEmitter);
         Data.Dictionary = Dictionary;
+        var Dictionary;
+        (function (Dictionary) {
+            var Events;
+            (function (Events) {
+                Events.ADD = "add";
+                Events.CHANGE = "change";
+                Events.REMOVE = "remove";
+                Events.CLEAR = "clear";
+            })(Events = Dictionary.Events || (Dictionary.Events = {}));
+        })(Dictionary = Data.Dictionary || (Data.Dictionary = {}));
     })(Data = TSCore.Data || (TSCore.Data = {}));
 })(TSCore || (TSCore = {}));
 /// <reference path="./Data/Dictionary.ts" />
@@ -639,14 +648,6 @@ var TSCore;
 (function (TSCore) {
     var Data;
     (function (Data) {
-        var CollectionEvents;
-        (function (CollectionEvents) {
-            CollectionEvents.ADD = Data.SetEvents.ADD;
-            CollectionEvents.CHANGE = Data.SetEvents.CHANGE;
-            CollectionEvents.REMOVE = Data.SetEvents.REMOVE;
-            CollectionEvents.REPLACE = Data.SetEvents.REPLACE;
-            CollectionEvents.CLEAR = Data.SetEvents.CLEAR;
-        })(CollectionEvents = Data.CollectionEvents || (Data.CollectionEvents = {}));
         var Collection = (function (_super) {
             __extends(Collection, _super);
             function Collection() {
@@ -664,13 +665,13 @@ var TSCore;
             };
             Collection.prototype.prependMany = function (items) {
                 this._data = items.concat(this._data);
-                this.trigger(CollectionEvents.ADD, { items: items });
-                this.trigger(CollectionEvents.CHANGE);
+                this.events.trigger(TSCore.Data.Collection.Events.ADD, { items: items });
+                this.events.trigger(TSCore.Data.Collection.Events.CHANGE);
             };
             Collection.prototype.insert = function (item, index) {
                 this._data.splice(index, 0, item);
-                this.trigger(CollectionEvents.ADD, { items: [item] });
-                this.trigger(CollectionEvents.CHANGE);
+                this.events.trigger(TSCore.Data.Collection.Events.ADD, { items: [item] });
+                this.events.trigger(TSCore.Data.Collection.Events.CHANGE);
             };
             Collection.prototype.replaceItem = function (source, replacement) {
                 return this.replace(this.indexOf(source), replacement);
@@ -681,8 +682,8 @@ var TSCore;
                 }
                 var currentItem = this._data[index];
                 this._data[index] = replacement;
-                this.trigger(CollectionEvents.REPLACE, { source: currentItem, replacement: replacement });
-                this.trigger(CollectionEvents.CHANGE);
+                this.events.trigger(TSCore.Data.Collection.Events.REPLACE, { source: currentItem, replacement: replacement });
+                this.events.trigger(TSCore.Data.Collection.Events.CHANGE);
                 return currentItem;
             };
             Collection.prototype.first = function () {
@@ -700,6 +701,17 @@ var TSCore;
             return Collection;
         })(Data.Set);
         Data.Collection = Collection;
+        var Collection;
+        (function (Collection) {
+            var Events;
+            (function (Events) {
+                Events.ADD = Data.Set.Events.ADD;
+                Events.CHANGE = Data.Set.Events.CHANGE;
+                Events.REMOVE = Data.Set.Events.REMOVE;
+                Events.REPLACE = Data.Set.Events.REPLACE;
+                Events.CLEAR = Data.Set.Events.CLEAR;
+            })(Events = Collection.Events || (Collection.Events = {}));
+        })(Collection = Data.Collection || (Data.Collection = {}));
     })(Data = TSCore.Data || (TSCore.Data = {}));
 })(TSCore || (TSCore = {}));
 var TSCore;
@@ -780,15 +792,6 @@ var TSCore;
 (function (TSCore) {
     var Data;
     (function (Data) {
-        var SortedCollectionEvents;
-        (function (SortedCollectionEvents) {
-            SortedCollectionEvents.ADD = Data.SetEvents.ADD;
-            SortedCollectionEvents.CHANGE = Data.SetEvents.CHANGE;
-            SortedCollectionEvents.REMOVE = Data.SetEvents.REMOVE;
-            SortedCollectionEvents.REPLACE = Data.SetEvents.REPLACE;
-            SortedCollectionEvents.CLEAR = Data.SetEvents.CLEAR;
-            SortedCollectionEvents.SORT = "sort";
-        })(SortedCollectionEvents = Data.SortedCollectionEvents || (Data.SortedCollectionEvents = {}));
         var SortedCollection = (function (_super) {
             __extends(SortedCollection, _super);
             function SortedCollection(data, sortPredicate) {
@@ -845,12 +848,24 @@ var TSCore;
                     return;
                 }
                 this._data = _.sortBy(this._data, this._sortPredicate);
-                this.trigger(SortedCollectionEvents.SORT);
-                this.trigger(SortedCollectionEvents.CHANGE);
+                this.events.trigger(TSCore.Data.SortedCollection.Events.SORT);
+                this.events.trigger(TSCore.Data.SortedCollection.Events.CHANGE);
             };
             return SortedCollection;
         })(Data.Set);
         Data.SortedCollection = SortedCollection;
+        var SortedCollection;
+        (function (SortedCollection) {
+            var Events;
+            (function (Events) {
+                Events.ADD = Data.Set.Events.ADD;
+                Events.CHANGE = Data.Set.Events.CHANGE;
+                Events.REMOVE = Data.Set.Events.REMOVE;
+                Events.REPLACE = Data.Set.Events.REPLACE;
+                Events.CLEAR = Data.Set.Events.CLEAR;
+                Events.SORT = "sort";
+            })(Events = SortedCollection.Events || (SortedCollection.Events = {}));
+        })(SortedCollection = Data.SortedCollection || (Data.SortedCollection = {}));
     })(Data = TSCore.Data || (TSCore.Data = {}));
 })(TSCore || (TSCore = {}));
 /// <reference path="./Dictionary.ts" />

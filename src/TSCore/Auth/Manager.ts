@@ -2,37 +2,7 @@
 
 module TSCore.Auth {
 
-    export module ManagerEvents {
-
-        export const LOGIN_ATTEMPT_FAIL: string = "login-attempt-fail";
-        export const LOGIN_ATTEMPT_SUCCESS: string = "login-attempt-success";
-        export const LOGIN: string = "login";
-        export const LOGOUT: string = "logout";
-
-        export interface ILoginAttemptFailParams<T> {
-            credentials: T,
-            method: string
-        }
-
-        export interface ILoginAttemptSuccessParams<T> {
-            credentials: T,
-            method: string,
-            session: Session
-        }
-
-        export interface ILoginParams<T> {
-            method: string,
-            session: Session
-        }
-
-        export interface ILogoutParams<T> {
-            method: string
-        }
-    }
-
-    export interface IIdentity {
-
-    }
+    export interface IIdentity {}
 
     export interface IAttemptError {
         message: string;
@@ -76,7 +46,7 @@ module TSCore.Auth {
             authMethod.login(credentials, (error: ILoginAttemptError, identity: IIdentity) => {
 
                 if (error) {
-                    this.events.trigger(ManagerEvents.LOGIN_ATTEMPT_FAIL, { credentials: credentials, method: method });
+                    this.events.trigger(TSCore.Auth.Manager.Events.LOGIN_ATTEMPT_FAIL, { credentials: credentials, method: method });
                     done(error, null);
                     return;
                 }
@@ -84,13 +54,13 @@ module TSCore.Auth {
                 var session = this._setSessionForMethod(method, identity);
 
 
-                this.events.trigger(ManagerEvents.LOGIN_ATTEMPT_SUCCESS, {
+                this.events.trigger(TSCore.Auth.Manager.Events.LOGIN_ATTEMPT_SUCCESS, {
                     credentials: credentials,
                     method: method,
                     session: session
                 });
 
-                this.events.trigger(ManagerEvents.LOGIN, {
+                this.events.trigger(TSCore.Auth.Manager.Events.LOGIN, {
                     credentials: credentials,
                     method: method,
                     session: session
@@ -134,7 +104,7 @@ module TSCore.Auth {
                     this.sessions.remove(method);
                 }
 
-                this.events.trigger(ManagerEvents.LOGOUT, {
+                this.events.trigger(TSCore.Auth.Manager.Events.LOGOUT, {
                     method: method
                 });
 
@@ -178,6 +148,34 @@ module TSCore.Auth {
          */
         public hasSessions(): boolean {
             return !this.sessions.isEmpty();
+        }
+    }
+
+    export module Manager.Events {
+
+        export const LOGIN_ATTEMPT_FAIL: string = "login-attempt-fail";
+        export const LOGIN_ATTEMPT_SUCCESS: string = "login-attempt-success";
+        export const LOGIN: string = "login";
+        export const LOGOUT: string = "logout";
+
+        export interface ILoginAttemptFailParams<T> {
+            credentials: T,
+            method: string
+        }
+
+        export interface ILoginAttemptSuccessParams<T> {
+            credentials: T,
+            method: string,
+            session: Session
+        }
+
+        export interface ILoginParams<T> {
+            method: string,
+            session: Session
+        }
+
+        export interface ILogoutParams<T> {
+            method: string
         }
     }
 }
