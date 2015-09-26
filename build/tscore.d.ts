@@ -534,6 +534,13 @@ declare module TSCore.Utils {
 }
 declare module TSCore.Utils {
     class Random {
+        private static _uuidLut;
+        private static uuidLut;
+        static number(min: number, max: number): number;
+        static uniqueNumber(): number;
+        static bool(): boolean;
+        static string(length?: number, characters?: string): string;
+        static uuid(): string;
     }
 }
 declare module TSCore.Utils {

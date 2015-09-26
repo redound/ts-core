@@ -27,7 +27,7 @@ module TSCore.Utils {
 
         public static uniqueNumber(): number {
 
-            return new Date().getTime() + '' + Random.number(0, 100);
+            return parseInt(new Date().getTime() + '' + Random.number(0, 100));
         }
 
         public static bool(): boolean {
