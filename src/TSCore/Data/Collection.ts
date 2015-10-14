@@ -115,6 +115,18 @@ module TSCore.Data {
         public indexOf(item:T): number {
             return _.indexOf(this._data, item);
         }
+
+        /**
+         * Sort collection.
+         *
+         * @returns {void}
+         */
+        public sort(sortPredicate: any): void {
+
+            this._data = _.sortBy(this._data, sortPredicate);
+
+            this.events.trigger(TSCore.Data.Collection.Events.CHANGE);
+        }
     }
 
     export module Collection.Events {
