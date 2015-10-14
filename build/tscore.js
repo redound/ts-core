@@ -698,6 +698,10 @@ var TSCore;
             Collection.prototype.indexOf = function (item) {
                 return _.indexOf(this._data, item);
             };
+            Collection.prototype.sort = function (sortPredicate) {
+                this._data = _.sortBy(this._data, sortPredicate);
+                this.events.trigger(TSCore.Data.Collection.Events.CHANGE);
+            };
             return Collection;
         })(Data.Set);
         Data.Collection = Collection;

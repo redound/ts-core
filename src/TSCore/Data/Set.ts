@@ -86,7 +86,7 @@ module TSCore.Data {
          *
          * @param properties    Object containing key-value pairs.
          */
-        public removeWhere(properties: {}) {
+        public removeWhere(properties: any) {
             this.removeMany(this.where(properties));
         }
 

@@ -119,7 +119,7 @@ declare module TSCore.Data {
         addMany(items?: T[]): void;
         remove(item: T): void;
         removeMany(items: T[]): void;
-        removeWhere(properties: {}): void;
+        removeWhere(properties: any): void;
         replaceItem(source: T, replacement: T): T;
         clear(): void;
         each(iterator: _.ListIterator<T, void>): void;
@@ -235,6 +235,7 @@ declare module TSCore.Data {
         last(): T;
         get(index: number): T;
         indexOf(item: T): number;
+        sort(sortPredicate: any): void;
     }
     module Collection.Events {
         const ADD: string;
