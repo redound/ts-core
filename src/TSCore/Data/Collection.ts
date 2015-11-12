@@ -35,16 +35,18 @@ module TSCore.Data {
          *
          * @param item Item to be added.
          */
-        public add(item:T) {
+        public add(item:T): T {
 
             if(this.contains(item)){
-                return;
+                return null;
             }
 
             this._data.push(item);
 
             this.events.trigger(TSCore.Data.Collection.Events.ADD, { items: [item] });
             this.events.trigger(TSCore.Data.Collection.Events.CHANGE);
+
+            return item;
         }
 
         /**
@@ -52,7 +54,7 @@ module TSCore.Data {
          *
          * @param items Items to be added.
          */
-        public addMany(items:T[]) {
+        public addMany(items:T[]): T[] {
 
             // Remove existing items
             var itemsToAdd = [];
@@ -71,6 +73,8 @@ module TSCore.Data {
                 this.events.trigger(TSCore.Data.Collection.Events.ADD, {items: itemsToAdd});
                 this.events.trigger(TSCore.Data.Collection.Events.CHANGE);
             }
+
+            return itemsToAdd;
         }
 
         /**

@@ -15,16 +15,27 @@ module TSCore.Data {
             super(data);
         }
 
-        public addManyData(data: {}[]){
+        public addManyData(data: {}[]): V[] {
+
+            var addedItems = [];
 
             _.each(data, (item) => {
-                this.set(data[this._primaryKey], this._instantiateModel(item));
+
+                var instance = this._instantiateModel(item);
+                this.set(data[this._primaryKey], instance);
+
+                addedItems.push(instance);
             });
+
+            return addedItems;
         }
 
-        public addData(data: {}){
+        public addData(data: {}): V {
 
-            this.set(data[this._primaryKey], this._instantiateModel(data));
+            var instance = this._instantiateModel(data);
+            this.set(data[this._primaryKey], instance);
+
+            return instance;
         }
 
         public toArray(): any[] {

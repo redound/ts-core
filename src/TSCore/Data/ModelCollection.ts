@@ -23,12 +23,12 @@ module TSCore.Data {
                 createdModels.push(this._instantiateModel(item));
             });
 
-            this.addMany(createdModels);
+            return this.addMany(createdModels);
         }
 
         public addData(data: {}){
 
-            this.add(this._instantiateModel(data));
+            return this.add(this._instantiateModel(data));
         }
 
         public contains(item:T): boolean {

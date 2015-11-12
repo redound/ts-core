@@ -570,11 +570,12 @@ var TSCore;
             };
             Collection.prototype.add = function (item) {
                 if (this.contains(item)) {
-                    return;
+                    return null;
                 }
                 this._data.push(item);
                 this.events.trigger(TSCore.Data.Collection.Events.ADD, { items: [item] });
                 this.events.trigger(TSCore.Data.Collection.Events.CHANGE);
+                return item;
             };
             Collection.prototype.addMany = function (items) {
                 var _this = this;
@@ -589,6 +590,7 @@ var TSCore;
                     this.events.trigger(TSCore.Data.Collection.Events.ADD, { items: itemsToAdd });
                     this.events.trigger(TSCore.Data.Collection.Events.CHANGE);
                 }
+                return itemsToAdd;
             };
             Collection.prototype.remove = function (item) {
                 this._data = _.without(this._data, item);
@@ -861,10 +863,10 @@ var TSCore;
                 _.each(data, function (item) {
                     createdModels.push(_this._instantiateModel(item));
                 });
-                this.addMany(createdModels);
+                return this.addMany(createdModels);
             };
             ModelCollection.prototype.addData = function (data) {
-                this.add(this._instantiateModel(data));
+                return this.add(this._instantiateModel(data));
             };
             ModelCollection.prototype.contains = function (item) {
                 var predicate = {};
@@ -900,12 +902,18 @@ var TSCore;
             }
             ModelDictionary.prototype.addManyData = function (data) {
                 var _this = this;
+                var addedItems = [];
                 _.each(data, function (item) {
-                    _this.set(data[_this._primaryKey], _this._instantiateModel(item));
+                    var instance = _this._instantiateModel(item);
+                    _this.set(data[_this._primaryKey], instance);
+                    addedItems.push(instance);
                 });
+                return addedItems;
             };
             ModelDictionary.prototype.addData = function (data) {
-                this.set(data[this._primaryKey], this._instantiateModel(data));
+                var instance = this._instantiateModel(data);
+                this.set(data[this._primaryKey], instance);
+                return instance;
             };
             ModelDictionary.prototype.toArray = function () {
                 return _.map(_super.prototype.toArray.call(this), function (item) {

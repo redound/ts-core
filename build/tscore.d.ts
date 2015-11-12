@@ -185,8 +185,8 @@ declare module TSCore.Data {
         constructor(data?: T[]);
         length: number;
         count(): number;
-        add(item: T): void;
-        addMany(items: T[]): void;
+        add(item: T): T;
+        addMany(items: T[]): T[];
         remove(item: T): void;
         removeMany(items: T[]): void;
         removeWhere(properties: any): void;
@@ -298,8 +298,8 @@ declare module TSCore.Data {
         protected _primaryKey: string;
         protected _modelClass: IModelInterface;
         constructor(modelClass: IModelInterface, primaryKey?: string, data?: T[]);
-        addManyData(data: {}[]): void;
-        addData(data: {}): void;
+        addManyData(data: {}[]): T[];
+        addData(data: {}): T;
         contains(item: T): boolean;
         toArray(): any[];
         protected _instantiateModel(data: {}): T;
@@ -310,8 +310,8 @@ declare module TSCore.Data {
         protected _primaryKey: string;
         protected _modelClass: IModelInterface;
         constructor(modelClass: IModelInterface, primaryKey?: string, data?: IDictionaryData);
-        addManyData(data: {}[]): void;
-        addData(data: {}): void;
+        addManyData(data: {}[]): V[];
+        addData(data: {}): V;
         toArray(): any[];
         toObject(): {};
         protected _instantiateModel(data: {}): V;
