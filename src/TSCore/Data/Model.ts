@@ -2,10 +2,13 @@ module TSCore.Data {
 
     export class Model {
 
-        protected _defaults = {};
-        protected _whitelist = [];
+        protected _defaults: {};
+        protected _whitelist: string[];
 
         constructor(data?:{}) {
+
+            this._defaults = this.defaults();
+            this._whitelist = this.whitelist();
 
             _.defaults(this, this._defaults);
 
@@ -13,6 +16,14 @@ module TSCore.Data {
                this.assign(data);
             }
         }
+
+        protected whitelist(): string[] {
+            return [];
+        }
+        protected defaults(): {} {
+            return {}
+        }
+
 
         public assign(data?: any) {
 

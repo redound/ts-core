@@ -793,13 +793,19 @@ var TSCore;
     (function (Data) {
         var Model = (function () {
             function Model(data) {
-                this._defaults = {};
-                this._whitelist = [];
+                this._defaults = this.defaults();
+                this._whitelist = this.whitelist();
                 _.defaults(this, this._defaults);
                 if (data) {
                     this.assign(data);
                 }
             }
+            Model.prototype.whitelist = function () {
+                return [];
+            };
+            Model.prototype.defaults = function () {
+                return {};
+            };
             Model.prototype.assign = function (data) {
                 var _this = this;
                 _.each(this._whitelist, function (attr) {

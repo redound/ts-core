@@ -280,8 +280,10 @@ declare module TSCore.Data {
 declare module TSCore.Data {
     class Model {
         protected _defaults: {};
-        protected _whitelist: any[];
+        protected _whitelist: string[];
         constructor(data?: {});
+        protected whitelist(): string[];
+        protected defaults(): {};
         assign(data?: any): Model;
         toObject(): {};
     }
