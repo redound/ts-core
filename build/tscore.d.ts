@@ -109,52 +109,6 @@ declare module TSCore {
     }
 }
 declare module TSCore.Data {
-    class Set<T> {
-        protected _data: T[];
-        events: TSCore.Events.EventEmitter;
-        constructor(data?: T[]);
-        length: number;
-        count(): number;
-        add(item: T): void;
-        addMany(items?: T[]): void;
-        remove(item: T): void;
-        removeMany(items: T[]): void;
-        removeWhere(properties: any): void;
-        replaceItem(source: T, replacement: T): T;
-        clear(): void;
-        each(iterator: _.ListIterator<T, void>): void;
-        pluck(propertyName: string): any[];
-        isEmpty(): boolean;
-        find(iterator?: _.ListIterator<T, boolean>): T[];
-        findFirst(iterator?: _.ListIterator<T, boolean>): T;
-        where(properties: {}): T[];
-        whereFirst(properties: {}): T;
-        contains(item: T): boolean;
-        toArray(): T[];
-    }
-    module Set.Events {
-        const ADD: string;
-        const CHANGE: string;
-        const REMOVE: string;
-        const REPLACE: string;
-        const CLEAR: string;
-        interface IChangeParams<T> {
-        }
-        interface IClearParams<T> {
-        }
-        interface IAddParams<T> {
-            items: T[];
-        }
-        interface IRemoveParams<T> {
-            items: T[];
-        }
-        interface IReplaceParams<T> {
-            source: T;
-            replacement: T;
-        }
-    }
-}
-declare module TSCore.Data {
     interface IDictionaryData {
         [key: string]: IKeyValuePair;
     }
@@ -223,19 +177,28 @@ declare module TSCore {
     }
 }
 declare module TSCore.Data {
-    class Collection<T> extends Set<T> {
-        length: number;
+    class Collection<T> {
         protected _data: T[];
-        prepend(item: T): void;
-        prependMany(items: T[]): void;
-        insert(item: T, index: number): void;
+        events: TSCore.Events.EventEmitter;
+        constructor(data?: T[]);
+        length: number;
+        count(): number;
+        add(item: T): void;
+        addMany(items: T[]): void;
+        remove(item: T): void;
+        removeMany(items: T[]): void;
+        removeWhere(properties: any): void;
         replaceItem(source: T, replacement: T): T;
-        replace(index: number, replacement: T): T;
-        first(): T;
-        last(): T;
-        get(index: number): T;
-        indexOf(item: T): number;
-        sort(sortPredicate: any): void;
+        clear(): void;
+        each(iterator: _.ListIterator<T, void>): void;
+        pluck(propertyName: string): any[];
+        isEmpty(): boolean;
+        find(iterator?: _.ListIterator<T, boolean>): T[];
+        findFirst(iterator?: _.ListIterator<T, boolean>): T;
+        where(properties: {}): T[];
+        whereFirst(properties: {}): T;
+        contains(item: T): boolean;
+        toArray(): T[];
     }
     module Collection.Events {
         const ADD: string;
@@ -243,74 +206,154 @@ declare module TSCore.Data {
         const REMOVE: string;
         const REPLACE: string;
         const CLEAR: string;
-        interface IChangeParams<T> extends Set.Events.IChangeParams<T> {
+        interface IChangeParams<T> {
         }
-        interface IClearParams<T> extends Set.Events.IClearParams<T> {
+        interface IClearParams<T> {
         }
-        interface IAddParams<T> extends Set.Events.IAddParams<T> {
+        interface IAddParams<T> {
+            items: T[];
         }
-        interface IRemoveParams<T> extends Set.Events.IRemoveParams<T> {
+        interface IRemoveParams<T> {
+            items: T[];
         }
-        interface IReplaceParams<T> extends Set.Events.IReplaceParams<T> {
+        interface IReplaceParams<T> {
+            source: T;
+            replacement: T;
         }
     }
 }
 declare module TSCore.Data {
-    class Grid<T> {
-    }
-}
-declare module TSCore.Data {
-    class Model {
-        defaults: {};
-        constructor(attrs: any);
-    }
-}
-declare module TSCore.Data {
-    class ModelCollection<T> extends Collection<T> {
-    }
-}
-declare module TSCore.Data {
-    class Queue<T> {
-    }
-}
-declare module TSCore.Data {
-    class RemoteModelCollection<T> extends ModelCollection<T> {
-    }
-}
-declare module TSCore.Data {
-    class SortedCollection<T> extends Set<T> {
-        protected _sortPredicate: any;
-        sortPredicate: any;
-        constructor(data: T[], sortPredicate: any);
+    class List<T> {
+        protected _data: T[];
+        events: TSCore.Events.EventEmitter;
+        constructor(data?: T[]);
+        length: number;
+        count(): number;
         add(item: T): void;
-        addMany(items: T[]): void;
+        addMany(items?: T[]): void;
+        prepend(item: T): void;
+        prependMany(items: T[]): void;
+        insert(item: T, index: number): void;
         remove(item: T): void;
         removeMany(items: T[]): void;
+        removeWhere(properties: any): void;
         replaceItem(source: T, replacement: T): T;
+        replace(index: number, replacement: T): T;
+        clear(): void;
+        each(iterator: _.ListIterator<T, void>): void;
+        pluck(propertyName: string): any[];
+        isEmpty(): boolean;
         first(): T;
         last(): T;
         get(index: number): T;
         indexOf(item: T): number;
+        sort(sortPredicate: any): void;
+        find(iterator?: _.ListIterator<T, boolean>): T[];
+        findFirst(iterator?: _.ListIterator<T, boolean>): T;
+        where(properties: {}): T[];
+        whereFirst(properties: {}): T;
+        contains(item: T): boolean;
+        toArray(): T[];
+    }
+    module List.Events {
+        const ADD: string;
+        const CHANGE: string;
+        const REMOVE: string;
+        const REPLACE: string;
+        const CLEAR: string;
+        interface IChangeParams<T> {
+        }
+        interface IClearParams<T> {
+        }
+        interface IAddParams<T> {
+            items: T[];
+        }
+        interface IRemoveParams<T> {
+            items: T[];
+        }
+        interface IReplaceParams<T> {
+            source: T;
+            replacement: T;
+        }
+    }
+}
+declare module TSCore.Data {
+    class Model {
+        protected _defaults: {};
+        protected _whitelist: any[];
+        constructor(data?: {});
+        assign(data?: any): Model;
+        toObject(): {};
+    }
+}
+declare module TSCore.Data {
+    interface IModelInterface {
+        new (data: {}): Model;
+    }
+    class ModelCollection<T extends Model> extends Collection<T> {
+        protected _primaryKey: string;
+        protected _modelClass: IModelInterface;
+        constructor(modelClass: IModelInterface, primaryKey?: string, data?: T[]);
+        addManyData(data: {}[]): void;
+        addData(data: {}): void;
+        contains(item: T): boolean;
+        toArray(): any[];
+        protected _instantiateModel(data: {}): T;
+    }
+}
+declare module TSCore.Data {
+    class SortedList<T> {
+        protected _sortPredicate: any;
+        protected _data: T[];
+        events: TSCore.Events.EventEmitter;
+        sortPredicate: any;
+        constructor(data: T[], sortPredicate: any);
+        length: number;
+        count(): number;
+        add(item: T): void;
+        addMany(items?: T[]): void;
+        remove(item: T): void;
+        removeMany(items: T[]): void;
+        removeWhere(properties: any): void;
+        replaceItem(source: T, replacement: T): T;
+        clear(): void;
+        each(iterator: _.ListIterator<T, void>): void;
+        pluck(propertyName: string): any[];
+        isEmpty(): boolean;
+        first(): T;
+        last(): T;
+        get(index: number): T;
+        indexOf(item: T): number;
+        find(iterator?: _.ListIterator<T, boolean>): T[];
+        findFirst(iterator?: _.ListIterator<T, boolean>): T;
+        where(properties: {}): T[];
+        whereFirst(properties: {}): T;
+        contains(item: T): boolean;
+        toArray(): T[];
         sort(): void;
     }
-    module SortedCollection.Events {
+    module SortedList.Events {
         const ADD: string;
         const CHANGE: string;
         const REMOVE: string;
         const REPLACE: string;
         const CLEAR: string;
         const SORT: string;
-        interface IChangeParams<T> extends Set.Events.IChangeParams<T> {
+        interface IChangeParams<T> {
         }
-        interface IClearParams<T> extends Set.Events.IClearParams<T> {
-        }
-        interface IAddParams<T> extends Set.Events.IAddParams<T> {
-        }
-        interface IRemoveParams<T> extends Set.Events.IRemoveParams<T> {
-        }
-        interface IReplaceParams<T> extends Set.Events.IReplaceParams<T> {
+        interface IClearParams<T> {
         }
         interface ISortParams<T> {
+        }
+        interface IAddParams<T> {
+            items: T[];
+        }
+        interface IRemoveParams<T> {
+            items: T[];
+        }
+        interface IReplaceParams<T> {
+            source: T;
+            replacement: T;
         }
     }
 }

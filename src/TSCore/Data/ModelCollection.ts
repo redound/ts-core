@@ -15,7 +15,8 @@ module TSCore.Data {
 
             this._modelClass = modelClass;
             this._primaryKey = primaryKey || 'id';
-            this._data = data || [];
+
+            super(data);
         }
 
         public addManyData(data: {}[]){

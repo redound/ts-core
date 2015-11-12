@@ -1,5 +1,4 @@
 /// <reference path="../Events/EventEmitter.ts" />
-/// <reference path="Set.ts" />
 
 module TSCore.Data {
 

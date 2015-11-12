@@ -1,10 +1,9 @@
 /// <reference path="../TSCore.spec.ts" />
 
-declare var describe, it, expect, jasmine, beforeEach;
+declare var describe, it, expect, jasmine;
 
 describe("TSCore.Data.Collection", () => {
 
-    /** Setup for items **/
     var animal1 = {
         id: 1,
         name: 'Cat'
@@ -25,295 +24,609 @@ describe("TSCore.Data.Collection", () => {
         name: 'Hippo'
     };
 
+    /** Setup basic set **/
+    var basicSet = new TSCore.Data.Collection<IAnimal>();
+
+    /** Setup for testing events **/
     // Initialize a set to test events on
-    var collection = new TSCore.Data.Collection<IAnimal>();
+    var eventSet = new TSCore.Data.Collection<IAnimal>();
 
-    // Setup for testing CollectionEvents.ADD
+    // Setup for testing SetEvents.ADD
     var addListener = jasmine.createSpy("CollectionEvents.ADD listener");
-    collection.events.on(TSCore.Data.Collection.Events.ADD, addListener);
+    eventSet.events.on(TSCore.Data.Collection.Events.ADD, addListener);
 
-    // Setup for testing CollectionEvents.ADD
+    // Setup for testing SetEvents.ADD
     var changeListener = jasmine.createSpy("CollectionEvents.CHANGE listener");
-    collection.events.on(TSCore.Data.Collection.Events.CHANGE, changeListener);
+    eventSet.events.on(TSCore.Data.Collection.Events.CHANGE, changeListener);
 
-    // Setup for testing CollectionEvents.REMOVE
+    // Setup for testing SetEvents.REMOVE
     var removeListener = jasmine.createSpy("CollectionEvents.REMOVE listener");
-    collection.events.on(TSCore.Data.Collection.Events.REMOVE, removeListener);
+    eventSet.events.on(TSCore.Data.Collection.Events.REMOVE, removeListener);
 
-    // Setup for testing CollectionEvents.REPLACE
+    // Setup for testing SetEvents.REPLACE
     var replaceListener = jasmine.createSpy("CollectionEvents.REPLACE listener");
-    collection.events.on(TSCore.Data.Collection.Events.REPLACE, replaceListener);
+    eventSet.events.on(TSCore.Data.Collection.Events.REPLACE, replaceListener);
 
-    // Setup for testing CollectionEvents.REMOVE
+    // Setup for testing SetEvents.REMOVE
     var clearListener = jasmine.createSpy("CollectionEvents.CLEAR listener");
-    collection.events.on(TSCore.Data.Collection.Events.CLEAR, clearListener);
+    eventSet.events.on(TSCore.Data.Collection.Events.CLEAR, clearListener);
 
-    beforeEach(() => {
+    describe("General", () => {
 
-        // Prepare
-        collection.clear();
-        addListener.calls.reset();
-        changeListener.calls.reset();
-        removeListener.calls.reset();
-        replaceListener.calls.reset();
-        clearListener.calls.reset();
+        /**
+         * TODO: Should it be able to contain same objects?
+         */
+        it("can contain same objects (allows duplicates)", () => {
+
+            // Prepare
+            basicSet.clear();
+
+            // Test
+            expect(basicSet.length).toBe(0);
+            basicSet.addMany([animal1, animal2, animal3]);
+            expect(basicSet.length).toBe(3);
+        });
     });
 
-    describe("prepend()", () => {
+    describe("add()", () => {
 
-        it("should prepend the collection with given item", () => {
+        it("should add an item to collection", () => {
 
             // Prepare
-            collection.addMany([animal2, animal3, animal4]);
+            basicSet.clear();
 
             // Test
-            collection.prepend(animal1);
-            expect(collection.first()).toEqual(animal1);
-
-            collection.prepend(animal3);
-            expect(collection.first()).toEqual(animal3);
+            expect(basicSet.length).toBe(0);
+            basicSet.add(animal1);
+            expect(basicSet.length).toBe(1);
         });
 
-        it("should fire CollectionEvents.ADD containing the prepended item", () => {
+        it("should increase the size of the instance", () => {
+
+            // Prepare
+            var animals = [animal1, animal2, animal3, animal4];
+            basicSet.clear();
 
             // Test
-            collection.prepend(animal1);
+            /**
+             * By each time we add an item
+             * to the set we expect the dataSet's length
+             * to increase.
+             */
+            for(var i = 0; i < animals.length; i++) {
+
+                var animal = animals[i];
+                basicSet.add(animal);
+
+                expect(basicSet.length).toBe(i + 1);
+            }
+        });
+
+        it("should fire CollectionEvents.ADD", () => {
+
+            // Prepare
+            eventSet.clear();
+            addListener.calls.reset();
+
+            // Test
+            eventSet.add(animal1);
             expect(addListener).toHaveBeenCalled();
-            expect(addListener.calls.mostRecent().args[0].params.items[0]).toEqual(animal1);
-            collection.prepend(animal2);
-            expect(addListener.calls.count()).toBe(2);
-        });
-
-        it("should fire CollectionEvents.CHANGE", () => {
-
-            // Test
-            collection.prepend(animal1);
-            expect(changeListener).toHaveBeenCalled();
-            collection.prepend(animal2);
-            expect(changeListener.calls.count()).toBe(2);
-        })
-    });
-
-    describe("prependMany()", () => {
-
-        it("should prepend the collection with given items", () => {
-
-            // Prepare
-            collection.addMany([animal4]);
-
-            // Test
-            collection.prependMany([animal3, animal2, animal1]);
-            expect(collection.get(0)).toEqual(animal3);
-            expect(collection.get(1)).toEqual(animal2);
-            expect(collection.get(2)).toEqual(animal1);
-        });
-
-        it("should fire CollectionEvents.ADD containing the prepended item", () => {
-
-            // Prepare
-            var animals = [animal1, animal2, animal3];
-
-            // Test
-            collection.prepend(animal4);
-            collection.prependMany(animals);
-            expect(addListener).toHaveBeenCalled();
-            expect(addListener.calls.mostRecent().args[0].params.items).toEqual(animals);
-        });
-
-        it("should fire CollectionEvents.CHANGE exactly once", () => {
-
-            // Prepare
-            var animals = [animal1, animal2, animal3];
-
-            // Test
-            collection.prependMany(animals);
-            expect(changeListener).toHaveBeenCalled();
-            collection.prepend(animal2);
-            expect(changeListener.calls.count()).toBe(2);
-        })
-    });
-
-    describe("insert()", () => {
-
-        it("should insert given item at given index", () => {
-
-            // Prepare
-            collection.addMany([animal1, animal2, animal3]);
-
-            // Test
-            collection.insert(animal4, 2);
-            expect(collection.get(2)).toEqual(animal4);
-        });
-
-        it("should fire CollectionEvents.ADD containing the inserted item", () => {
-
-            // Prepare
-            collection.addMany([animal2, animal3, animal4]);
-
-            // Test
-            collection.insert(animal1, 2);
-            expect(addListener).toHaveBeenCalled();
-            expect(addListener.calls.mostRecent().args[0].params.items[0]).toEqual(animal1);
         });
 
         it("should fire CollectionEvents.CHANGE", () => {
 
             // Prepare
-            var animals = [animal1, animal2, animal3];
+            eventSet.clear();
+            changeListener.calls.reset();
 
             // Test
-            collection.prependMany(animals);
+            eventSet.add(animal1);
             expect(changeListener).toHaveBeenCalled();
-            collection.insert(animal2, 2);
-            expect(changeListener.calls.count()).toBe(2);
+        });
+    });
+
+    describe("addMany()", () => {
+
+        it("should add multiple items", () => {
+
+            // Prepare
+            basicSet.clear();
+
+            // Test
+            expect(basicSet.length).toBe(0);
+            basicSet.addMany([animal1, animal2]);
+
+            expect(basicSet.length).toBe(2);
+        });
+
+        it("should fire CollectionEvents.ADD", () => {
+
+            // Prepare
+            eventSet.clear();
+            addListener.calls.reset();
+
+            // Test
+            eventSet.addMany([animal1, animal2]);
+            expect(addListener).toHaveBeenCalled();
+        });
+
+
+        it("should fire CollectionEvents.CHANGE", () => {
+
+            // Prepare
+            eventSet.clear();
+            changeListener.calls.reset();
+
+            // Test
+            eventSet.addMany([animal1, animal2]);
+            expect(changeListener).toHaveBeenCalled();
+        });
+
+    });
+
+    describe("remove()", () => {
+
+        it("should remove remove all instances of object (also when it has duplicates)", () => {
+
+            // Prepare
+            basicSet.clear();
+            basicSet.addMany([animal1, animal1, animal2]);
+
+            // Test
+            expect(basicSet.length).toBe(3);
+            basicSet.remove(animal1);
+            expect(basicSet.length).toBe(1);
+        });
+
+        it("should decrease the size of the instance", () => {
+
+            // Prepare
+            var animals = [animal1, animal2, animal3, animal4];
+            var dataSet = new TSCore.Data.Collection<IAnimal>(animals);
+
+            // Test
+            /**
+             * By each time we add an item
+             * to the set we expect the dataSet's length
+             * to increase.
+             */
+            for(var i = 0; i < animals.length; i++) {
+
+                var animal = animals[i];
+                dataSet.remove(animal);
+
+                expect(dataSet.length).toBe(animals.length - (i + 1));
+            }
+        });
+
+        it("should fire CollectionEvents.REMOVE", () => {
+
+            // Prepare
+            eventSet.clear();
+            eventSet.add(animal1);
+            removeListener.calls.reset();
+
+            // Test
+            eventSet.remove(animal1);
+            expect(removeListener).toHaveBeenCalled();
+        });
+
+
+        it("should fire CollectionEvents.CHANGE", () => {
+
+            // Prepare
+            eventSet.clear();
+            eventSet.addMany([animal1, animal2, animal3]);
+            changeListener.calls.reset();
+
+            // Test
+            eventSet.remove(animal1);
+            expect(changeListener).toHaveBeenCalled();
+        });
+    });
+
+    describe("removeMany()", () => {
+
+        it("should remove multiple items including duplicates", () => {
+
+            // Prepare
+            basicSet.clear();
+            basicSet.addMany([animal1, animal1, animal2, animal3]);
+
+            // Test
+            expect(basicSet.length).toBe(4);
+            basicSet.removeMany([animal1, animal2]);
+            expect(basicSet.length).toBe(1);
+            basicSet.removeMany([animal3]);
+            expect(basicSet.length).toBe(0);
+        });
+
+        it("should fire CollectionEvents.REMOVE", () => {
+
+            // Prepare
+            eventSet.clear();
+            eventSet.addMany([animal1, animal2, animal3]);
+            removeListener.calls.reset();
+
+            // Test
+            eventSet.removeMany([animal1, animal2]);
+            expect(removeListener).toHaveBeenCalled();
+        });
+
+
+        it("should fire CollectionEvents.CHANGE", () => {
+
+            // Prepare
+            eventSet.clear();
+            eventSet.addMany([animal1, animal2, animal3]);
+            changeListener.calls.reset();
+
+            // Test
+            eventSet.removeMany([animal1, animal2]);
+            expect(changeListener).toHaveBeenCalled();
+        });
+    });
+
+    describe("removeWhere()", () => {
+
+        it("should remove single or multiple items from set based on properties", () => {
+
+            // Prepare
+            basicSet.clear();
+            basicSet.addMany([animal1, animal2, animal3, {
+                id: 15,
+                name: 'Sheep'
+            }]);
+
+            // Test Single
+            expect(basicSet.length).toBe(4);
+            basicSet.removeWhere({ name: 'Sheep' });
+            expect(basicSet.length).toBe(3);
+
+            // Test multiple
+            basicSet.addMany([{
+                id: 16,
+                name: 'Fish'
+            }, {
+                id: 18,
+                name: 'Fish'
+            }]);
+            expect(basicSet.length).toBe(5);
+            basicSet.removeWhere({ name: 'Fish' });
+            expect(basicSet.length).toBe(3);
+        });
+
+        it("should fire CollectionEvents.REMOVE", () => {
+
+            // Prepare
+            eventSet.clear();
+            eventSet.addMany([{
+                id: 1,
+                name: 'Fish'
+            }, {
+                id: 2,
+                name: 'Fish'
+            }]);
+            removeListener.calls.reset();
+
+            // Test
+            eventSet.removeWhere({ name: 'Fish' });
+            expect(removeListener).toHaveBeenCalled();
+        });
+
+        it("should fire CollectionEvents.CHANGE", () => {
+
+            // Prepare
+            eventSet.clear();
+            eventSet.addMany([{
+                id: 1,
+                name: 'Fish'
+            }, {
+                id: 2,
+                name: 'Fish'
+            }]);
+            changeListener.calls.reset();
+
+            // Test
+            eventSet.removeWhere({ name: 'Fish' });
+            expect(changeListener).toHaveBeenCalled();
         });
     });
 
     describe("replaceItem()", () => {
 
-        it("should replace a given item for another given item", () => {
+        it("should replace one item for another", () => {
 
             // Prepare
-            collection.addMany([animal1, animal4, animal3]);
+            basicSet.clear();
+            basicSet.add(animal1);
 
             // Test
-            collection.replaceItem(animal4, animal2);
-            expect(collection.contains(animal2)).toBe(true);
-            expect(collection.get(1)).toEqual(animal2);
+            var replacedItem = basicSet.replaceItem(animal1, animal2);
+            expect(replacedItem).toBe(animal1);
         });
 
-        it("should fire CollectionEvents.REPLACE containing the source and the replacement", () => {
+        it("should only return the item when it gets replaced", () => {
 
             // Prepare
-            collection.addMany([animal1, animal3]);
+            basicSet.clear();
 
             // Test
-            expect(replaceListener).not.toHaveBeenCalled();
-            collection.replaceItem(animal3, animal2);
-            expect(replaceListener).toHaveBeenCalled();
-            expect(replaceListener.calls.mostRecent().args[0].params.source).toEqual(animal3);
-            expect(replaceListener.calls.mostRecent().args[0].params.replacement).toEqual(animal2);
-        });
+            var replacedItem = basicSet.replaceItem(animal1, animal2);
+            expect(replacedItem).toBe(null);
+        })
+    });
 
-        it("should fire CollectionEvents.CHANGE", () => {
+    describe("count()", () => {
 
-            // Prepare
-            collection.addMany([animal1, animal3]);
-            changeListener.calls.reset();
+        it("should alias magic getter for this._data.length", () => {
 
-            // Test
-            expect(changeListener).not.toHaveBeenCalled();
-            collection.replaceItem(animal3, animal2);
-            expect(changeListener).toHaveBeenCalled();
+            // Initialize an empty set
+            var dataSet = new TSCore.Data.Collection<IAnimal>();
+
+            // Add one animal
+            dataSet.add(animal1);
+
+            // Expect: length as well as count() to be 1
+            expect(dataSet.length).toBe(1);
+            expect(dataSet.count()).toBe(1);
+
+            // Add another animal
+            dataSet.add(animal2);
+
+            // Expect: length as well as count() to be 2
+            expect(dataSet.length).toBe(2);
+            expect(dataSet.length).toBe(2);
         });
     });
 
-    describe("replace()", () => {
+    describe("each()", () => {
 
-        it("should replace given item at given index in the collection", () => {
-
-            // Prepare
-            collection.addMany([animal1, animal2]);
-
-            // Test
-            collection.replace(1, animal3);
-            expect(collection.get(1)).toEqual(animal3);
-        });
-
-        it("should not allow replacing an empty index", () => {
+        it("should iterate over each item", () => {
 
             // Prepare
-            collection.addMany([animal1, animal2]);
+            var animals = [animal1, animal2, animal3, animal4];
+            basicSet.clear();
+            basicSet.addMany(animals);
 
             // Test
-            collection.replace(20, animal4);
-            expect(collection.get(20)).not.toEqual(animal4);
-        });
+            basicSet.each((item) => {
 
-        it("should fire CollectionEvents.REPLACE containing the source and the replacement", () => {
-
-            // Prepare
-            collection.addMany([animal1, animal2]);
-
-            // Test
-            collection.replace(0, animal3);
-            expect(replaceListener).toHaveBeenCalled();
-            expect(replaceListener.calls.mostRecent().args[0].params.source).toEqual(animal1);
-            expect(replaceListener.calls.mostRecent().args[0].params.replacement).toEqual(animal3);
-        });
-
-        it ("should fire CollectionEvents.CHANGE", () => {
-
-            // Prepare
-            collection.addMany([animal1, animal2]);
-            changeListener.calls.reset();
-
-            // Test
-            expect(changeListener).not.toHaveBeenCalled();
-            collection.replace(0, animal3);
-            expect(changeListener).toHaveBeenCalled();
+                var index = animals.indexOf(item);
+                expect(( index > -1 )).toBe(true);
+                animals.splice(0, index);
+            });
         });
     });
 
-    describe("first()", () => {
+    describe("pluck()", () => {
 
-        it("should return the first item out of the collection", () => {
+        it("should return the values for each item as an array for the given property", () => {
 
             // Prepare
-            collection.addMany([animal1, animal2, animal3]);
+            basicSet.clear();
+            basicSet.addMany([{
+                id: 16,
+                name: 'Dog'
+            }, {
+                id: 18,
+                name: 'Cat'
+            }, {
+                id: 19,
+                name: 'Lion'
+            }]);
 
             // Test
-            expect(collection.first()).toEqual(animal1);
+            var names = basicSet.pluck('name');
+            expect(names[0]).toBe('Dog');
+            expect(names[1]).toBe('Cat');
+            expect(names[2]).toBe('Lion');
         });
     });
 
-    describe("last()", () => {
+    describe("isEmpty()", () => {
 
-        it("should return the last item out of the collection", () => {
+        it("should return true if length of set is 0", () => {
 
             // Prepare
-            collection.addMany([animal1, animal2, animal3]);
+            basicSet.clear();
 
             // Test
-            expect(collection.last()).toEqual(animal3);
+            expect(basicSet.length).toBe(0);
+            expect(basicSet.isEmpty()).toBe(true);
         });
     });
 
-    describe("get()", () => {
+    describe("find()", () => {
 
-        it("should return the item in collection at the given index", () => {
+        it("should return items that are allowed by listiterator", () => {
 
             // Prepare
-            collection.addMany([animal1, animal2, animal3]);
+            basicSet.clear();
+            basicSet.addMany([{
+                id: 1,
+                name: 'Lion'
+            }, {
+                id: 2,
+                name: 'Panther'
+            }, {
+                id: 3,
+                name: 'Leopard'
+            }]);
 
             // Test
-            expect(collection.get(1)).toEqual(animal2);
+            var found = basicSet.find((item) => {
+
+                return item.name !== 'Panther';
+            });
+
+            expect(found.length).toBe(2);
+        });
+
+        it("should be optional", () => {
+
+            basicSet.clear();
+            basicSet.addMany([{
+                id: 1,
+                name: 'Lion'
+            }, {
+                id: 2,
+                name: 'Panther'
+            }, {
+                id: 3,
+                name: 'Leopard'
+            }]);
+
+            // Test
+            var found = basicSet.find();
+            expect(found.length).toBe(3);
         });
     });
 
-    describe("indexOf()", () => {
+    describe("findFirst()", () => {
 
-        it("should return the index of given item in collection", () => {
+        it("should return the first item that is allowed by listiterator", () => {
 
             // Prepare
-            collection.addMany([animal1, animal2, animal3]);
+            basicSet.clear();
+            basicSet.addMany([{
+                id: 1,
+                name: 'Lion'
+            }, {
+                id: 2,
+                name: 'Panther'
+            }, {
+                id: 3,
+                name: 'Leopard'
+            }]);
 
             // Test
-            expect(collection.indexOf(animal3)).toBe(2);
+            var found = basicSet.findFirst((item) => {
+
+                return item.name.length > 4;
+            });
+
+            expect(found.name).toBe('Panther');
+        });
+    });
+
+    describe("where()", () => {
+
+        it("should return all items that have the properties given", () => {
+
+            // Prepare
+            basicSet.clear();
+            basicSet.addMany([{
+                id: 1,
+                name: 'Lion'
+            }, {
+                id: 2,
+                name: 'Panther'
+            }, {
+                id: 3,
+                name: 'Leopard'
+            }, {
+                id: 3,
+                name: 'Leopard'
+            }]);
+
+            // Test
+            var found = basicSet.where({ id: 3, name: 'Leopard' });
+            expect(found.length).toBe(2);
+            expect(found[0].name).toBe('Leopard');
+            expect(found[1].name).toBe('Leopard');
+        });
+    });
+
+    describe("whereFirst()", () => {
+
+        it("should return the first item that has the properties given", () => {
+
+            // Prepare
+            basicSet.clear();
+            basicSet.addMany([{
+                id: 1,
+                name: 'Lion'
+            }, {
+                id: 2,
+                name: 'Panther'
+            }, {
+                id: 3,
+                name: 'Leopard'
+            }, {
+                id: 4,
+                name: 'Leopard'
+            }]);
+
+            // Test
+            var found = basicSet.whereFirst({ name: 'Leopard' });
+            expect(found.id).toBe(3);
+            expect(found.name).toBe('Leopard');
+        });
+    });
+
+    describe("contains()", () => {
+
+        it("should return true or false depending on the given item is in the set or not", () => {
+
+            // Prepare
+            basicSet.clear();
+            basicSet.add(animal1);
+
+            // Test
+            expect(basicSet.contains(animal1)).toBe(true);
+            expect(basicSet.contains(animal2)).toBe(false);
+            basicSet.add(animal2);
+            expect(basicSet.contains(animal2)).toBe(true);
+            expect(basicSet.contains(animal3)).toBe(false);
+        });
+    });
+
+    describe("toArray()", () => {
+
+        it("should return an array that has the same items as the set has", () => {
+
+            // Prepare
+            var animals = [animal1, animal2, animal3];
+            basicSet.clear();
+            basicSet.addMany(animals);
+
+            // Test
+            var returned = basicSet.toArray();
+            expect(animals).toEqual(returned);
+        });
+    });
+
+    describe("constructor()", () => {
+
+        it("should increase the size of the instance when passing data", () => {
+
+            // Initialize set with two animals
+            var dataSet = new TSCore.Data.Collection<IAnimal>([animal1, animal2]);
+
+            // Expect: length to be 2
+            expect(dataSet.length).toBe(2);
+        });
+
+        it("size of set should be zero when not passing data", () => {
+
+            // Initialize empty set
+            var dataSet = new TSCore.Data.Collection<IAnimal>();
+
+            // Expect: length to be 0
+            expect(dataSet.length).toBe(0);
         });
     });
 
     describe("clear()", () => {
 
-        it("should fire CollectionEvents.CLEAR", () => {
+        it("set should been empty when called", () => {
 
-            // Prepare
-            collection.addMany([animal1, animal2, animal3]);
+            var dataSet = new TSCore.Data.Collection<IAnimal>([animal1, animal2, animal3, animal4]);
 
-            // Test
-            expect(clearListener).not.toHaveBeenCalled();
-            collection.clear();
-            expect(clearListener).toHaveBeenCalled();
+            expect(dataSet.isEmpty()).toBe(false);
+            dataSet.clear();
+            expect(dataSet.isEmpty()).toBe(true);
         });
     });
 });

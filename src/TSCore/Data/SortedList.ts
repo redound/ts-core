@@ -1,5 +1,3 @@
-/// <reference path="./Set.ts" />
-
 module TSCore.Data {
 
     export class SortedList<T> {

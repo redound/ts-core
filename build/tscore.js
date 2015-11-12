@@ -356,111 +356,6 @@ var TSCore;
 (function (TSCore) {
     var Data;
     (function (Data) {
-        var Set = (function () {
-            function Set(data) {
-                this.events = new TSCore.Events.EventEmitter();
-                this._data = data || [];
-            }
-            Object.defineProperty(Set.prototype, "length", {
-                get: function () {
-                    return this.count();
-                },
-                enumerable: true,
-                configurable: true
-            });
-            Set.prototype.count = function () {
-                return this._data.length;
-            };
-            Set.prototype.add = function (item) {
-                this._data.push(item);
-                this.events.trigger(TSCore.Data.Set.Events.ADD, { items: [item] });
-                this.events.trigger(TSCore.Data.Set.Events.CHANGE);
-            };
-            Set.prototype.addMany = function (items) {
-                if (items === void 0) { items = []; }
-                this._data = this._data.concat(items);
-                this.events.trigger(TSCore.Data.Set.Events.ADD, { items: items });
-                this.events.trigger(TSCore.Data.Set.Events.CHANGE);
-            };
-            Set.prototype.remove = function (item) {
-                this._data = _.without(this._data, item);
-                this.events.trigger(TSCore.Data.Set.Events.REMOVE, { items: [item] });
-                this.events.trigger(TSCore.Data.Set.Events.CHANGE);
-            };
-            Set.prototype.removeMany = function (items) {
-                this._data = _.difference(this._data, items);
-                this.events.trigger(TSCore.Data.Set.Events.REMOVE, { items: items });
-                this.events.trigger(TSCore.Data.Set.Events.CHANGE);
-            };
-            Set.prototype.removeWhere = function (properties) {
-                this.removeMany(this.where(properties));
-            };
-            Set.prototype.replaceItem = function (source, replacement) {
-                var index = _.indexOf(this._data, source);
-                if (index < 0 || index >= this.count()) {
-                    return null;
-                }
-                var currentItem = this._data[index];
-                this._data[index] = replacement;
-                this.events.trigger(TSCore.Data.Set.Events.REPLACE, { source: source, replacement: replacement });
-                this.events.trigger(TSCore.Data.Set.Events.CHANGE);
-                return currentItem;
-            };
-            Set.prototype.clear = function () {
-                this._data = [];
-                this.events.trigger(TSCore.Data.Set.Events.REMOVE, { items: this.toArray() });
-                this.events.trigger(TSCore.Data.Set.Events.CLEAR);
-                this.events.trigger(TSCore.Data.Set.Events.CHANGE);
-            };
-            Set.prototype.each = function (iterator) {
-                _.each(this._data, iterator);
-            };
-            Set.prototype.pluck = function (propertyName) {
-                return _.pluck(this._data, propertyName);
-            };
-            Set.prototype.isEmpty = function () {
-                return this.count() === 0;
-            };
-            Set.prototype.find = function (iterator) {
-                return _.filter(this._data, iterator);
-            };
-            Set.prototype.findFirst = function (iterator) {
-                return _.find(this._data, iterator);
-            };
-            Set.prototype.where = function (properties) {
-                return _.where(this._data, properties);
-            };
-            Set.prototype.whereFirst = function (properties) {
-                return _.findWhere(this._data, properties);
-            };
-            Set.prototype.contains = function (item) {
-                return _.contains(this._data, item);
-            };
-            Set.prototype.toArray = function () {
-                return _.clone(this._data);
-            };
-            return Set;
-        })();
-        Data.Set = Set;
-        var Set;
-        (function (Set) {
-            var Events;
-            (function (Events) {
-                Events.ADD = "add";
-                Events.CHANGE = "change";
-                Events.REMOVE = "remove";
-                Events.REPLACE = "replace";
-                Events.CLEAR = "clear";
-            })(Events = Set.Events || (Set.Events = {}));
-        })(Set = Data.Set || (Data.Set = {}));
-    })(Data = TSCore.Data || (TSCore.Data = {}));
-})(TSCore || (TSCore = {}));
-/// <reference path="../Events/EventEmitter.ts" />
-/// <reference path="Set.ts" />
-var TSCore;
-(function (TSCore) {
-    var Data;
-    (function (Data) {
         var Dictionary = (function (_super) {
             __extends(Dictionary, _super);
             function Dictionary(data) {
@@ -643,15 +538,15 @@ var TSCore;
     })();
     TSCore.DI = DI;
 })(TSCore || (TSCore = {}));
-/// <reference path="./Set.ts" />
+/// <reference path="../Events/EventEmitter.ts" />
 var TSCore;
 (function (TSCore) {
     var Data;
     (function (Data) {
-        var Collection = (function (_super) {
-            __extends(Collection, _super);
-            function Collection() {
-                _super.apply(this, arguments);
+        var Collection = (function () {
+            function Collection(data) {
+                this.events = new TSCore.Events.EventEmitter();
+                this._data = data || [];
             }
             Object.defineProperty(Collection.prototype, "length", {
                 get: function () {
@@ -660,60 +555,100 @@ var TSCore;
                 enumerable: true,
                 configurable: true
             });
-            Collection.prototype.prepend = function (item) {
-                this.insert(item, 0);
+            Collection.prototype.count = function () {
+                return this._data.length;
             };
-            Collection.prototype.prependMany = function (items) {
-                this._data = items.concat(this._data);
-                this.events.trigger(TSCore.Data.Collection.Events.ADD, { items: items });
-                this.events.trigger(TSCore.Data.Collection.Events.CHANGE);
-            };
-            Collection.prototype.insert = function (item, index) {
-                this._data.splice(index, 0, item);
+            Collection.prototype.add = function (item) {
+                if (this.contains(item)) {
+                    return;
+                }
+                this._data.push(item);
                 this.events.trigger(TSCore.Data.Collection.Events.ADD, { items: [item] });
                 this.events.trigger(TSCore.Data.Collection.Events.CHANGE);
             };
-            Collection.prototype.replaceItem = function (source, replacement) {
-                return this.replace(this.indexOf(source), replacement);
+            Collection.prototype.addMany = function (items) {
+                var _this = this;
+                var itemsToAdd = [];
+                _.each(items, function (item) {
+                    if (!_this.contains(item)) {
+                        itemsToAdd.push(item);
+                    }
+                });
+                if (itemsToAdd.length > 0) {
+                    this._data = this._data.concat(itemsToAdd);
+                    this.events.trigger(TSCore.Data.Collection.Events.ADD, { items: itemsToAdd });
+                    this.events.trigger(TSCore.Data.Collection.Events.CHANGE);
+                }
             };
-            Collection.prototype.replace = function (index, replacement) {
+            Collection.prototype.remove = function (item) {
+                this._data = _.without(this._data, item);
+                this.events.trigger(TSCore.Data.Collection.Events.REMOVE, { items: [item] });
+                this.events.trigger(TSCore.Data.Collection.Events.CHANGE);
+            };
+            Collection.prototype.removeMany = function (items) {
+                this._data = _.difference(this._data, items);
+                this.events.trigger(TSCore.Data.Collection.Events.REMOVE, { items: items });
+                this.events.trigger(TSCore.Data.Collection.Events.CHANGE);
+            };
+            Collection.prototype.removeWhere = function (properties) {
+                this.removeMany(this.where(properties));
+            };
+            Collection.prototype.replaceItem = function (source, replacement) {
+                var index = _.indexOf(this._data, source);
                 if (index < 0 || index >= this.count()) {
                     return null;
                 }
                 var currentItem = this._data[index];
                 this._data[index] = replacement;
-                this.events.trigger(TSCore.Data.Collection.Events.REPLACE, { source: currentItem, replacement: replacement });
+                this.events.trigger(TSCore.Data.Collection.Events.REPLACE, { source: source, replacement: replacement });
                 this.events.trigger(TSCore.Data.Collection.Events.CHANGE);
                 return currentItem;
             };
-            Collection.prototype.first = function () {
-                return _.first(this._data);
-            };
-            Collection.prototype.last = function () {
-                return _.last(this._data);
-            };
-            Collection.prototype.get = function (index) {
-                return this._data[index];
-            };
-            Collection.prototype.indexOf = function (item) {
-                return _.indexOf(this._data, item);
-            };
-            Collection.prototype.sort = function (sortPredicate) {
-                this._data = _.sortBy(this._data, sortPredicate);
+            Collection.prototype.clear = function () {
+                this._data = [];
+                this.events.trigger(TSCore.Data.Collection.Events.REMOVE, { items: this.toArray() });
+                this.events.trigger(TSCore.Data.Collection.Events.CLEAR);
                 this.events.trigger(TSCore.Data.Collection.Events.CHANGE);
             };
+            Collection.prototype.each = function (iterator) {
+                _.each(this._data, iterator);
+            };
+            Collection.prototype.pluck = function (propertyName) {
+                return _.pluck(this._data, propertyName);
+            };
+            Collection.prototype.isEmpty = function () {
+                return this.count() === 0;
+            };
+            Collection.prototype.find = function (iterator) {
+                return _.filter(this._data, iterator);
+            };
+            Collection.prototype.findFirst = function (iterator) {
+                return _.find(this._data, iterator);
+            };
+            Collection.prototype.where = function (properties) {
+                return _.where(this._data, properties);
+            };
+            Collection.prototype.whereFirst = function (properties) {
+                return _.findWhere(this._data, properties);
+            };
+            Collection.prototype.contains = function (item) {
+                return _.contains(this._data, item);
+            };
+            Collection.prototype.toArray = function () {
+                return _.clone(this._data);
+            };
             return Collection;
-        })(Data.Set);
+        })();
         Data.Collection = Collection;
         var Collection;
         (function (Collection) {
             var Events;
             (function (Events) {
-                Events.ADD = Data.Set.Events.ADD;
-                Events.CHANGE = Data.Set.Events.CHANGE;
-                Events.REMOVE = Data.Set.Events.REMOVE;
-                Events.REPLACE = Data.Set.Events.REPLACE;
-                Events.CLEAR = Data.Set.Events.CLEAR;
+                Events.ADD = "add";
+                Events.CHANGE = "change";
+                Events.REMOVE = "remove";
+                Events.REPLACE = "replace";
+                Events.CLEAR = "clear";
             })(Events = Collection.Events || (Collection.Events = {}));
         })(Collection = Data.Collection || (Data.Collection = {}));
     })(Data = TSCore.Data || (TSCore.Data = {}));
@@ -722,12 +657,134 @@ var TSCore;
 (function (TSCore) {
     var Data;
     (function (Data) {
-        var Grid = (function () {
-            function Grid() {
+        var List = (function () {
+            function List(data) {
+                this.events = new TSCore.Events.EventEmitter();
+                this._data = data || [];
             }
-            return Grid;
+            Object.defineProperty(List.prototype, "length", {
+                get: function () {
+                    return this.count();
+                },
+                enumerable: true,
+                configurable: true
+            });
+            List.prototype.count = function () {
+                return this._data.length;
+            };
+            List.prototype.add = function (item) {
+                this._data.push(item);
+                this.events.trigger(TSCore.Data.List.Events.ADD, { items: [item] });
+                this.events.trigger(TSCore.Data.List.Events.CHANGE);
+            };
+            List.prototype.addMany = function (items) {
+                if (items === void 0) { items = []; }
+                this._data = this._data.concat(items);
+                this.events.trigger(TSCore.Data.List.Events.ADD, { items: items });
+                this.events.trigger(TSCore.Data.List.Events.CHANGE);
+            };
+            List.prototype.prepend = function (item) {
+                this.insert(item, 0);
+            };
+            List.prototype.prependMany = function (items) {
+                this._data = items.concat(this._data);
+                this.events.trigger(TSCore.Data.List.Events.ADD, { items: items });
+                this.events.trigger(TSCore.Data.List.Events.CHANGE);
+            };
+            List.prototype.insert = function (item, index) {
+                this._data.splice(index, 0, item);
+                this.events.trigger(TSCore.Data.List.Events.ADD, { items: [item] });
+                this.events.trigger(TSCore.Data.List.Events.CHANGE);
+            };
+            List.prototype.remove = function (item) {
+                this._data = _.without(this._data, item);
+                this.events.trigger(TSCore.Data.List.Events.REMOVE, { items: [item] });
+                this.events.trigger(TSCore.Data.List.Events.CHANGE);
+            };
+            List.prototype.removeMany = function (items) {
+                this._data = _.difference(this._data, items);
+                this.events.trigger(TSCore.Data.List.Events.REMOVE, { items: items });
+                this.events.trigger(TSCore.Data.List.Events.CHANGE);
+            };
+            List.prototype.removeWhere = function (properties) {
+                this.removeMany(this.where(properties));
+            };
+            List.prototype.replaceItem = function (source, replacement) {
+                return this.replace(this.indexOf(source), replacement);
+            };
+            List.prototype.replace = function (index, replacement) {
+                if (index < 0 || index >= this.count()) {
+                    return null;
+                }
+                var currentItem = this._data[index];
+                this._data[index] = replacement;
+                this.events.trigger(TSCore.Data.List.Events.REPLACE, { source: currentItem, replacement: replacement });
+                this.events.trigger(TSCore.Data.List.Events.CHANGE);
+                return currentItem;
+            };
+            List.prototype.clear = function () {
+                this._data = [];
+                this.events.trigger(TSCore.Data.List.Events.REMOVE, { items: this.toArray() });
+                this.events.trigger(TSCore.Data.List.Events.CLEAR);
+                this.events.trigger(TSCore.Data.List.Events.CHANGE);
+            };
+            List.prototype.each = function (iterator) {
+                _.each(this._data, iterator);
+            };
+            List.prototype.pluck = function (propertyName) {
+                return _.pluck(this._data, propertyName);
+            };
+            List.prototype.isEmpty = function () {
+                return this.count() === 0;
+            };
+            List.prototype.first = function () {
+                return _.first(this._data);
+            };
+            List.prototype.last = function () {
+                return _.last(this._data);
+            };
+            List.prototype.get = function (index) {
+                return this._data[index];
+            };
+            List.prototype.indexOf = function (item) {
+                return _.indexOf(this._data, item);
+            };
+            List.prototype.sort = function (sortPredicate) {
+                this._data = _.sortBy(this._data, sortPredicate);
+                this.events.trigger(TSCore.Data.List.Events.CHANGE);
+            };
+            List.prototype.find = function (iterator) {
+                return _.filter(this._data, iterator);
+            };
+            List.prototype.findFirst = function (iterator) {
+                return _.find(this._data, iterator);
+            };
+            List.prototype.where = function (properties) {
+                return _.where(this._data, properties);
+            };
+            List.prototype.whereFirst = function (properties) {
+                return _.findWhere(this._data, properties);
+            };
+            List.prototype.contains = function (item) {
+                return _.contains(this._data, item);
+            };
+            List.prototype.toArray = function () {
+                return _.clone(this._data);
+            };
+            return List;
         })();
-        Data.Grid = Grid;
+        Data.List = List;
+        var List;
+        (function (List) {
+            var Events;
+            (function (Events) {
+                Events.ADD = "add";
+                Events.CHANGE = "change";
+                Events.REMOVE = "remove";
+                Events.REPLACE = "replace";
+                Events.CLEAR = "clear";
+            })(Events = List.Events || (List.Events = {}));
+        })(List = Data.List || (Data.List = {}));
     })(Data = TSCore.Data || (TSCore.Data = {}));
 })(TSCore || (TSCore = {}));
 var TSCore;
@@ -735,15 +792,36 @@ var TSCore;
     var Data;
     (function (Data) {
         var Model = (function () {
-            function Model(attrs) {
+            function Model(data) {
+                this._defaults = {};
+                this._whitelist = [];
+                _.defaults(this, this._defaults);
+                if (data) {
+                    this.assign(data);
+                }
+            }
+            Model.prototype.assign = function (data) {
                 var _this = this;
-                this.defaults = {};
-                _.each(attrs, function (value, key) {
-                    if (_this.defaults[key] !== undefined) {
-                        _this[key] = value;
+                _.each(this._whitelist, function (attr) {
+                    _this[attr] = !_.isUndefined(data[attr]) ? data[attr] : _this[attr] || null;
+                });
+                return this;
+            };
+            Model.prototype.toObject = function () {
+                var _this = this;
+                var result = {};
+                _.each(_.keys(this), function (key) {
+                    var value = _this[key];
+                    if (key.slice(0, '_'.length) != '_') {
+                        var parsedValue = value;
+                        if (value instanceof Model) {
+                            parsedValue = value.toObject();
+                        }
+                        result[key] = parsedValue;
                     }
                 });
-            }
+                return result;
+            };
             return Model;
         })();
         Data.Model = Model;
@@ -756,9 +834,37 @@ var TSCore;
     (function (Data) {
         var ModelCollection = (function (_super) {
             __extends(ModelCollection, _super);
-            function ModelCollection() {
-                _super.apply(this, arguments);
+            function ModelCollection(modelClass, primaryKey, data) {
+                this._modelClass = modelClass;
+                this._primaryKey = primaryKey || 'id';
+                _super.call(this, data);
             }
+            ModelCollection.prototype.addManyData = function (data) {
+                var _this = this;
+                var createdModels = [];
+                _.each(data, function (item) {
+                    createdModels.push(_this._instantiateModel(item));
+                });
+                this.addMany(createdModels);
+            };
+            ModelCollection.prototype.addData = function (data) {
+                this.add(this._instantiateModel(data));
+            };
+            ModelCollection.prototype.contains = function (item) {
+                var predicate = {};
+                predicate[this._primaryKey] = item[this._primaryKey];
+                return this.whereFirst(predicate) != null;
+            };
+            ModelCollection.prototype.toArray = function () {
+                var result = [];
+                this.each(function (item) {
+                    result.push(item.toObject());
+                });
+                return result;
+            };
+            ModelCollection.prototype._instantiateModel = function (data) {
+                return new this._modelClass(data);
+            };
             return ModelCollection;
         })(Data.Collection);
         Data.ModelCollection = ModelCollection;
@@ -768,42 +874,14 @@ var TSCore;
 (function (TSCore) {
     var Data;
     (function (Data) {
-        var Queue = (function () {
-            function Queue() {
-            }
-            return Queue;
-        })();
-        Data.Queue = Queue;
-    })(Data = TSCore.Data || (TSCore.Data = {}));
-})(TSCore || (TSCore = {}));
-/// <reference path="./ModelCollection.ts" />
-var TSCore;
-(function (TSCore) {
-    var Data;
-    (function (Data) {
-        var RemoteModelCollection = (function (_super) {
-            __extends(RemoteModelCollection, _super);
-            function RemoteModelCollection() {
-                _super.apply(this, arguments);
-            }
-            return RemoteModelCollection;
-        })(Data.ModelCollection);
-        Data.RemoteModelCollection = RemoteModelCollection;
-    })(Data = TSCore.Data || (TSCore.Data = {}));
-})(TSCore || (TSCore = {}));
-/// <reference path="./Set.ts" />
-var TSCore;
-(function (TSCore) {
-    var Data;
-    (function (Data) {
-        var SortedCollection = (function (_super) {
-            __extends(SortedCollection, _super);
-            function SortedCollection(data, sortPredicate) {
-                _super.call(this, data);
+        var SortedList = (function () {
+            function SortedList(data, sortPredicate) {
+                this.events = new TSCore.Events.EventEmitter();
+                this._data = data || [];
                 this._sortPredicate = sortPredicate;
                 this.sort();
             }
-            Object.defineProperty(SortedCollection.prototype, "sortPredicate", {
+            Object.defineProperty(SortedList.prototype, "sortPredicate", {
                 get: function () {
                     return this._sortPredicate;
                 },
@@ -814,62 +892,124 @@ var TSCore;
                 enumerable: true,
                 configurable: true
             });
-            SortedCollection.prototype.add = function (item) {
-                _super.prototype.add.call(this, item);
-                this.sort();
+            Object.defineProperty(SortedList.prototype, "length", {
+                get: function () {
+                    return this.count();
+                },
+                enumerable: true,
+                configurable: true
+            });
+            SortedList.prototype.count = function () {
+                return this._data.length;
             };
-            SortedCollection.prototype.addMany = function (items) {
-                _super.prototype.addMany.call(this, items);
+            SortedList.prototype.add = function (item) {
+                this._data.push(item);
                 this.sort();
+                this.events.trigger(TSCore.Data.SortedList.Events.ADD, { items: [item] });
+                this.events.trigger(TSCore.Data.SortedList.Events.CHANGE);
             };
-            SortedCollection.prototype.remove = function (item) {
-                _super.prototype.remove.call(this, item);
+            SortedList.prototype.addMany = function (items) {
+                if (items === void 0) { items = []; }
+                this._data = this._data.concat(items);
                 this.sort();
+                this.events.trigger(TSCore.Data.SortedList.Events.ADD, { items: items });
+                this.events.trigger(TSCore.Data.SortedList.Events.CHANGE);
             };
-            SortedCollection.prototype.removeMany = function (items) {
-                _super.prototype.removeMany.call(this, items);
+            SortedList.prototype.remove = function (item) {
+                this._data = _.without(this._data, item);
                 this.sort();
+                this.events.trigger(TSCore.Data.SortedList.Events.REMOVE, { items: [item] });
+                this.events.trigger(TSCore.Data.SortedList.Events.CHANGE);
             };
-            SortedCollection.prototype.replaceItem = function (source, replacement) {
-                var currentItem = _super.prototype.replaceItem.call(this, source, replacement);
+            SortedList.prototype.removeMany = function (items) {
+                this._data = _.difference(this._data, items);
                 this.sort();
+                this.events.trigger(TSCore.Data.SortedList.Events.REMOVE, { items: items });
+                this.events.trigger(TSCore.Data.SortedList.Events.CHANGE);
+            };
+            SortedList.prototype.removeWhere = function (properties) {
+                this.removeMany(this.where(properties));
+            };
+            SortedList.prototype.replaceItem = function (source, replacement) {
+                var index = _.indexOf(this._data, source);
+                if (index < 0 || index >= this.count()) {
+                    return null;
+                }
+                var currentItem = this._data[index];
+                this._data[index] = replacement;
+                this.sort();
+                this.events.trigger(TSCore.Data.SortedList.Events.REPLACE, { source: source, replacement: replacement });
+                this.events.trigger(TSCore.Data.SortedList.Events.CHANGE);
                 return currentItem;
             };
-            SortedCollection.prototype.first = function () {
+            SortedList.prototype.clear = function () {
+                this._data = [];
+                this.events.trigger(TSCore.Data.SortedList.Events.REMOVE, { items: this.toArray() });
+                this.events.trigger(TSCore.Data.SortedList.Events.CLEAR);
+                this.events.trigger(TSCore.Data.SortedList.Events.CHANGE);
+            };
+            SortedList.prototype.each = function (iterator) {
+                _.each(this._data, iterator);
+            };
+            SortedList.prototype.pluck = function (propertyName) {
+                return _.pluck(this._data, propertyName);
+            };
+            SortedList.prototype.isEmpty = function () {
+                return this.count() === 0;
+            };
+            SortedList.prototype.first = function () {
                 return _.first(this._data);
             };
-            SortedCollection.prototype.last = function () {
+            SortedList.prototype.last = function () {
                 return _.last(this._data);
             };
-            SortedCollection.prototype.get = function (index) {
+            SortedList.prototype.get = function (index) {
                 return this._data[index];
             };
-            SortedCollection.prototype.indexOf = function (item) {
+            SortedList.prototype.indexOf = function (item) {
                 return _.indexOf(this._data, item);
             };
-            SortedCollection.prototype.sort = function () {
+            SortedList.prototype.find = function (iterator) {
+                return _.filter(this._data, iterator);
+            };
+            SortedList.prototype.findFirst = function (iterator) {
+                return _.find(this._data, iterator);
+            };
+            SortedList.prototype.where = function (properties) {
+                return _.where(this._data, properties);
+            };
+            SortedList.prototype.whereFirst = function (properties) {
+                return _.findWhere(this._data, properties);
+            };
+            SortedList.prototype.contains = function (item) {
+                return _.contains(this._data, item);
+            };
+            SortedList.prototype.toArray = function () {
+                return _.clone(this._data);
+            };
+            SortedList.prototype.sort = function () {
                 if (this._sortPredicate === null || this._sortPredicate === undefined) {
                     return;
                 }
                 this._data = _.sortBy(this._data, this._sortPredicate);
-                this.events.trigger(TSCore.Data.SortedCollection.Events.SORT);
-                this.events.trigger(TSCore.Data.SortedCollection.Events.CHANGE);
+                this.events.trigger(TSCore.Data.SortedList.Events.SORT);
+                this.events.trigger(TSCore.Data.SortedList.Events.CHANGE);
             };
-            return SortedCollection;
-        })(Data.Set);
-        Data.SortedCollection = SortedCollection;
-        var SortedCollection;
-        (function (SortedCollection) {
+            return SortedList;
+        })();
+        Data.SortedList = SortedList;
+        var SortedList;
+        (function (SortedList) {
             var Events;
             (function (Events) {
-                Events.ADD = Data.Set.Events.ADD;
-                Events.CHANGE = Data.Set.Events.CHANGE;
-                Events.REMOVE = Data.Set.Events.REMOVE;
-                Events.REPLACE = Data.Set.Events.REPLACE;
-                Events.CLEAR = Data.Set.Events.CLEAR;
+                Events.ADD = "add";
+                Events.CHANGE = "change";
+                Events.REMOVE = "remove";
+                Events.REPLACE = "replace";
+                Events.CLEAR = "clear";
                 Events.SORT = "sort";
-            })(Events = SortedCollection.Events || (SortedCollection.Events = {}));
-        })(SortedCollection = Data.SortedCollection || (Data.SortedCollection = {}));
+            })(Events = SortedList.Events || (SortedList.Events = {}));
+        })(SortedList = Data.SortedList || (Data.SortedList = {}));
     })(Data = TSCore.Data || (TSCore.Data = {}));
 })(TSCore || (TSCore = {}));
 /// <reference path="./Dictionary.ts" />
@@ -1669,13 +1809,10 @@ var TSCore;
 /// <reference path="TSCore/DI.ts" />
 /// <reference path="TSCore/Data/Collection.ts" />
 /// <reference path="TSCore/Data/Dictionary.ts" />
-/// <reference path="TSCore/Data/Grid.ts" />
+/// <reference path="TSCore/Data/List.ts" />
 /// <reference path="TSCore/Data/Model.ts" />
 /// <reference path="TSCore/Data/ModelCollection.ts" />
-/// <reference path="TSCore/Data/Queue.ts" />
-/// <reference path="TSCore/Data/RemoteModelCollection.ts" />
-/// <reference path="TSCore/Data/Set.ts" />
-/// <reference path="TSCore/Data/SortedCollection.ts" />
+/// <reference path="TSCore/Data/SortedList.ts" />
 /// <reference path="TSCore/Data/Store.ts" />
 /// <reference path="TSCore/DateTime/DateFormatter.ts" />
 /// <reference path="TSCore/DateTime/DateTime.ts" />

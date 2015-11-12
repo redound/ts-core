@@ -1,7 +1,6 @@
-
 module TSCore.Data {
 
-    export abstract class Model {
+    export class Model {
 
         protected _defaults = {};
         protected _whitelist = [];
@@ -28,7 +27,9 @@ module TSCore.Data {
 
             var result = {};
 
-            _.each(this, function(value, key){
+            _.each(_.keys(this), (key) => {
+
+                var value = this[key];
 
                 if(key.slice(0, '_'.length) != '_'){
 

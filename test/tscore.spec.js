@@ -259,217 +259,18 @@ describe("TSCore.Data.Collection", function () {
         id: 4,
         name: 'Hippo'
     };
-    var collection = new TSCore.Data.Collection();
+    var basicSet = new TSCore.Data.Collection();
+    var eventSet = new TSCore.Data.Collection();
     var addListener = jasmine.createSpy("CollectionEvents.ADD listener");
-    collection.events.on(TSCore.Data.Collection.Events.ADD, addListener);
+    eventSet.events.on(TSCore.Data.Collection.Events.ADD, addListener);
     var changeListener = jasmine.createSpy("CollectionEvents.CHANGE listener");
-    collection.events.on(TSCore.Data.Collection.Events.CHANGE, changeListener);
+    eventSet.events.on(TSCore.Data.Collection.Events.CHANGE, changeListener);
     var removeListener = jasmine.createSpy("CollectionEvents.REMOVE listener");
-    collection.events.on(TSCore.Data.Collection.Events.REMOVE, removeListener);
+    eventSet.events.on(TSCore.Data.Collection.Events.REMOVE, removeListener);
     var replaceListener = jasmine.createSpy("CollectionEvents.REPLACE listener");
-    collection.events.on(TSCore.Data.Collection.Events.REPLACE, replaceListener);
+    eventSet.events.on(TSCore.Data.Collection.Events.REPLACE, replaceListener);
     var clearListener = jasmine.createSpy("CollectionEvents.CLEAR listener");
-    collection.events.on(TSCore.Data.Collection.Events.CLEAR, clearListener);
-    beforeEach(function () {
-        collection.clear();
-        addListener.calls.reset();
-        changeListener.calls.reset();
-        removeListener.calls.reset();
-        replaceListener.calls.reset();
-        clearListener.calls.reset();
-    });
-    describe("prepend()", function () {
-        it("should prepend the collection with given item", function () {
-            collection.addMany([animal2, animal3, animal4]);
-            collection.prepend(animal1);
-            expect(collection.first()).toEqual(animal1);
-            collection.prepend(animal3);
-            expect(collection.first()).toEqual(animal3);
-        });
-        it("should fire CollectionEvents.ADD containing the prepended item", function () {
-            collection.prepend(animal1);
-            expect(addListener).toHaveBeenCalled();
-            expect(addListener.calls.mostRecent().args[0].params.items[0]).toEqual(animal1);
-            collection.prepend(animal2);
-            expect(addListener.calls.count()).toBe(2);
-        });
-        it("should fire CollectionEvents.CHANGE", function () {
-            collection.prepend(animal1);
-            expect(changeListener).toHaveBeenCalled();
-            collection.prepend(animal2);
-            expect(changeListener.calls.count()).toBe(2);
-        });
-    });
-    describe("prependMany()", function () {
-        it("should prepend the collection with given items", function () {
-            collection.addMany([animal4]);
-            collection.prependMany([animal3, animal2, animal1]);
-            expect(collection.get(0)).toEqual(animal3);
-            expect(collection.get(1)).toEqual(animal2);
-            expect(collection.get(2)).toEqual(animal1);
-        });
-        it("should fire CollectionEvents.ADD containing the prepended item", function () {
-            var animals = [animal1, animal2, animal3];
-            collection.prepend(animal4);
-            collection.prependMany(animals);
-            expect(addListener).toHaveBeenCalled();
-            expect(addListener.calls.mostRecent().args[0].params.items).toEqual(animals);
-        });
-        it("should fire CollectionEvents.CHANGE exactly once", function () {
-            var animals = [animal1, animal2, animal3];
-            collection.prependMany(animals);
-            expect(changeListener).toHaveBeenCalled();
-            collection.prepend(animal2);
-            expect(changeListener.calls.count()).toBe(2);
-        });
-    });
-    describe("insert()", function () {
-        it("should insert given item at given index", function () {
-            collection.addMany([animal1, animal2, animal3]);
-            collection.insert(animal4, 2);
-            expect(collection.get(2)).toEqual(animal4);
-        });
-        it("should fire CollectionEvents.ADD containing the inserted item", function () {
-            collection.addMany([animal2, animal3, animal4]);
-            collection.insert(animal1, 2);
-            expect(addListener).toHaveBeenCalled();
-            expect(addListener.calls.mostRecent().args[0].params.items[0]).toEqual(animal1);
-        });
-        it("should fire CollectionEvents.CHANGE", function () {
-            var animals = [animal1, animal2, animal3];
-            collection.prependMany(animals);
-            expect(changeListener).toHaveBeenCalled();
-            collection.insert(animal2, 2);
-            expect(changeListener.calls.count()).toBe(2);
-        });
-    });
-    describe("replaceItem()", function () {
-        it("should replace a given item for another given item", function () {
-            collection.addMany([animal1, animal4, animal3]);
-            collection.replaceItem(animal4, animal2);
-            expect(collection.contains(animal2)).toBe(true);
-            expect(collection.get(1)).toEqual(animal2);
-        });
-        it("should fire CollectionEvents.REPLACE containing the source and the replacement", function () {
-            collection.addMany([animal1, animal3]);
-            expect(replaceListener).not.toHaveBeenCalled();
-            collection.replaceItem(animal3, animal2);
-            expect(replaceListener).toHaveBeenCalled();
-            expect(replaceListener.calls.mostRecent().args[0].params.source).toEqual(animal3);
-            expect(replaceListener.calls.mostRecent().args[0].params.replacement).toEqual(animal2);
-        });
-        it("should fire CollectionEvents.CHANGE", function () {
-            collection.addMany([animal1, animal3]);
-            changeListener.calls.reset();
-            expect(changeListener).not.toHaveBeenCalled();
-            collection.replaceItem(animal3, animal2);
-            expect(changeListener).toHaveBeenCalled();
-        });
-    });
-    describe("replace()", function () {
-        it("should replace given item at given index in the collection", function () {
-            collection.addMany([animal1, animal2]);
-            collection.replace(1, animal3);
-            expect(collection.get(1)).toEqual(animal3);
-        });
-        it("should not allow replacing an empty index", function () {
-            collection.addMany([animal1, animal2]);
-            collection.replace(20, animal4);
-            expect(collection.get(20)).not.toEqual(animal4);
-        });
-        it("should fire CollectionEvents.REPLACE containing the source and the replacement", function () {
-            collection.addMany([animal1, animal2]);
-            collection.replace(0, animal3);
-            expect(replaceListener).toHaveBeenCalled();
-            expect(replaceListener.calls.mostRecent().args[0].params.source).toEqual(animal1);
-            expect(replaceListener.calls.mostRecent().args[0].params.replacement).toEqual(animal3);
-        });
-        it("should fire CollectionEvents.CHANGE", function () {
-            collection.addMany([animal1, animal2]);
-            changeListener.calls.reset();
-            expect(changeListener).not.toHaveBeenCalled();
-            collection.replace(0, animal3);
-            expect(changeListener).toHaveBeenCalled();
-        });
-    });
-    describe("first()", function () {
-        it("should return the first item out of the collection", function () {
-            collection.addMany([animal1, animal2, animal3]);
-            expect(collection.first()).toEqual(animal1);
-        });
-    });
-    describe("last()", function () {
-        it("should return the last item out of the collection", function () {
-            collection.addMany([animal1, animal2, animal3]);
-            expect(collection.last()).toEqual(animal3);
-        });
-    });
-    describe("get()", function () {
-        it("should return the item in collection at the given index", function () {
-            collection.addMany([animal1, animal2, animal3]);
-            expect(collection.get(1)).toEqual(animal2);
-        });
-    });
-    describe("indexOf()", function () {
-        it("should return the index of given item in collection", function () {
-            collection.addMany([animal1, animal2, animal3]);
-            expect(collection.indexOf(animal3)).toBe(2);
-        });
-    });
-    describe("clear()", function () {
-        it("should fire CollectionEvents.CLEAR", function () {
-            collection.addMany([animal1, animal2, animal3]);
-            expect(clearListener).not.toHaveBeenCalled();
-            collection.clear();
-            expect(clearListener).toHaveBeenCalled();
-        });
-    });
-});
-/// <reference path="../TSCore.spec.ts" />
-describe("TSCore.Data.Dictionary", function () {
-});
-/// <reference path="../TSCore.spec.ts" />
-describe("TSCore.Data.Grid", function () {
-});
-/// <reference path="../TSCore.spec.ts" />
-describe("TSCore.Data.ModelCollection", function () {
-});
-/// <reference path="../TSCore.spec.ts" />
-describe("TSCore.Data.Queue", function () {
-});
-/// <reference path="../TSCore.spec.ts" />
-describe("TSCore.Data.RemoteModelCollection", function () {
-});
-/// <reference path="../TSCore.spec.ts" />
-describe("TSCore.Data.Set", function () {
-    var animal1 = {
-        id: 1,
-        name: 'Cat'
-    };
-    var animal2 = {
-        id: 2,
-        name: 'Dog'
-    };
-    var animal3 = {
-        id: 3,
-        name: 'Horse'
-    };
-    var animal4 = {
-        id: 4,
-        name: 'Hippo'
-    };
-    var basicSet = new TSCore.Data.Set();
-    var eventSet = new TSCore.Data.Set();
-    var addListener = jasmine.createSpy("SetEvents.ADD listener");
-    eventSet.events.on(TSCore.Data.Set.Events.ADD, addListener);
-    var changeListener = jasmine.createSpy("SetEvents.CHANGE listener");
-    eventSet.events.on(TSCore.Data.Set.Events.CHANGE, changeListener);
-    var removeListener = jasmine.createSpy("SetEvents.REMOVE listener");
-    eventSet.events.on(TSCore.Data.Set.Events.REMOVE, removeListener);
-    var replaceListener = jasmine.createSpy("SetEvents.REPLACE listener");
-    eventSet.events.on(TSCore.Data.Set.Events.REPLACE, replaceListener);
-    var clearListener = jasmine.createSpy("SetEvents.CLEAR listener");
-    eventSet.events.on(TSCore.Data.Set.Events.CLEAR, clearListener);
+    eventSet.events.on(TSCore.Data.Collection.Events.CLEAR, clearListener);
     describe("General", function () {
         it("can contain same objects (allows duplicates)", function () {
             basicSet.clear();
@@ -479,7 +280,7 @@ describe("TSCore.Data.Set", function () {
         });
     });
     describe("add()", function () {
-        it("should add an item to set", function () {
+        it("should add an item to collection", function () {
             basicSet.clear();
             expect(basicSet.length).toBe(0);
             basicSet.add(animal1);
@@ -494,13 +295,13 @@ describe("TSCore.Data.Set", function () {
                 expect(basicSet.length).toBe(i + 1);
             }
         });
-        it("should fire SetEvents.ADD", function () {
+        it("should fire CollectionEvents.ADD", function () {
             eventSet.clear();
             addListener.calls.reset();
             eventSet.add(animal1);
             expect(addListener).toHaveBeenCalled();
         });
-        it("should fire SetEvents.CHANGE", function () {
+        it("should fire CollectionEvents.CHANGE", function () {
             eventSet.clear();
             changeListener.calls.reset();
             eventSet.add(animal1);
@@ -514,13 +315,13 @@ describe("TSCore.Data.Set", function () {
             basicSet.addMany([animal1, animal2]);
             expect(basicSet.length).toBe(2);
         });
-        it("should fire SetEvents.ADD", function () {
+        it("should fire CollectionEvents.ADD", function () {
             eventSet.clear();
             addListener.calls.reset();
             eventSet.addMany([animal1, animal2]);
             expect(addListener).toHaveBeenCalled();
         });
-        it("should fire SetEvents.CHANGE", function () {
+        it("should fire CollectionEvents.CHANGE", function () {
             eventSet.clear();
             changeListener.calls.reset();
             eventSet.addMany([animal1, animal2]);
@@ -537,21 +338,21 @@ describe("TSCore.Data.Set", function () {
         });
         it("should decrease the size of the instance", function () {
             var animals = [animal1, animal2, animal3, animal4];
-            var dataSet = new TSCore.Data.Set(animals);
+            var dataSet = new TSCore.Data.Collection(animals);
             for (var i = 0; i < animals.length; i++) {
                 var animal = animals[i];
                 dataSet.remove(animal);
                 expect(dataSet.length).toBe(animals.length - (i + 1));
             }
         });
-        it("should fire SetEvents.REMOVE", function () {
+        it("should fire CollectionEvents.REMOVE", function () {
             eventSet.clear();
             eventSet.add(animal1);
             removeListener.calls.reset();
             eventSet.remove(animal1);
             expect(removeListener).toHaveBeenCalled();
         });
-        it("should fire SetEvents.CHANGE", function () {
+        it("should fire CollectionEvents.CHANGE", function () {
             eventSet.clear();
             eventSet.addMany([animal1, animal2, animal3]);
             changeListener.calls.reset();
@@ -569,14 +370,14 @@ describe("TSCore.Data.Set", function () {
             basicSet.removeMany([animal3]);
             expect(basicSet.length).toBe(0);
         });
-        it("should fire SetEvents.REMOVE", function () {
+        it("should fire CollectionEvents.REMOVE", function () {
             eventSet.clear();
             eventSet.addMany([animal1, animal2, animal3]);
             removeListener.calls.reset();
             eventSet.removeMany([animal1, animal2]);
             expect(removeListener).toHaveBeenCalled();
         });
-        it("should fire SetEvents.CHANGE", function () {
+        it("should fire CollectionEvents.CHANGE", function () {
             eventSet.clear();
             eventSet.addMany([animal1, animal2, animal3]);
             changeListener.calls.reset();
@@ -605,7 +406,7 @@ describe("TSCore.Data.Set", function () {
             basicSet.removeWhere({ name: 'Fish' });
             expect(basicSet.length).toBe(3);
         });
-        it("should fire SetEvents.REMOVE", function () {
+        it("should fire CollectionEvents.REMOVE", function () {
             eventSet.clear();
             eventSet.addMany([{
                     id: 1,
@@ -618,7 +419,7 @@ describe("TSCore.Data.Set", function () {
             eventSet.removeWhere({ name: 'Fish' });
             expect(removeListener).toHaveBeenCalled();
         });
-        it("should fire SetEvents.CHANGE", function () {
+        it("should fire CollectionEvents.CHANGE", function () {
             eventSet.clear();
             eventSet.addMany([{
                     id: 1,
@@ -647,7 +448,7 @@ describe("TSCore.Data.Set", function () {
     });
     describe("count()", function () {
         it("should alias magic getter for this._data.length", function () {
-            var dataSet = new TSCore.Data.Set();
+            var dataSet = new TSCore.Data.Collection();
             dataSet.add(animal1);
             expect(dataSet.length).toBe(1);
             expect(dataSet.count()).toBe(1);
@@ -812,17 +613,17 @@ describe("TSCore.Data.Set", function () {
     });
     describe("constructor()", function () {
         it("should increase the size of the instance when passing data", function () {
-            var dataSet = new TSCore.Data.Set([animal1, animal2]);
+            var dataSet = new TSCore.Data.Collection([animal1, animal2]);
             expect(dataSet.length).toBe(2);
         });
         it("size of set should be zero when not passing data", function () {
-            var dataSet = new TSCore.Data.Set();
+            var dataSet = new TSCore.Data.Collection();
             expect(dataSet.length).toBe(0);
         });
     });
     describe("clear()", function () {
         it("set should been empty when called", function () {
-            var dataSet = new TSCore.Data.Set([animal1, animal2, animal3, animal4]);
+            var dataSet = new TSCore.Data.Collection([animal1, animal2, animal3, animal4]);
             expect(dataSet.isEmpty()).toBe(false);
             dataSet.clear();
             expect(dataSet.isEmpty()).toBe(true);
@@ -830,7 +631,188 @@ describe("TSCore.Data.Set", function () {
     });
 });
 /// <reference path="../TSCore.spec.ts" />
-describe("TSCore.Data.SortedCollection", function () {
+describe("TSCore.Data.List", function () {
+    var animal1 = {
+        id: 1,
+        name: 'Cat'
+    };
+    var animal2 = {
+        id: 2,
+        name: 'Dog'
+    };
+    var animal3 = {
+        id: 3,
+        name: 'Horse'
+    };
+    var animal4 = {
+        id: 4,
+        name: 'Hippo'
+    };
+    var collection = new TSCore.Data.List();
+    var addListener = jasmine.createSpy("ListEvents.ADD listener");
+    collection.events.on(TSCore.Data.List.Events.ADD, addListener);
+    var changeListener = jasmine.createSpy("ListEvents.CHANGE listener");
+    collection.events.on(TSCore.Data.List.Events.CHANGE, changeListener);
+    var removeListener = jasmine.createSpy("ListEvents.REMOVE listener");
+    collection.events.on(TSCore.Data.List.Events.REMOVE, removeListener);
+    var replaceListener = jasmine.createSpy("ListEvents.REPLACE listener");
+    collection.events.on(TSCore.Data.List.Events.REPLACE, replaceListener);
+    var clearListener = jasmine.createSpy("ListEvents.CLEAR listener");
+    collection.events.on(TSCore.Data.List.Events.CLEAR, clearListener);
+    beforeEach(function () {
+        collection.clear();
+        addListener.calls.reset();
+        changeListener.calls.reset();
+        removeListener.calls.reset();
+        replaceListener.calls.reset();
+        clearListener.calls.reset();
+    });
+    describe("prepend()", function () {
+        it("should prepend the list with given item", function () {
+            collection.addMany([animal2, animal3, animal4]);
+            collection.prepend(animal1);
+            expect(collection.first()).toEqual(animal1);
+            collection.prepend(animal3);
+            expect(collection.first()).toEqual(animal3);
+        });
+        it("should fire ListEvents.ADD containing the prepended item", function () {
+            collection.prepend(animal1);
+            expect(addListener).toHaveBeenCalled();
+            expect(addListener.calls.mostRecent().args[0].params.items[0]).toEqual(animal1);
+            collection.prepend(animal2);
+            expect(addListener.calls.count()).toBe(2);
+        });
+        it("should fire ListEvents.CHANGE", function () {
+            collection.prepend(animal1);
+            expect(changeListener).toHaveBeenCalled();
+            collection.prepend(animal2);
+            expect(changeListener.calls.count()).toBe(2);
+        });
+    });
+    describe("prependMany()", function () {
+        it("should prepend the list with given items", function () {
+            collection.addMany([animal4]);
+            collection.prependMany([animal3, animal2, animal1]);
+            expect(collection.get(0)).toEqual(animal3);
+            expect(collection.get(1)).toEqual(animal2);
+            expect(collection.get(2)).toEqual(animal1);
+        });
+        it("should fire ListEvents.ADD containing the prepended item", function () {
+            var animals = [animal1, animal2, animal3];
+            collection.prepend(animal4);
+            collection.prependMany(animals);
+            expect(addListener).toHaveBeenCalled();
+            expect(addListener.calls.mostRecent().args[0].params.items).toEqual(animals);
+        });
+        it("should fire ListEvents.CHANGE exactly once", function () {
+            var animals = [animal1, animal2, animal3];
+            collection.prependMany(animals);
+            expect(changeListener).toHaveBeenCalled();
+            collection.prepend(animal2);
+            expect(changeListener.calls.count()).toBe(2);
+        });
+    });
+    describe("insert()", function () {
+        it("should insert given item at given index", function () {
+            collection.addMany([animal1, animal2, animal3]);
+            collection.insert(animal4, 2);
+            expect(collection.get(2)).toEqual(animal4);
+        });
+        it("should fire ListEvents.ADD containing the inserted item", function () {
+            collection.addMany([animal2, animal3, animal4]);
+            collection.insert(animal1, 2);
+            expect(addListener).toHaveBeenCalled();
+            expect(addListener.calls.mostRecent().args[0].params.items[0]).toEqual(animal1);
+        });
+        it("should fire ListEvents.CHANGE", function () {
+            var animals = [animal1, animal2, animal3];
+            collection.prependMany(animals);
+            expect(changeListener).toHaveBeenCalled();
+            collection.insert(animal2, 2);
+            expect(changeListener.calls.count()).toBe(2);
+        });
+    });
+    describe("replaceItem()", function () {
+        it("should replace a given item for another given item", function () {
+            collection.addMany([animal1, animal4, animal3]);
+            collection.replaceItem(animal4, animal2);
+            expect(collection.contains(animal2)).toBe(true);
+            expect(collection.get(1)).toEqual(animal2);
+        });
+        it("should fire ListEvents.REPLACE containing the source and the replacement", function () {
+            collection.addMany([animal1, animal3]);
+            expect(replaceListener).not.toHaveBeenCalled();
+            collection.replaceItem(animal3, animal2);
+            expect(replaceListener).toHaveBeenCalled();
+            expect(replaceListener.calls.mostRecent().args[0].params.source).toEqual(animal3);
+            expect(replaceListener.calls.mostRecent().args[0].params.replacement).toEqual(animal2);
+        });
+        it("should fire ListEvents.CHANGE", function () {
+            collection.addMany([animal1, animal3]);
+            changeListener.calls.reset();
+            expect(changeListener).not.toHaveBeenCalled();
+            collection.replaceItem(animal3, animal2);
+            expect(changeListener).toHaveBeenCalled();
+        });
+    });
+    describe("replace()", function () {
+        it("should replace given item at given index in the collection", function () {
+            collection.addMany([animal1, animal2]);
+            collection.replace(1, animal3);
+            expect(collection.get(1)).toEqual(animal3);
+        });
+        it("should not allow replacing an empty index", function () {
+            collection.addMany([animal1, animal2]);
+            collection.replace(20, animal4);
+            expect(collection.get(20)).not.toEqual(animal4);
+        });
+        it("should fire ListEvents.REPLACE containing the source and the replacement", function () {
+            collection.addMany([animal1, animal2]);
+            collection.replace(0, animal3);
+            expect(replaceListener).toHaveBeenCalled();
+            expect(replaceListener.calls.mostRecent().args[0].params.source).toEqual(animal1);
+            expect(replaceListener.calls.mostRecent().args[0].params.replacement).toEqual(animal3);
+        });
+        it("should fire ListEvents.CHANGE", function () {
+            collection.addMany([animal1, animal2]);
+            changeListener.calls.reset();
+            expect(changeListener).not.toHaveBeenCalled();
+            collection.replace(0, animal3);
+            expect(changeListener).toHaveBeenCalled();
+        });
+    });
+    describe("first()", function () {
+        it("should return the first item out of the list", function () {
+            collection.addMany([animal1, animal2, animal3]);
+            expect(collection.first()).toEqual(animal1);
+        });
+    });
+    describe("last()", function () {
+        it("should return the last item out of the list", function () {
+            collection.addMany([animal1, animal2, animal3]);
+            expect(collection.last()).toEqual(animal3);
+        });
+    });
+    describe("get()", function () {
+        it("should return the item in list at the given index", function () {
+            collection.addMany([animal1, animal2, animal3]);
+            expect(collection.get(1)).toEqual(animal2);
+        });
+    });
+    describe("indexOf()", function () {
+        it("should return the index of given item in list", function () {
+            collection.addMany([animal1, animal2, animal3]);
+            expect(collection.indexOf(animal3)).toBe(2);
+        });
+    });
+    describe("clear()", function () {
+        it("should fire ListEvents.CLEAR", function () {
+            collection.addMany([animal1, animal2, animal3]);
+            expect(clearListener).not.toHaveBeenCalled();
+            collection.clear();
+            expect(clearListener).toHaveBeenCalled();
+        });
+    });
 });
 /// <reference path="../TSCore.spec.ts" />
 jasmine.clock().install();
