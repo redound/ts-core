@@ -128,11 +128,13 @@ declare module TSCore.Data {
         contains(key: K): boolean;
         containsValue(value: V): boolean;
         each(iterator: IDictionaryIterator<K, V>): void;
-        values(): K[];
+        values(): V[];
         keys(): K[];
         count(): number;
         isEmpty(): boolean;
         clear(): void;
+        toObject(): {};
+        toArray(): V[];
         protected _getPair(key: K): IKeyValuePair;
         protected _getKeyString(key: K): string;
         protected _assignUniqueID(object: Object): void;
@@ -278,6 +280,9 @@ declare module TSCore.Data {
     }
 }
 declare module TSCore.Data {
+    interface IModelInterface {
+        new (data: {}): Model;
+    }
     class Model {
         protected _defaults: {};
         protected _whitelist: string[];
@@ -289,9 +294,6 @@ declare module TSCore.Data {
     }
 }
 declare module TSCore.Data {
-    interface IModelInterface {
-        new (data: {}): Model;
-    }
     class ModelCollection<T extends Model> extends Collection<T> {
         protected _primaryKey: string;
         protected _modelClass: IModelInterface;
@@ -301,6 +303,18 @@ declare module TSCore.Data {
         contains(item: T): boolean;
         toArray(): any[];
         protected _instantiateModel(data: {}): T;
+    }
+}
+declare module TSCore.Data {
+    class ModelDictionary<K, V extends Model> extends Dictionary<K, V> {
+        protected _primaryKey: string;
+        protected _modelClass: IModelInterface;
+        constructor(modelClass: IModelInterface, primaryKey?: string, data?: IDictionaryData);
+        addManyData(data: {}[]): void;
+        addData(data: {}): void;
+        toArray(): any[];
+        toObject(): {};
+        protected _instantiateModel(data: {}): V;
     }
 }
 declare module TSCore.Data {

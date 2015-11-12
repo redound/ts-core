@@ -2,10 +2,6 @@
 
 module TSCore.Data {
 
-    export interface IModelInterface {
-        new (data: {}): Model;
-    }
-
     export class ModelCollection<T extends Model> extends Collection<T> {
 
         protected _primaryKey:string;

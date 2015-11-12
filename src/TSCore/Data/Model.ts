@@ -1,5 +1,9 @@
 module TSCore.Data {
 
+    export interface IModelInterface {
+        new (data: {}): Model;
+    }
+
     export class Model {
 
         protected _defaults: {};

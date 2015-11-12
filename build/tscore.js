@@ -435,6 +435,16 @@ var TSCore;
                 this.events.trigger(TSCore.Data.Dictionary.Events.CLEAR);
                 this.events.trigger(TSCore.Data.Dictionary.Events.CHANGE);
             };
+            Dictionary.prototype.toObject = function () {
+                var result = {};
+                _.each(_.values(this._data), function (item) {
+                    result[item.key] = item.value;
+                });
+                return result;
+            };
+            Dictionary.prototype.toArray = function () {
+                return this.values();
+            };
             Dictionary.prototype._getPair = function (key) {
                 var keyString = this._getKeyString(key);
                 var foundPair = null;
@@ -874,6 +884,45 @@ var TSCore;
             return ModelCollection;
         })(Data.Collection);
         Data.ModelCollection = ModelCollection;
+    })(Data = TSCore.Data || (TSCore.Data = {}));
+})(TSCore || (TSCore = {}));
+/// <reference path="./Collection.ts" />
+var TSCore;
+(function (TSCore) {
+    var Data;
+    (function (Data) {
+        var ModelDictionary = (function (_super) {
+            __extends(ModelDictionary, _super);
+            function ModelDictionary(modelClass, primaryKey, data) {
+                this._modelClass = modelClass;
+                this._primaryKey = primaryKey || 'id';
+                _super.call(this, data);
+            }
+            ModelDictionary.prototype.addManyData = function (data) {
+                var _this = this;
+                _.each(data, function (item) {
+                    _this.set(data[_this._primaryKey], _this._instantiateModel(item));
+                });
+            };
+            ModelDictionary.prototype.addData = function (data) {
+                this.set(data[this._primaryKey], this._instantiateModel(data));
+            };
+            ModelDictionary.prototype.toArray = function () {
+                return _.map(_super.prototype.toArray.call(this), function (item) {
+                    return item.toObject();
+                });
+            };
+            ModelDictionary.prototype.toObject = function () {
+                return _.mapObject(_super.prototype.toObject, function (item) {
+                    return item.toObject();
+                });
+            };
+            ModelDictionary.prototype._instantiateModel = function (data) {
+                return new this._modelClass(data);
+            };
+            return ModelDictionary;
+        })(Data.Dictionary);
+        Data.ModelDictionary = ModelDictionary;
     })(Data = TSCore.Data || (TSCore.Data = {}));
 })(TSCore || (TSCore = {}));
 var TSCore;
@@ -1818,6 +1867,7 @@ var TSCore;
 /// <reference path="TSCore/Data/List.ts" />
 /// <reference path="TSCore/Data/Model.ts" />
 /// <reference path="TSCore/Data/ModelCollection.ts" />
+/// <reference path="TSCore/Data/ModelDictionary.ts" />
 /// <reference path="TSCore/Data/SortedList.ts" />
 /// <reference path="TSCore/Data/Store.ts" />
 /// <reference path="TSCore/DateTime/DateFormatter.ts" />

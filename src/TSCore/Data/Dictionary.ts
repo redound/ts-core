@@ -135,9 +135,9 @@ module TSCore.Data {
         /**
          * Get all values in dictionary.
          *
-         * @returns {any[]}
+         * @returns {V[]}
          */
-        public values(): K[] {
+        public values(): V[] {
             return _.pluck(_.values(this._data), 'value');
         }
 
@@ -145,7 +145,7 @@ module TSCore.Data {
          * TODO: Return right keys.
          * Get all keys in dictionary.
          *
-         * @returns {any[]}
+         * @returns {K[]}
          */
         public keys(): K[] {
             return _.pluck(_.values(this._data), 'key');
@@ -182,6 +182,22 @@ module TSCore.Data {
             this.events.trigger(TSCore.Data.Dictionary.Events.CLEAR);
             this.events.trigger(TSCore.Data.Dictionary.Events.CHANGE);
         }
+
+        public toObject(): {} {
+
+            var result = {};
+
+            _.each(_.values(this._data), (item: IKeyValuePair) => {
+                result[item.key] = item.value;
+            });
+
+            return result;
+        }
+
+        public toArray(): V[] {
+            return this.values();
+        }
+
 
         /**
          * Get pair for key in dictionary.

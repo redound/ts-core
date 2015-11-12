@@ -12,6 +12,7 @@
 /// <reference path="TSCore/Data/List.ts" />
 /// <reference path="TSCore/Data/Model.ts" />
 /// <reference path="TSCore/Data/ModelCollection.ts" />
+/// <reference path="TSCore/Data/ModelDictionary.ts" />
 /// <reference path="TSCore/Data/SortedList.ts" />
 /// <reference path="TSCore/Data/Store.ts" />
 /// <reference path="TSCore/DateTime/DateFormatter.ts" />
