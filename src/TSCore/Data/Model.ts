@@ -1,18 +1,48 @@
 
 module TSCore.Data {
 
-    export class Model {
+    export abstract class Model {
 
-        defaults = {};
+        protected _defaults = {};
+        protected _whitelist = [];
 
-        constructor(attrs) {
+        constructor(data?:{}) {
 
-            _.each(attrs, (value, key) => {
+            _.defaults(this, this._defaults);
 
-                if (this.defaults[key] !== undefined) {
-                    this[key] = value;
+            if(data) {
+               this.assign(data);
+            }
+        }
+
+        public assign(data?: any) {
+
+            _.each(this._whitelist, (attr: string) => {
+                this[attr] = !_.isUndefined(data[attr]) ? data[attr] : this[attr] || null;
+            });
+
+            return this;
+        }
+
+        public toObject() {
+
+            var result = {};
+
+            _.each(this, function(value, key){
+
+                if(key.slice(0, '_'.length) != '_'){
+
+                    var parsedValue = value;
+
+                    if(value instanceof Model){
+                        parsedValue = (<Model>value).toObject();
+                    }
+
+                    result[key] = parsedValue;
                 }
             });
+
+            return result;
         }
     }
 }

@@ -1,18 +1,47 @@
-/// <reference path="../Events/EventEmitter.ts" />
+/// <reference path="./Set.ts" />
 
 module TSCore.Data {
 
-    export class Set<T> {
+    export class SortedList<T> {
 
+        protected _sortPredicate;
         protected _data:T[];
         public events: TSCore.Events.EventEmitter = new TSCore.Events.EventEmitter();
 
-        constructor(data?:T[]){
-            this._data = data || [];
+
+        /**
+         * Magic getter for sortPredicate.
+         *
+         * @returns {any}
+         */
+        public get sortPredicate() {
+            return this._sortPredicate;
+        }
+
+        /** Magic setter for sortPredicate
+         *
+         * @param predicate Predicate to set.
+         */
+        public set sortPredicate(predicate) {
+            this._sortPredicate = predicate;
+            this.sort();
         }
 
         /**
-         * Get length of set. (same as method count)
+         * Constructor function
+         * @param data Data to populate list of instance with.
+         * @param sortPredicate Predicate to sort list to.
+         */
+        constructor(data:T[], sortPredicate) {
+
+            this._data = data || [];
+            this._sortPredicate = sortPredicate;
+
+            this.sort();
+        }
+
+        /**
+         * Get length of List. (same as method count)
          *
          * @returns {number}
          */
@@ -21,7 +50,7 @@ module TSCore.Data {
         }
 
         /**
-         * Get count of set. (same as property length)
+         * Get count of List. (same as property length)
          *
          * @returns {number}
          */
@@ -30,55 +59,59 @@ module TSCore.Data {
         }
 
         /**
-         * Add (push) item to set.
+         * Add (push) item to List.
          *
          * @param item Item to be added.
          */
         public add(item:T) {
 
             this._data.push(item);
+            this.sort();
 
-            this.events.trigger(TSCore.Data.Set.Events.ADD, { items: [item] });
-            this.events.trigger(TSCore.Data.Set.Events.CHANGE);
+            this.events.trigger(TSCore.Data.SortedList.Events.ADD, { items: [item] });
+            this.events.trigger(TSCore.Data.SortedList.Events.CHANGE);
         }
 
         /**
-         * Add multiple (concat) items to set.
+         * Add multiple (concat) items to List.
          *
          * @param items Items to be added.
          */
         public addMany(items:T[] = []) {
 
             this._data = this._data.concat(items);
+            this.sort();
 
-            this.events.trigger(TSCore.Data.Set.Events.ADD, { items: items });
-            this.events.trigger(TSCore.Data.Set.Events.CHANGE);
+            this.events.trigger(TSCore.Data.SortedList.Events.ADD, { items: items });
+            this.events.trigger(TSCore.Data.SortedList.Events.CHANGE);
         }
 
         /**
-         * Remove item from set.
+         * Remove item from List.
          *
          * @param item Item to be removed.
          */
         public remove(item: T) {
 
             this._data = _.without(this._data, item);
+            this.sort();
 
-            this.events.trigger(TSCore.Data.Set.Events.REMOVE, { items: [item] });
-            this.events.trigger(TSCore.Data.Set.Events.CHANGE);
+            this.events.trigger(TSCore.Data.SortedList.Events.REMOVE, { items: [item] });
+            this.events.trigger(TSCore.Data.SortedList.Events.CHANGE);
         }
 
         /**
-         * Remove multiple items from set.
+         * Remove multiple items from List.
          *
          * @param items Items to be removed.
          */
         public removeMany(items: T[]) {
 
             this._data = _.difference(this._data, items);
+            this.sort();
 
-            this.events.trigger(TSCore.Data.Set.Events.REMOVE, { items: items });
-            this.events.trigger(TSCore.Data.Set.Events.CHANGE);
+            this.events.trigger(TSCore.Data.SortedList.Events.REMOVE, { items: items });
+            this.events.trigger(TSCore.Data.SortedList.Events.CHANGE);
         }
 
         /**
@@ -91,15 +124,13 @@ module TSCore.Data {
         }
 
         /**
-         * Replace an item with another item in set
+         * Replace an item with another item.
          *
-         * TODO: Discussion - Should there be a recursiveReplaceItem() that will replace duplicates?
-         *
-         * @param source    The item that gets replaced inside the set.
-         * @param replacement The item that replaces the source item.
-         * @returns {any}
+         * @param source        The item that gets replaced inside the list.
+         * @param replacement   The item that replaces the source item.
+         * @returns {T}
          */
-        public replaceItem(source: T, replacement: T): T {
+        public replaceItem(source:T, replacement:T): T {
 
             var index = _.indexOf(this._data, source);
 
@@ -110,26 +141,28 @@ module TSCore.Data {
             var currentItem = this._data[index];
             this._data[index] = replacement;
 
-            this.events.trigger(TSCore.Data.Set.Events.REPLACE, { source: source, replacement: replacement });
-            this.events.trigger(TSCore.Data.Set.Events.CHANGE);
+            this.sort();
+
+            this.events.trigger(TSCore.Data.SortedList.Events.REPLACE, { source: source, replacement: replacement });
+            this.events.trigger(TSCore.Data.SortedList.Events.CHANGE);
 
             return currentItem;
         }
 
         /**
-         * Clears the set.
+         * Clears the List.
          */
         public clear() {
 
             this._data = [];
 
-            this.events.trigger(TSCore.Data.Set.Events.REMOVE, { items: this.toArray() });
-            this.events.trigger(TSCore.Data.Set.Events.CLEAR);
-            this.events.trigger(TSCore.Data.Set.Events.CHANGE);
+            this.events.trigger(TSCore.Data.SortedList.Events.REMOVE, { items: this.toArray() });
+            this.events.trigger(TSCore.Data.SortedList.Events.CLEAR);
+            this.events.trigger(TSCore.Data.SortedList.Events.CHANGE);
         }
 
         /**
-         * Iterates over all item in set, yielding each in turn to an iteratee function.
+         * Iterates over all item in List, yielding each in turn to an iteratee function.
          *
          * @param iterator Iteratee function.
          */
@@ -149,12 +182,49 @@ module TSCore.Data {
         }
 
         /**
-         * Check whether the set is empty.
+         * Check whether the List is empty.
          *
          * @returns {boolean}
          */
         public isEmpty(): boolean {
             return this.count() === 0;
+        }
+
+        /**
+         * Get the first item from list.
+         *
+         * @returns {T}
+         */
+        public first(): T {
+            return _.first(this._data);
+        }
+
+        /**
+         * Get the last item from list.
+         * @returns {T}
+         */
+        public last(): T {
+            return _.last(this._data);
+        }
+
+        /**
+         * Get an item at a specified index in list.
+         *
+         * @param index Index of the item to be returned.
+         * @returns {T}
+         */
+        public get(index:number): T {
+            return this._data[index];
+        }
+
+        /**
+         * Get the index of an item in list.
+         *
+         * @param item Item to return index for.
+         * @returns {number}
+         */
+        public indexOf(item:T): number {
+            return _.indexOf(this._data, item);
         }
 
         /**
@@ -182,7 +252,7 @@ module TSCore.Data {
          * of the key-value pairs listed in properties.
          *
          * ````js
-         * collection.where({author: "Shakespeare", year: 1611});
+         * list.where({author: "Shakespeare", year: 1611});
          *     => [{title: "Cymbeline", author: "Shakespeare", year: 1611},
          *         {title: "The Tempest", author: "Shakespeare", year: 1611}]
          * ````
@@ -205,7 +275,7 @@ module TSCore.Data {
         }
 
         /**
-         * Check if set contains item.
+         * Check if List contains item.
          *
          * @param item Item to check against.
          * @returns {boolean}
@@ -215,25 +285,45 @@ module TSCore.Data {
         }
 
         /**
-         * Convert set to array.
+         * Convert List to array.
          *
          * @returns {any[]}
          */
         public toArray():T[] {
             return _.clone(this._data);
         }
+
+
+        /**
+         * Sort list.
+         *
+         * @returns {void}
+         */
+        public sort(): void {
+
+            if(this._sortPredicate === null || this._sortPredicate === undefined) {
+                return;
+            }
+
+            this._data = _.sortBy(this._data, this._sortPredicate);
+
+            this.events.trigger(TSCore.Data.SortedList.Events.SORT);
+            this.events.trigger(TSCore.Data.SortedList.Events.CHANGE);
+        }
     }
 
-    export module Set.Events {
+    export module SortedList.Events {
 
         export const ADD:string = "add";
         export const CHANGE:string = "change";
         export const REMOVE:string = "remove";
         export const REPLACE:string = "replace";
         export const CLEAR:string = "clear";
+        export const SORT:string = "sort";
 
         export interface IChangeParams<T> {}
         export interface IClearParams<T> {}
+        export interface ISortParams<T> {}
 
         export interface IAddParams<T> {
             items: T[]
