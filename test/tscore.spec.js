@@ -1,58 +1,4 @@
 /// <reference path="../../build/tscore.d.ts" /> 
-/// <reference path="../TSCore.spec.ts" />
-describe("TSCore.Auth.Manager", function () {
-    describe("addMethod()", function () {
-        it("should add an auth method", function () {
-            var authManager = new TSCore.Auth.Manager();
-            authManager.addMethod('email', new TSCore.Auth.Method());
-            console.log('authManager', authManager);
-        });
-    });
-});
-/// <reference path="../TSCore.spec.ts" />
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
-};
-var Mocks;
-(function (Mocks) {
-    var Bootstrap = (function (_super) {
-        __extends(Bootstrap, _super);
-        function Bootstrap() {
-            _super.call(this);
-            this.configSpy = jasmine.createSpy();
-            this.loggerSpy = jasmine.createSpy();
-            this.authManagerSpy = jasmine.createSpy();
-        }
-        Bootstrap.prototype._initConfig = function () {
-            this.configSpy();
-        };
-        Bootstrap.prototype._initLogger = function () {
-            this.loggerSpy();
-        };
-        Bootstrap.prototype._initAuthManager = function () {
-            this.authManagerSpy();
-        };
-        return Bootstrap;
-    })(TSCore.Bootstrap);
-    Mocks.Bootstrap = Bootstrap;
-})(Mocks || (Mocks = {}));
-/// <reference path="TSCore.spec.ts" />
-/// <reference path="./Mocks/Bootstrap.ts" />
-describe("TSCore.Bootstrap", function () {
-    it("should call each method starting with '_init'", function () {
-        var bootstrap = new Mocks.Bootstrap();
-        expect(bootstrap.configSpy).not.toHaveBeenCalled();
-        expect(bootstrap.loggerSpy).not.toHaveBeenCalled();
-        expect(bootstrap.authManagerSpy).not.toHaveBeenCalled();
-        bootstrap.init();
-        expect(bootstrap.configSpy).toHaveBeenCalled();
-        expect(bootstrap.loggerSpy).toHaveBeenCalled();
-        expect(bootstrap.authManagerSpy).toHaveBeenCalled();
-    });
-});
 /// <reference path="TSCore.spec.ts" />
 describe("TSCore.Config", function () {
     var config = new TSCore.Config();
@@ -998,29 +944,26 @@ describe("TSCore.Geometry.Size", function () {
 /// <reference path="../../TSCore.spec.ts" />
 describe("TSCore.Logger.Stream.Console", function () {
     var logSpy = jasmine.createSpy('logSpy');
-    var debugSpy = jasmine.createSpy('debugSpy');
     var infoSpy = jasmine.createSpy('infoSpy');
     var warnSpy = jasmine.createSpy('warnSpy');
     var errorSpy = jasmine.createSpy('errorSpy');
     var fakeConsole = {
         log: logSpy,
-        debug: debugSpy,
         info: infoSpy,
         warn: warnSpy,
         error: errorSpy
     };
     beforeEach(function () {
         logSpy.calls.reset();
-        debugSpy.calls.reset();
         infoSpy.calls.reset();
         warnSpy.calls.reset();
         errorSpy.calls.reset();
     });
     describe("exec()", function () {
         it("should not execute when level is higher", function () {
-            var consoleStream = new TSCore.Logger.Stream.Console(fakeConsole);
+            var consoleStream = new TSCore.Logger.Stream.Console(fakeConsole, false);
             var logger = new TSCore.Logger.Logger();
-            logger.setStream('console', consoleStream);
+            logger.addStream('console', consoleStream);
             logger.error('Test error');
             expect(errorSpy).toHaveBeenCalled();
             expect(errorSpy.calls.mostRecent().args[0]).toBe('Test error');

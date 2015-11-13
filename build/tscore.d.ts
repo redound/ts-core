@@ -23,79 +23,6 @@ declare module TSCore.Events {
         reset(): TSCore.Events.EventEmitter;
     }
 }
-declare module TSCore.Auth {
-    interface IIdentity {
-    }
-    interface IAttemptError {
-        message: string;
-    }
-    interface ILoginAttemptError extends IAttemptError {
-    }
-    interface ILogoutAttemptError extends IAttemptError {
-    }
-    interface ILoginAttempt {
-        (error: ILoginAttemptError, identity: IIdentity): any;
-    }
-    interface ILogoutAttempt {
-        (error?: ILogoutAttemptError): any;
-    }
-    class Manager {
-        protected _authMethods: TSCore.Data.Dictionary<any, Method>;
-        protected sessions: TSCore.Data.Dictionary<any, Session>;
-        events: TSCore.Events.EventEmitter;
-        login(method: any, credentials: {}, done?: ILoginAttempt): void;
-        private _setSessionForMethod(method, identity);
-        logout(method: any, done?: ILogoutAttempt): void;
-        addMethod(method: any, authMethod: Method): TSCore.Auth.Manager;
-        removeMethod(method: any): TSCore.Auth.Manager;
-        hasSessions(): boolean;
-    }
-    module Manager.Events {
-        const LOGIN_ATTEMPT_FAIL: string;
-        const LOGIN_ATTEMPT_SUCCESS: string;
-        const LOGIN: string;
-        const LOGOUT: string;
-        interface ILoginAttemptFailParams<T> {
-            credentials: T;
-            method: string;
-        }
-        interface ILoginAttemptSuccessParams<T> {
-            credentials: T;
-            method: string;
-            session: Session;
-        }
-        interface ILoginParams<T> {
-            method: string;
-            session: Session;
-        }
-        interface ILogoutParams<T> {
-            method: string;
-        }
-    }
-}
-declare module TSCore.Auth {
-    class Method {
-        static name: string;
-        login(credentials: any, done: ILoginAttempt): void;
-        logout(session: TSCore.Auth.Session, done: ILogoutAttempt): void;
-    }
-}
-declare module TSCore.Auth {
-    class Session {
-        protected _method: string;
-        protected _identity: IIdentity;
-        constructor(_method?: string, _identity?: IIdentity);
-        getIdentity(): TSCore.Auth.IIdentity;
-        setIdentity(identity: IIdentity): TSCore.Auth.Session;
-        getMethod(): string;
-        setMethod(method: string): TSCore.Auth.Session;
-    }
-}
-declare module TSCore {
-    class Bootstrap {
-        init(): void;
-    }
-}
 declare module TSCore {
     class Config extends Events.EventEmitter {
         private _cache;
@@ -519,47 +446,46 @@ declare module TSCore.Text {
 }
 declare module TSCore.Logger {
     interface IStream {
-        level: LogLevel;
         exec(options: ILogOptions): any;
     }
 }
-declare module TSCore {
-    module Logger {
-        enum LogLevel {
-            TRACE = 0,
-            DEBUG = 1,
-            INFO = 2,
-            WARN = 3,
-            ERROR = 4,
-            FATAL = 5,
-        }
-        interface IExecOptions {
-            level: LogLevel;
-            args: any[];
-        }
-        interface ILogOptions {
-            level: LogLevel;
-            args: any[];
-            time: number;
-        }
-        class Logger {
-            private _streams;
-            constructor();
-            setStream(key: string, logger: TSCore.Logger.IStream): void;
-            unsetStream(key: string): void;
-            trace(...args: any[]): void;
-            debug(...args: any[]): void;
-            info(...args: any[]): void;
-            warn(...args: any[]): void;
-            error(...args: any[]): void;
-            fatal(...args: any[]): void;
-            private _exec(options);
-        }
+declare module TSCore.Logger {
+    enum LogLevel {
+        LOG = 0,
+        INFO = 1,
+        WARN = 2,
+        ERROR = 3,
+        FATAL = 4,
+    }
+    interface ILogOptions {
+        level: LogLevel;
+        tag: string;
+        args: any[];
+        time: number;
+    }
+    interface IStreamEntry {
+        level: LogLevel;
+        stream: TSCore.Logger.IStream;
+    }
+    class Logger {
+        protected _streams: TSCore.Data.Dictionary<string, IStreamEntry>;
+        protected _parent: Logger;
+        protected _tag: string;
+        constructor(parent?: Logger, tag?: string);
+        child(tag: string): Logger;
+        addStream(key: string, stream: TSCore.Logger.IStream, level?: LogLevel): void;
+        removeStream(key: string): void;
+        getStreams(): TSCore.Data.Dictionary<string, IStreamEntry>;
+        log(...args: any[]): void;
+        info(...args: any[]): void;
+        warn(...args: any[]): void;
+        error(...args: any[]): void;
+        fatal(...args: any[]): void;
+        private _exec(level, args);
     }
 }
 declare module TSCore.Logger.Stream {
     interface IConsole {
-        debug(): any;
         log(): any;
         info(): any;
         warn(): any;
@@ -567,15 +493,11 @@ declare module TSCore.Logger.Stream {
     }
     class Console implements TSCore.Logger.IStream {
         private _console;
-        level: TSCore.Logger.LogLevel;
-        constructor(_console: IConsole);
-        exec(options: TSCore.Logger.IExecOptions): void;
-    }
-}
-declare module TSCore.Logger.Stream {
-    class Toastr implements TSCore.Logger.IStream {
-        level: TSCore.Logger.LogLevel;
-        exec(): void;
+        colorsEnabled: boolean;
+        constructor(_console: IConsole, colorsEnabled?: boolean);
+        exec(options: TSCore.Logger.ILogOptions): void;
+        protected _generateHex(input: string): string;
+        protected _getIdealTextColor(bgColor: any): string;
     }
 }
 declare module TSCore {

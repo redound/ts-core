@@ -3,7 +3,6 @@
 module TSCore.Logger.Stream {
 
     export interface IConsole {
-        debug();
         log();
         info();
         warn();
@@ -12,25 +11,18 @@ module TSCore.Logger.Stream {
 
     export class Console implements TSCore.Logger.IStream {
 
-        public level: TSCore.Logger.LogLevel;
+        constructor(private _console: IConsole, public colorsEnabled: boolean = true) {
 
-        constructor(private _console: IConsole) {
-
-            this.level = TSCore.Logger.LogLevel.DEBUG;
         }
 
-        public exec(options: TSCore.Logger.IExecOptions) {
+        public exec(options: TSCore.Logger.ILogOptions) {
 
             var method;
 
-            if (this.level > options.level) {
-                return;
-            }
-
             switch(options.level) {
 
-                case TSCore.Logger.LogLevel.DEBUG:
-                    method = 'debug';
+                case TSCore.Logger.LogLevel.LOG:
+                    method = 'log';
                     break;
                 case TSCore.Logger.LogLevel.INFO:
                     method = 'info';
@@ -43,7 +35,51 @@ module TSCore.Logger.Stream {
                     break;
             }
 
-            this._console[method].apply(this._console, options.args || []);
+            var optionArgs = options.args || [];
+            var args = [];
+
+            if(this.colorsEnabled) {
+
+                var tagBackgroundColor = this._generateHex(options.tag);
+                var tagTextColor = this._getIdealTextColor(tagBackgroundColor);
+
+                args = ['%c ' + options.tag + ' ', 'background: ' + tagBackgroundColor + '; color: ' + tagTextColor + ';'].concat(optionArgs);
+            }
+            else {
+
+                args = [options.tag].concat(optionArgs);
+            }
+
+            this._console[method].apply(this._console, args);
+        }
+
+        protected _generateHex(input: string) {
+
+            // str to hash
+            for (var i = 0, hash = 0; i < input.length; hash = input.charCodeAt(i++) + ((hash << 5) - hash));
+
+            // int/hash to hex
+            for (var i = 0, colour = "#"; i < 3; colour += ("00" + ((hash >> i++ * 8) & 0xFF).toString(16)).slice(-2));
+
+            return colour;
+        }
+
+        protected _getIdealTextColor(bgColor) {
+
+            var r = bgColor.substring(1, 3);
+            var g = bgColor.substring(3, 5);
+            var b = bgColor.substring(5, 7);
+
+            var components = {
+                R: parseInt(r, 16),
+                G: parseInt(g, 16),
+                B: parseInt(b, 16)
+            };
+
+            var nThreshold = 105;
+            var bgDelta = (components.R * 0.299) + (components.G * 0.587) + (components.B * 0.114);
+
+            return ((255 - bgDelta) < nThreshold) ? "#000000" : "#ffffff";
         }
     }
 }

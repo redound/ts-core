@@ -22,7 +22,7 @@ module TSCore.Data {
             _.each(data, (item) => {
 
                 var instance = this._instantiateModel(item);
-                this.set(data[this._primaryKey], instance);
+                this.set(item[this._primaryKey], instance);
 
                 addedItems.push(instance);
             });

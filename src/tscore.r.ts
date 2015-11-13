@@ -1,10 +1,6 @@
 /// <reference path="../typings/tsd.d.ts" />
 
 //grunt-start
-/// <reference path="TSCore/Auth/Manager.ts" />
-/// <reference path="TSCore/Auth/Method.ts" />
-/// <reference path="TSCore/Auth/Session.ts" />
-/// <reference path="TSCore/Bootstrap.ts" />
 /// <reference path="TSCore/Config.ts" />
 /// <reference path="TSCore/DI.ts" />
 /// <reference path="TSCore/Data/Collection.ts" />
@@ -29,7 +25,6 @@
 /// <reference path="TSCore/Logger/Logger.ts" />
 /// <reference path="TSCore/Logger/Stream/Console.ts" />
 /// <reference path="TSCore/Logger/Stream/IStream.ts" />
-/// <reference path="TSCore/Logger/Stream/Toastr.ts" />
 /// <reference path="TSCore/TSCore.ts" />
 /// <reference path="TSCore/Utils/Base64.ts" />
 /// <reference path="TSCore/Utils/Random.ts" />

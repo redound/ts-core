@@ -104,161 +104,6 @@ var TSCore;
         Events.EventEmitter = EventEmitter;
     })(Events = TSCore.Events || (TSCore.Events = {}));
 })(TSCore || (TSCore = {}));
-/// <reference path="../Events/EventEmitter.ts" />
-var TSCore;
-(function (TSCore) {
-    var Auth;
-    (function (Auth) {
-        var Manager = (function () {
-            function Manager() {
-                this._authMethods = new TSCore.Data.Dictionary();
-                this.sessions = new TSCore.Data.Dictionary();
-                this.events = new TSCore.Events.EventEmitter();
-            }
-            Manager.prototype.login = function (method, credentials, done) {
-                var _this = this;
-                var authMethod = this._authMethods.get(method);
-                if (!authMethod) {
-                    done({ message: 'AuthMethod does not exist' }, null);
-                }
-                authMethod.login(credentials, function (error, identity) {
-                    if (error) {
-                        _this.events.trigger(TSCore.Auth.Manager.Events.LOGIN_ATTEMPT_FAIL, { credentials: credentials, method: method });
-                        done(error, null);
-                        return;
-                    }
-                    var session = _this._setSessionForMethod(method, identity);
-                    _this.events.trigger(TSCore.Auth.Manager.Events.LOGIN_ATTEMPT_SUCCESS, {
-                        credentials: credentials,
-                        method: method,
-                        session: session
-                    });
-                    _this.events.trigger(TSCore.Auth.Manager.Events.LOGIN, {
-                        credentials: credentials,
-                        method: method,
-                        session: session
-                    });
-                    done(error, session);
-                });
-            };
-            Manager.prototype._setSessionForMethod = function (method, identity) {
-                var session = new Auth.Session();
-                session.setIdentity(identity);
-                this.sessions.set(method, session);
-                return session;
-            };
-            Manager.prototype.logout = function (method, done) {
-                var _this = this;
-                var authMethod = this._authMethods.get(method);
-                if (!authMethod) {
-                    done({
-                        message: 'AuthMethod does not exist'
-                    });
-                }
-                var session = this.sessions.get(method);
-                if (!session) {
-                    done({
-                        message: 'Session does not exist'
-                    });
-                }
-                authMethod.logout(session, function (error) {
-                    if (!error) {
-                        _this.sessions.remove(method);
-                    }
-                    _this.events.trigger(TSCore.Auth.Manager.Events.LOGOUT, {
-                        method: method
-                    });
-                    if (done) {
-                        done(error);
-                    }
-                });
-            };
-            Manager.prototype.addMethod = function (method, authMethod) {
-                this._authMethods.set(method, authMethod);
-                return this;
-            };
-            Manager.prototype.removeMethod = function (method) {
-                this._authMethods.remove(method);
-                return this;
-            };
-            Manager.prototype.hasSessions = function () {
-                return !this.sessions.isEmpty();
-            };
-            return Manager;
-        })();
-        Auth.Manager = Manager;
-        var Manager;
-        (function (Manager) {
-            var Events;
-            (function (Events) {
-                Events.LOGIN_ATTEMPT_FAIL = "login-attempt-fail";
-                Events.LOGIN_ATTEMPT_SUCCESS = "login-attempt-success";
-                Events.LOGIN = "login";
-                Events.LOGOUT = "logout";
-            })(Events = Manager.Events || (Manager.Events = {}));
-        })(Manager = Auth.Manager || (Auth.Manager = {}));
-    })(Auth = TSCore.Auth || (TSCore.Auth = {}));
-})(TSCore || (TSCore = {}));
-var TSCore;
-(function (TSCore) {
-    var Auth;
-    (function (Auth) {
-        var Method = (function () {
-            function Method() {
-            }
-            Method.prototype.login = function (credentials, done) {
-            };
-            Method.prototype.logout = function (session, done) {
-            };
-            return Method;
-        })();
-        Auth.Method = Method;
-    })(Auth = TSCore.Auth || (TSCore.Auth = {}));
-})(TSCore || (TSCore = {}));
-var TSCore;
-(function (TSCore) {
-    var Auth;
-    (function (Auth) {
-        var Session = (function () {
-            function Session(_method, _identity) {
-                this._method = _method;
-                this._identity = _identity;
-            }
-            Session.prototype.getIdentity = function () {
-                return this._identity;
-            };
-            Session.prototype.setIdentity = function (identity) {
-                this._identity = identity;
-                return this;
-            };
-            Session.prototype.getMethod = function () {
-                return this._method;
-            };
-            Session.prototype.setMethod = function (method) {
-                this._method = method;
-                return this;
-            };
-            return Session;
-        })();
-        Auth.Session = Session;
-    })(Auth = TSCore.Auth || (TSCore.Auth = {}));
-})(TSCore || (TSCore = {}));
-var TSCore;
-(function (TSCore) {
-    var Bootstrap = (function () {
-        function Bootstrap() {
-        }
-        Bootstrap.prototype.init = function () {
-            for (var method in this) {
-                if (TSCore.Utils.Text.startsWith(method, "_init")) {
-                    this[method]();
-                }
-            }
-        };
-        return Bootstrap;
-    })();
-    TSCore.Bootstrap = Bootstrap;
-})(TSCore || (TSCore = {}));
 /// <reference path="Events/EventEmitter.ts" />
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -905,7 +750,7 @@ var TSCore;
                 var addedItems = [];
                 _.each(data, function (item) {
                     var instance = _this._instantiateModel(item);
-                    _this.set(data[_this._primaryKey], instance);
+                    _this.set(item[_this._primaryKey], instance);
                     addedItems.push(instance);
                 });
                 return addedItems;
@@ -1473,91 +1318,81 @@ var TSCore;
     var Logger;
     (function (Logger_1) {
         (function (LogLevel) {
-            LogLevel[LogLevel["TRACE"] = 0] = "TRACE";
-            LogLevel[LogLevel["DEBUG"] = 1] = "DEBUG";
-            LogLevel[LogLevel["INFO"] = 2] = "INFO";
-            LogLevel[LogLevel["WARN"] = 3] = "WARN";
-            LogLevel[LogLevel["ERROR"] = 4] = "ERROR";
-            LogLevel[LogLevel["FATAL"] = 5] = "FATAL";
+            LogLevel[LogLevel["LOG"] = 0] = "LOG";
+            LogLevel[LogLevel["INFO"] = 1] = "INFO";
+            LogLevel[LogLevel["WARN"] = 2] = "WARN";
+            LogLevel[LogLevel["ERROR"] = 3] = "ERROR";
+            LogLevel[LogLevel["FATAL"] = 4] = "FATAL";
         })(Logger_1.LogLevel || (Logger_1.LogLevel = {}));
         var LogLevel = Logger_1.LogLevel;
         var Logger = (function () {
-            function Logger() {
-                this._streams = new TSCore.Data.Dictionary();
+            function Logger(parent, tag) {
+                this._parent = parent;
+                this._tag = tag;
+                this._streams = this._parent ? this._parent.getStreams() : new TSCore.Data.Dictionary();
             }
-            Logger.prototype.setStream = function (key, logger) {
-                this._streams.set(key, logger);
+            Logger.prototype.child = function (tag) {
+                return new Logger(this, tag);
             };
-            Logger.prototype.unsetStream = function (key) {
+            Logger.prototype.addStream = function (key, stream, level) {
+                if (level === void 0) { level = LogLevel.LOG; }
+                this._streams.set(key, {
+                    level: level,
+                    stream: stream
+                });
+            };
+            Logger.prototype.removeStream = function (key) {
                 this._streams.remove(key);
             };
-            Logger.prototype.trace = function () {
-                var args = [];
-                for (var _i = 0; _i < arguments.length; _i++) {
-                    args[_i - 0] = arguments[_i];
-                }
-                this._exec({
-                    level: TSCore.Logger.LogLevel.TRACE,
-                    args: args
-                });
+            Logger.prototype.getStreams = function () {
+                return this._streams;
             };
-            Logger.prototype.debug = function () {
+            Logger.prototype.log = function () {
                 var args = [];
                 for (var _i = 0; _i < arguments.length; _i++) {
                     args[_i - 0] = arguments[_i];
                 }
-                this._exec({
-                    level: TSCore.Logger.LogLevel.DEBUG,
-                    args: args
-                });
+                this._exec(LogLevel.LOG, args);
             };
             Logger.prototype.info = function () {
                 var args = [];
                 for (var _i = 0; _i < arguments.length; _i++) {
                     args[_i - 0] = arguments[_i];
                 }
-                this._exec({
-                    level: TSCore.Logger.LogLevel.INFO,
-                    args: args
-                });
+                this._exec(LogLevel.INFO, args);
             };
             Logger.prototype.warn = function () {
                 var args = [];
                 for (var _i = 0; _i < arguments.length; _i++) {
                     args[_i - 0] = arguments[_i];
                 }
-                this._exec({
-                    level: TSCore.Logger.LogLevel.WARN,
-                    args: args
-                });
+                this._exec(LogLevel.WARN, args);
             };
             Logger.prototype.error = function () {
                 var args = [];
                 for (var _i = 0; _i < arguments.length; _i++) {
                     args[_i - 0] = arguments[_i];
                 }
-                this._exec({
-                    level: TSCore.Logger.LogLevel.ERROR,
-                    args: args
-                });
+                this._exec(LogLevel.ERROR, args);
             };
             Logger.prototype.fatal = function () {
                 var args = [];
                 for (var _i = 0; _i < arguments.length; _i++) {
                     args[_i - 0] = arguments[_i];
                 }
-                this._exec({
-                    level: TSCore.Logger.LogLevel.FATAL,
-                    args: args
-                });
+                this._exec(LogLevel.FATAL, args);
             };
-            Logger.prototype._exec = function (options) {
-                this._streams.each(function (key, stream) {
-                    stream.exec({
-                        level: options.level,
-                        args: options.args,
-                        time: new Date().getTime()
-                    });
+            Logger.prototype._exec = function (level, args) {
+                var tag = this._tag || args.shift();
+                this._streams.each(function (key, streamEntry) {
+                    if (level >= streamEntry.level) {
+                        streamEntry.stream.exec({
+                            level: level,
+                            tag: tag,
+                            args: args,
+                            time: new Date().getTime()
+                        });
+                    }
                 });
             };
             return Logger;
@@ -1573,18 +1408,16 @@ var TSCore;
         var Stream;
         (function (Stream) {
             var Console = (function () {
-                function Console(_console) {
+                function Console(_console, colorsEnabled) {
+                    if (colorsEnabled === void 0) { colorsEnabled = true; }
                     this._console = _console;
-                    this.level = TSCore.Logger.LogLevel.DEBUG;
+                    this.colorsEnabled = colorsEnabled;
                 }
                 Console.prototype.exec = function (options) {
                     var method;
-                    if (this.level > options.level) {
-                        return;
-                    }
                     switch (options.level) {
-                        case TSCore.Logger.LogLevel.DEBUG:
-                            method = 'debug';
+                        case TSCore.Logger.LogLevel.LOG:
+                            method = 'log';
                             break;
                         case TSCore.Logger.LogLevel.INFO:
                             method = 'info';
@@ -1596,29 +1429,41 @@ var TSCore;
                             method = 'error';
                             break;
                     }
-                    this._console[method].apply(this._console, options.args || []);
+                    var optionArgs = options.args || [];
+                    var args = [];
+                    if (this.colorsEnabled) {
+                        var tagBackgroundColor = this._generateHex(options.tag);
+                        var tagTextColor = this._getIdealTextColor(tagBackgroundColor);
+                        args = ['%c ' + options.tag + ' ', 'background: ' + tagBackgroundColor + '; color: ' + tagTextColor + ';'].concat(optionArgs);
+                    }
+                    else {
+                        args = [options.tag].concat(optionArgs);
+                    }
+                    this._console[method].apply(this._console, args);
+                };
+                Console.prototype._generateHex = function (input) {
+                    for (var i = 0, hash = 0; i < input.length; hash = input.charCodeAt(i++) + ((hash << 5) - hash))
+                        ;
+                    for (var i = 0, colour = "#"; i < 3; colour += ("00" + ((hash >> i++ * 8) & 0xFF).toString(16)).slice(-2))
+                        ;
+                    return colour;
+                };
+                Console.prototype._getIdealTextColor = function (bgColor) {
+                    var r = bgColor.substring(1, 3);
+                    var g = bgColor.substring(3, 5);
+                    var b = bgColor.substring(5, 7);
+                    var components = {
+                        R: parseInt(r, 16),
+                        G: parseInt(g, 16),
+                        B: parseInt(b, 16)
+                    };
+                    var nThreshold = 105;
+                    var bgDelta = (components.R * 0.299) + (components.G * 0.587) + (components.B * 0.114);
+                    return ((255 - bgDelta) < nThreshold) ? "#000000" : "#ffffff";
                 };
                 return Console;
             })();
             Stream.Console = Console;
-        })(Stream = Logger.Stream || (Logger.Stream = {}));
-    })(Logger = TSCore.Logger || (TSCore.Logger = {}));
-})(TSCore || (TSCore = {}));
-/// <reference path="IStream.ts" />
-var TSCore;
-(function (TSCore) {
-    var Logger;
-    (function (Logger) {
-        var Stream;
-        (function (Stream) {
-            var Toastr = (function () {
-                function Toastr() {
-                }
-                Toastr.prototype.exec = function () {
-                };
-                return Toastr;
-            })();
-            Stream.Toastr = Toastr;
         })(Stream = Logger.Stream || (Logger.Stream = {}));
     })(Logger = TSCore.Logger || (TSCore.Logger = {}));
 })(TSCore || (TSCore = {}));
@@ -1864,10 +1709,6 @@ var TSCore;
     })(Utils = TSCore.Utils || (TSCore.Utils = {}));
 })(TSCore || (TSCore = {}));
 /// <reference path="../typings/tsd.d.ts" />
-/// <reference path="TSCore/Auth/Manager.ts" />
-/// <reference path="TSCore/Auth/Method.ts" />
-/// <reference path="TSCore/Auth/Session.ts" />
-/// <reference path="TSCore/Bootstrap.ts" />
 /// <reference path="TSCore/Config.ts" />
 /// <reference path="TSCore/DI.ts" />
 /// <reference path="TSCore/Data/Collection.ts" />
@@ -1892,7 +1733,6 @@ var TSCore;
 /// <reference path="TSCore/Logger/Logger.ts" />
 /// <reference path="TSCore/Logger/Stream/Console.ts" />
 /// <reference path="TSCore/Logger/Stream/IStream.ts" />
-/// <reference path="TSCore/Logger/Stream/Toastr.ts" />
 /// <reference path="TSCore/TSCore.ts" />
 /// <reference path="TSCore/Utils/Base64.ts" />
 /// <reference path="TSCore/Utils/Random.ts" />

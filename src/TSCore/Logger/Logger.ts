@@ -1,142 +1,146 @@
 /// <reference path="Stream/IStream.ts" />
 
-module TSCore {
+module TSCore.Logger {
 
-    export module Logger {
+    export enum LogLevel {
+        LOG,
+        INFO,
+        WARN,
+        ERROR,
+        FATAL
+    }
 
-        export enum LogLevel {
-            TRACE,
-            DEBUG,
-            INFO,
-            WARN,
-            ERROR,
-            FATAL
+    export interface ILogOptions {
+        level: LogLevel;
+        tag: string;
+        args: any[];
+        time: number;
+    }
+
+    export interface IStreamEntry {
+        level: LogLevel;
+        stream: TSCore.Logger.IStream;
+    }
+
+    export class Logger {
+
+        protected _streams: TSCore.Data.Dictionary<string, IStreamEntry>;
+        protected _parent: Logger;
+        protected _tag: string;
+
+        constructor(parent?: Logger, tag?: string) {
+
+            this._parent = parent;
+            this._tag = tag;
+
+            this._streams = this._parent ? this._parent.getStreams() : new TSCore.Data.Dictionary<string, IStreamEntry>();
         }
 
-        export interface IExecOptions {
-            level: LogLevel;
-            args: any[];
+        /**
+         * Return a child logger with a pre-configured tag
+         *
+         * @param tag
+         */
+        public child(tag: string): Logger {
+
+            return new Logger(this, tag);
         }
 
-        export interface ILogOptions {
-            level: LogLevel;
-            args: any[];
-            time: number;
+        /**
+         * Set ILogStream instance for key.
+         *
+         * @param key       Name for logger.
+         * @param stream    TSCore.Logger.IStream instance.
+         * @param level     Minimal log level for this stream
+         */
+        public addStream(key: string, stream: TSCore.Logger.IStream, level: LogLevel = LogLevel.LOG) {
+
+            this._streams.set(key, {
+                level: level,
+                stream: stream
+            });
         }
 
-        export class Logger {
+        /**
+         * Unset ILogStream instance for key.
+         *
+         * @param key   Name for logger.
+         */
+        public removeStream(key: string) {
 
-            private _streams:TSCore.Data.Dictionary<string, TSCore.Logger.IStream>;
+            this._streams.remove(key);
+        }
 
-            constructor() {
+        /**
+         * Get all streams
+         */
+        public getStreams(): TSCore.Data.Dictionary<string, IStreamEntry> {
 
-                this._streams = new TSCore.Data.Dictionary<string, TSCore.Logger.IStream>();
-            }
+            return this._streams;
+        }
 
-            /**
-             * Set ILogStream instance for key.
-             *
-             * @param key       Name for logger.
-             * @param logger    TSCore.Logger.Adapters.IAdapter instance.
-             */
-            public setStream(key: string, logger: TSCore.Logger.IStream) {
+        /**
+         * Execute log streams with TSCore.Logger.LogLevel.LOG
+         *
+         * @returns {void}
+         */
+        public log(...args) {
+            this._exec(LogLevel.LOG, args);
+        }
 
-                this._streams.set(key, logger);
-            }
+        /**
+         * Execute log streams with TSCore.Logger.LogLevel.INFO
+         *
+         * @returns {void}
+         */
+        public info(...args) {
+            this._exec(LogLevel.INFO, args);
+        }
 
-            /**
-             * Unset ILogStream instance for key.
-             *
-             * @param key   Name for logger.
-             */
-            public unsetStream(key: string) {
+        /**
+         * Execute log streams with TSCore.Logger.LogLevel.WARN
+         *
+         * @returns {void}
+         */
+        public warn(...args) {
+            this._exec(LogLevel.WARN, args);
+        }
 
-                this._streams.remove(key);
-            }
+        /**
+         * Execute log streams with TSCore.Logger.LogLevel.INFO
+         *
+         * @returns {void}
+         */
+        public error(...args) {
+            this._exec(LogLevel.ERROR, args);
+        }
 
-            /**
-             * Execute log streams with TSCore.Logger.LogLevel.TRACE
-             *
-             * @returns {void}
-             */
-            public trace(...args): void {
-                this._exec({
-                    level: TSCore.Logger.LogLevel.TRACE,
-                    args: args
-                });
-            }
+        /**
+         * Execute log streams with TSCore.Logger.LogLevel.FATAL
+         *
+         * @returns {void}
+         */
+        public fatal(...args) {
+            this._exec(LogLevel.FATAL, args);
+        }
 
-            /**
-             * Execute log streams with TSCore.Logger.LogLevel.DEBUG
-             *
-             * @returns {void}
-             */
-            public debug(...args) {
-                this._exec({
-                    level: TSCore.Logger.LogLevel.DEBUG,
-                    args: args
-                });
-            }
 
-            /**
-             * Execute log streams with TSCore.Logger.LogLevel.INFO
-             *
-             * @returns {void}
-             */
-            public info(...args) {
-                this._exec({
-                    level: TSCore.Logger.LogLevel.INFO,
-                    args: args
-                });
-            }
+        private _exec(level: LogLevel, args: any[]) {
 
-            /**
-             * Execute log streams with TSCore.Logger.LogLevel.WARN
-             *
-             * @returns {void}
-             */
-            public warn(...args) {
-                this._exec({
-                    level: TSCore.Logger.LogLevel.WARN,
-                    args: args
-                });
-            }
+            var tag = this._tag || args.shift();
 
-            /**
-             * Execute log streams with TSCore.Logger.LogLevel.INFO
-             *
-             * @returns {void}
-             */
-            public error(...args) {
-                this._exec({
-                    level: TSCore.Logger.LogLevel.ERROR,
-                    args: args
-                });
-            }
+            this._streams.each((key:string, streamEntry: IStreamEntry) => {
 
-            /**
-             * Execute log streams with TSCore.Logger.LogLevel.FATAL
-             *
-             * @returns {void}
-             */
-            public fatal(...args) {
-                this._exec({
-                    level: TSCore.Logger.LogLevel.FATAL,
-                    args: args
-                });
-            }
+                if(level >= streamEntry.level) {
 
-            private _exec(options: TSCore.Logger.IExecOptions) {
-
-                this._streams.each((key:string, stream: TSCore.Logger.IStream) => {
-
-                    stream.exec({
-                        level: options.level,
-                        args: options.args,
+                    streamEntry.stream.exec({
+                        level: level,
+                        tag: tag,
+                        args: args,
                         time: new Date().getTime()
                     });
-                });
-            }
+                }
+            });
         }
     }
 }
