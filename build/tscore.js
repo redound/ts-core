@@ -1,9 +1,33 @@
 var TSCore;
 (function (TSCore) {
+    var BaseObject = (function () {
+        function BaseObject() {
+        }
+        Object.defineProperty(BaseObject.prototype, "static", {
+            get: function () {
+                return Object.getPrototypeOf(this).constructor;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        return BaseObject;
+    })();
+    TSCore.BaseObject = BaseObject;
+})(TSCore || (TSCore = {}));
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
+var TSCore;
+(function (TSCore) {
     var Events;
     (function (Events) {
-        var Event = (function () {
+        var Event = (function (_super) {
+            __extends(Event, _super);
             function Event(topic, _params, caller) {
+                _super.call(this);
                 this.topic = topic;
                 this._params = _params;
                 this.caller = caller;
@@ -20,7 +44,7 @@ var TSCore;
                 this.isStopped = true;
             };
             return Event;
-        })();
+        })(TSCore.BaseObject);
         Events.Event = Event;
     })(Events = TSCore.Events || (TSCore.Events = {}));
 })(TSCore || (TSCore = {}));
@@ -29,10 +53,11 @@ var TSCore;
 (function (TSCore) {
     var Events;
     (function (Events) {
-        var EventEmitter = (function () {
+        var EventEmitter = (function (_super) {
+            __extends(EventEmitter, _super);
             function EventEmitter() {
+                _super.call(this);
                 this._eventCallbacks = {};
-                return this;
             }
             EventEmitter.prototype.on = function (topics, callback, context, once) {
                 var _this = this;
@@ -100,17 +125,11 @@ var TSCore;
                 return this;
             };
             return EventEmitter;
-        })();
+        })(TSCore.BaseObject);
         Events.EventEmitter = EventEmitter;
     })(Events = TSCore.Events || (TSCore.Events = {}));
 })(TSCore || (TSCore = {}));
 /// <reference path="Events/EventEmitter.ts" />
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
-};
 var TSCore;
 (function (TSCore) {
     var Config = (function (_super) {
@@ -319,7 +338,7 @@ var TSCore;
             Dictionary._OBJECT_UNIQUE_ID_KEY = '__TSCore_Object_Unique_ID';
             Dictionary._OBJECT_UNIQUE_ID_COUNTER = 1;
             return Dictionary;
-        })(TSCore.Events.EventEmitter);
+        })(TSCore.BaseObject);
         Data.Dictionary = Dictionary;
         var Dictionary;
         (function (Dictionary) {
@@ -337,8 +356,10 @@ var TSCore;
 var TSCore;
 (function (TSCore) {
     var Dictionary = TSCore.Data.Dictionary;
-    var DI = (function () {
+    var DI = (function (_super) {
+        __extends(DI, _super);
         function DI() {
+            _super.call(this);
             this._services = new Dictionary();
             this._cache = new Dictionary();
         }
@@ -390,7 +411,7 @@ var TSCore;
             return instance;
         };
         return DI;
-    })();
+    })(TSCore.BaseObject);
     TSCore.DI = DI;
 })(TSCore || (TSCore = {}));
 /// <reference path="../Events/EventEmitter.ts" />
@@ -398,8 +419,10 @@ var TSCore;
 (function (TSCore) {
     var Data;
     (function (Data) {
-        var Collection = (function () {
+        var Collection = (function (_super) {
+            __extends(Collection, _super);
             function Collection(data) {
+                _super.call(this);
                 this.events = new TSCore.Events.EventEmitter();
                 this._data = data || [];
             }
@@ -495,7 +518,7 @@ var TSCore;
                 return _.clone(this._data);
             };
             return Collection;
-        })();
+        })(TSCore.BaseObject);
         Data.Collection = Collection;
         var Collection;
         (function (Collection) {
@@ -514,8 +537,10 @@ var TSCore;
 (function (TSCore) {
     var Data;
     (function (Data) {
-        var List = (function () {
+        var List = (function (_super) {
+            __extends(List, _super);
             function List(data) {
+                _super.call(this);
                 this.events = new TSCore.Events.EventEmitter();
                 this._data = data || [];
             }
@@ -629,7 +654,7 @@ var TSCore;
                 return _.clone(this._data);
             };
             return List;
-        })();
+        })(TSCore.BaseObject);
         Data.List = List;
         var List;
         (function (List) {
@@ -648,24 +673,27 @@ var TSCore;
 (function (TSCore) {
     var Data;
     (function (Data) {
-        var Model = (function () {
+        var Model = (function (_super) {
+            __extends(Model, _super);
             function Model(data) {
-                this._defaults = this.defaults();
-                this._whitelist = this.whitelist();
-                _.defaults(this, this._defaults);
+                _super.call(this);
+                _.defaults(this, this.static.defaults());
                 if (data) {
                     this.assign(data);
                 }
             }
-            Model.prototype.whitelist = function () {
+            Model.primaryKey = function () {
+                return 'id';
+            };
+            Model.whitelist = function () {
                 return [];
             };
-            Model.prototype.defaults = function () {
+            Model.defaults = function () {
                 return {};
             };
             Model.prototype.assign = function (data) {
                 var _this = this;
-                _.each(this._whitelist, function (attr) {
+                _.each(this.static.whitelist(), function (attr) {
                     _this[attr] = !_.isUndefined(data[attr]) ? data[attr] : _this[attr] || null;
                 });
                 return this;
@@ -686,7 +714,7 @@ var TSCore;
                 return result;
             };
             return Model;
-        })();
+        })(TSCore.BaseObject);
         Data.Model = Model;
     })(Data = TSCore.Data || (TSCore.Data = {}));
 })(TSCore || (TSCore = {}));
@@ -697,9 +725,8 @@ var TSCore;
     (function (Data) {
         var ModelCollection = (function (_super) {
             __extends(ModelCollection, _super);
-            function ModelCollection(modelClass, primaryKey, data) {
+            function ModelCollection(modelClass, data) {
                 this._modelClass = modelClass;
-                this._primaryKey = primaryKey || 'id';
                 _super.call(this, data);
             }
             ModelCollection.prototype.addManyData = function (data) {
@@ -714,8 +741,9 @@ var TSCore;
                 return this.add(this._instantiateModel(data));
             };
             ModelCollection.prototype.contains = function (item) {
+                var primaryKey = this._modelClass.primaryKey();
                 var predicate = {};
-                predicate[this._primaryKey] = item[this._primaryKey];
+                predicate[primaryKey] = item[primaryKey];
                 return this.whereFirst(predicate) != null;
             };
             ModelCollection.prototype.toArray = function () {
@@ -740,9 +768,8 @@ var TSCore;
     (function (Data) {
         var ModelDictionary = (function (_super) {
             __extends(ModelDictionary, _super);
-            function ModelDictionary(modelClass, primaryKey, data) {
+            function ModelDictionary(modelClass, data) {
                 this._modelClass = modelClass;
-                this._primaryKey = primaryKey || 'id';
                 _super.call(this, data);
             }
             ModelDictionary.prototype.addManyData = function (data) {
@@ -750,14 +777,14 @@ var TSCore;
                 var addedItems = [];
                 _.each(data, function (item) {
                     var instance = _this._instantiateModel(item);
-                    _this.set(item[_this._primaryKey], instance);
+                    _this.set(item[_this._modelClass.primaryKey()], instance);
                     addedItems.push(instance);
                 });
                 return addedItems;
             };
             ModelDictionary.prototype.addData = function (data) {
                 var instance = this._instantiateModel(data);
-                this.set(data[this._primaryKey], instance);
+                this.set(data[this._modelClass.primaryKey()], instance);
                 return instance;
             };
             ModelDictionary.prototype.toArray = function () {
@@ -782,8 +809,10 @@ var TSCore;
 (function (TSCore) {
     var Data;
     (function (Data) {
-        var SortedList = (function () {
+        var SortedList = (function (_super) {
+            __extends(SortedList, _super);
             function SortedList(data, sortPredicate) {
+                _super.call(this);
                 this.events = new TSCore.Events.EventEmitter();
                 this._data = data || [];
                 this._sortPredicate = sortPredicate;
@@ -904,7 +933,7 @@ var TSCore;
                 this.events.trigger(TSCore.Data.SortedList.Events.CHANGE);
             };
             return SortedList;
-        })();
+        })(TSCore.BaseObject);
         Data.SortedList = SortedList;
         var SortedList;
         (function (SortedList) {
@@ -961,34 +990,12 @@ var TSCore;
 (function (TSCore) {
     var DateTime;
     (function (DateTime) {
-        var DateFormatter = (function () {
-            function DateFormatter() {
-            }
-            return DateFormatter;
-        })();
-        DateTime.DateFormatter = DateFormatter;
-    })(DateTime = TSCore.DateTime || (TSCore.DateTime = {}));
-})(TSCore || (TSCore = {}));
-var TSCore;
-(function (TSCore) {
-    var DateTime;
-    (function (DateTime_1) {
-        var DateTime = (function () {
-            function DateTime() {
-            }
-            return DateTime;
-        })();
-        DateTime_1.DateTime = DateTime;
-    })(DateTime = TSCore.DateTime || (TSCore.DateTime = {}));
-})(TSCore || (TSCore = {}));
-var TSCore;
-(function (TSCore) {
-    var DateTime;
-    (function (DateTime) {
-        var Timer = (function () {
+        var Timer = (function (_super) {
+            __extends(Timer, _super);
             function Timer(timeout, tickCallback, repeats) {
                 if (tickCallback === void 0) { tickCallback = null; }
                 if (repeats === void 0) { repeats = false; }
+                _super.call(this);
                 this.events = new TSCore.Events.EventEmitter();
                 this.timeout = timeout;
                 this.tickCallback = tickCallback;
@@ -1095,7 +1102,7 @@ var TSCore;
                 });
             };
             return Timer;
-        })();
+        })(TSCore.BaseObject);
         DateTime.Timer = Timer;
         var Timer;
         (function (Timer) {
@@ -1114,11 +1121,13 @@ var TSCore;
 (function (TSCore) {
     var Exception;
     (function (Exception) {
-        var ArgumentException = (function () {
+        var ArgumentException = (function (_super) {
+            __extends(ArgumentException, _super);
             function ArgumentException() {
+                _super.apply(this, arguments);
             }
             return ArgumentException;
-        })();
+        })(TSCore.BaseObject);
         Exception.ArgumentException = ArgumentException;
     })(Exception = TSCore.Exception || (TSCore.Exception = {}));
 })(TSCore || (TSCore = {}));
@@ -1126,10 +1135,12 @@ var TSCore;
 (function (TSCore) {
     var Exception;
     (function (Exception_1) {
-        var Exception = (function () {
+        var Exception = (function (_super) {
+            __extends(Exception, _super);
             function Exception(message, code, data) {
                 if (code === void 0) { code = 0; }
                 if (data === void 0) { data = null; }
+                _super.call(this);
                 this.message = message;
                 this.code = code;
                 this.data = data;
@@ -1145,7 +1156,7 @@ var TSCore;
                 return this.name + ' (' + this.code + '): ' + this.message;
             };
             return Exception;
-        })();
+        })(TSCore.BaseObject);
         Exception_1.Exception = Exception;
     })(Exception = TSCore.Exception || (TSCore.Exception = {}));
 })(TSCore || (TSCore = {}));
@@ -1153,10 +1164,12 @@ var TSCore;
 (function (TSCore) {
     var Geometry;
     (function (Geometry) {
-        var Point = (function () {
+        var Point = (function (_super) {
+            __extends(Point, _super);
             function Point(x, y) {
                 if (x === void 0) { x = 0; }
                 if (y === void 0) { y = 0; }
+                _super.call(this);
                 this.x = x;
                 this.y = y;
             }
@@ -1165,7 +1178,7 @@ var TSCore;
                 this.y += y;
             };
             return Point;
-        })();
+        })(TSCore.BaseObject);
         Geometry.Point = Point;
     })(Geometry = TSCore.Geometry || (TSCore.Geometry = {}));
 })(TSCore || (TSCore = {}));
@@ -1173,12 +1186,14 @@ var TSCore;
 (function (TSCore) {
     var Geometry;
     (function (Geometry) {
-        var Rect = (function () {
+        var Rect = (function (_super) {
+            __extends(Rect, _super);
             function Rect(x, y, width, height) {
                 if (x === void 0) { x = 0; }
                 if (y === void 0) { y = 0; }
                 if (width === void 0) { width = 0; }
                 if (height === void 0) { height = 0; }
+                _super.call(this);
                 this.origin = new Geometry.Point(x, y);
                 this.size = new Geometry.Size(width, height);
             }
@@ -1274,7 +1289,7 @@ var TSCore;
                 return this;
             };
             return Rect;
-        })();
+        })(TSCore.BaseObject);
         Geometry.Rect = Rect;
     })(Geometry = TSCore.Geometry || (TSCore.Geometry = {}));
 })(TSCore || (TSCore = {}));
@@ -1282,10 +1297,12 @@ var TSCore;
 (function (TSCore) {
     var Geometry;
     (function (Geometry) {
-        var Size = (function () {
+        var Size = (function (_super) {
+            __extends(Size, _super);
             function Size(width, height) {
                 if (width === void 0) { width = 0; }
                 if (height === void 0) { height = 0; }
+                _super.call(this);
                 this.width = width;
                 this.height = height;
             }
@@ -1296,21 +1313,9 @@ var TSCore;
                 return this.height / 2;
             };
             return Size;
-        })();
+        })(TSCore.BaseObject);
         Geometry.Size = Size;
     })(Geometry = TSCore.Geometry || (TSCore.Geometry = {}));
-})(TSCore || (TSCore = {}));
-var TSCore;
-(function (TSCore) {
-    var Text;
-    (function (Text) {
-        var Language = (function () {
-            function Language() {
-            }
-            return Language;
-        })();
-        Text.Language = Language;
-    })(Text = TSCore.Text || (TSCore.Text = {}));
 })(TSCore || (TSCore = {}));
 /// <reference path="Stream/IStream.ts" />
 var TSCore;
@@ -1325,8 +1330,10 @@ var TSCore;
             LogLevel[LogLevel["FATAL"] = 4] = "FATAL";
         })(Logger_1.LogLevel || (Logger_1.LogLevel = {}));
         var LogLevel = Logger_1.LogLevel;
-        var Logger = (function () {
+        var Logger = (function (_super) {
+            __extends(Logger, _super);
             function Logger(parent, tag) {
+                _super.call(this);
                 this._parent = parent;
                 this._tag = tag;
                 this._streams = this._parent ? this._parent.getStreams() : new TSCore.Data.Dictionary();
@@ -1396,7 +1403,7 @@ var TSCore;
                 });
             };
             return Logger;
-        })();
+        })(TSCore.BaseObject);
         Logger_1.Logger = Logger;
     })(Logger = TSCore.Logger || (TSCore.Logger = {}));
 })(TSCore || (TSCore = {}));
@@ -1407,9 +1414,11 @@ var TSCore;
     (function (Logger) {
         var Stream;
         (function (Stream) {
-            var Console = (function () {
+            var Console = (function (_super) {
+                __extends(Console, _super);
                 function Console(_console, colorsEnabled) {
                     if (colorsEnabled === void 0) { colorsEnabled = true; }
+                    _super.call(this);
                     this._console = _console;
                     this.colorsEnabled = colorsEnabled;
                 }
@@ -1462,7 +1471,7 @@ var TSCore;
                     return ((255 - bgDelta) < nThreshold) ? "#000000" : "#ffffff";
                 };
                 return Console;
-            })();
+            })(TSCore.BaseObject);
             Stream.Console = Console;
         })(Stream = Logger.Stream || (Logger.Stream = {}));
     })(Logger = TSCore.Logger || (TSCore.Logger = {}));
@@ -1471,8 +1480,10 @@ var TSCore;
 (function (TSCore) {
     var Utils;
     (function (Utils) {
-        var Base64 = (function () {
+        var Base64 = (function (_super) {
+            __extends(Base64, _super);
             function Base64() {
+                _super.apply(this, arguments);
             }
             Base64.prototype.encode = function (input) {
                 var keyStr = Base64.keyStr;
@@ -1543,7 +1554,7 @@ var TSCore;
                 'wxyz0123456789+/' +
                 '=';
             return Base64;
-        })();
+        })(TSCore.BaseObject);
         Utils.Base64 = Base64;
     })(Utils = TSCore.Utils || (TSCore.Utils = {}));
 })(TSCore || (TSCore = {}));
@@ -1551,8 +1562,10 @@ var TSCore;
 (function (TSCore) {
     var Utils;
     (function (Utils) {
-        var Random = (function () {
+        var Random = (function (_super) {
+            __extends(Random, _super);
             function Random() {
+                _super.apply(this, arguments);
             }
             Object.defineProperty(Random, "uuidLut", {
                 get: function () {
@@ -1597,7 +1610,7 @@ var TSCore;
                     lut[d3 & 0xff] + lut[d3 >> 8 & 0xff] + lut[d3 >> 16 & 0xff] + lut[d3 >> 24 & 0xff];
             };
             return Random;
-        })();
+        })(TSCore.BaseObject);
         Utils.Random = Random;
     })(Utils = TSCore.Utils || (TSCore.Utils = {}));
 })(TSCore || (TSCore = {}));
@@ -1605,8 +1618,10 @@ var TSCore;
 (function (TSCore) {
     var Utils;
     (function (Utils) {
-        var Text = (function () {
+        var Text = (function (_super) {
+            __extends(Text, _super);
             function Text() {
+                _super.apply(this, arguments);
             }
             Text.escapeHtml = function (input) {
                 var entityMap = Text.HtmlEntityMap;
@@ -1663,7 +1678,7 @@ var TSCore;
                 "/": '&#x2F;'
             };
             return Text;
-        })();
+        })(TSCore.BaseObject);
         Utils.Text = Text;
     })(Utils = TSCore.Utils || (TSCore.Utils = {}));
 })(TSCore || (TSCore = {}));
@@ -1671,8 +1686,10 @@ var TSCore;
 (function (TSCore) {
     var Utils;
     (function (Utils) {
-        var URL = (function () {
+        var URL = (function (_super) {
+            __extends(URL, _super);
             function URL(path) {
+                _super.call(this);
                 this._path = path;
             }
             Object.defineProperty(URL.prototype, "path", {
@@ -1704,11 +1721,12 @@ var TSCore;
                 configurable: true
             });
             return URL;
-        })();
+        })(TSCore.BaseObject);
         Utils.URL = URL;
     })(Utils = TSCore.Utils || (TSCore.Utils = {}));
 })(TSCore || (TSCore = {}));
 /// <reference path="../typings/tsd.d.ts" />
+/// <reference path="TSCore/BaseObject.ts" />
 /// <reference path="TSCore/Config.ts" />
 /// <reference path="TSCore/DI.ts" />
 /// <reference path="TSCore/Data/Collection.ts" />
@@ -1719,8 +1737,6 @@ var TSCore;
 /// <reference path="TSCore/Data/ModelDictionary.ts" />
 /// <reference path="TSCore/Data/SortedList.ts" />
 /// <reference path="TSCore/Data/Store.ts" />
-/// <reference path="TSCore/DateTime/DateFormatter.ts" />
-/// <reference path="TSCore/DateTime/DateTime.ts" />
 /// <reference path="TSCore/DateTime/Timer.ts" />
 /// <reference path="TSCore/Events/Event.ts" />
 /// <reference path="TSCore/Events/EventEmitter.ts" />
@@ -1729,7 +1745,6 @@ var TSCore;
 /// <reference path="TSCore/Geometry/Point.ts" />
 /// <reference path="TSCore/Geometry/Rect.ts" />
 /// <reference path="TSCore/Geometry/Size.ts" />
-/// <reference path="TSCore/Language.ts" />
 /// <reference path="TSCore/Logger/Logger.ts" />
 /// <reference path="TSCore/Logger/Stream/Console.ts" />
 /// <reference path="TSCore/Logger/Stream/IStream.ts" />

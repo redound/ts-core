@@ -5,17 +5,13 @@
 module TSCore.Utils {
 
 
-    export class Base64 {
+    export class Base64 extends TSCore.BaseObject {
 
         private static keyStr: any = 'ABCDEFGHIJKLMNOP' +
                                 'QRSTUVWXYZabcdef' +
                                 'ghijklmnopqrstuv' +
                                 'wxyz0123456789+/' +
                                 '=';
-
-        constructor() {
-
-        }
 
         public encode(input: any): string {
 

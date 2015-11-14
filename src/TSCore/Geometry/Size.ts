@@ -1,6 +1,6 @@
 module TSCore.Geometry {
 
-    export class Size {
+    export class Size extends TSCore.BaseObject {
 
         public width:number;
         public height:number;
@@ -12,6 +12,8 @@ module TSCore.Geometry {
          * @param height Height value of size.
          */
         constructor(width:number=0, height:number=0) {
+
+            super();
 
             this.width = width;
             this.height = height;

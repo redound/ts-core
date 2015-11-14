@@ -1,6 +1,6 @@
 module TSCore.Utils {
 
-    export class Random {
+    export class Random extends TSCore.BaseObject{
 
         private static _uuidLut: string[];
 

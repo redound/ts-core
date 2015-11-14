@@ -13,7 +13,7 @@ module TSCore.Events {
         (event: Event<any>);
     }
 
-    export class EventEmitter {
+    export class EventEmitter extends TSCore.BaseObject {
 
         private _eventCallbacks: {};
 
@@ -24,9 +24,9 @@ module TSCore.Events {
          */
         constructor() {
 
-            this._eventCallbacks = {};
+            super();
 
-            return this;
+            this._eventCallbacks = {};
         }
 
         /**

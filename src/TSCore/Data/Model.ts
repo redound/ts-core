@@ -2,36 +2,43 @@ module TSCore.Data {
 
     export interface IModelInterface {
         new (data: {}): Model;
+
+        primaryKey();
+        whitelist();
+        assign();
     }
 
-    export class Model {
+    export class Model extends TSCore.BaseObject {
 
         protected _defaults: {};
         protected _whitelist: string[];
 
         constructor(data?:{}) {
 
-            this._defaults = this.defaults();
-            this._whitelist = this.whitelist();
+            super();
 
-            _.defaults(this, this._defaults);
+            _.defaults(this, this.static.defaults());
 
             if(data) {
                this.assign(data);
             }
         }
 
-        protected whitelist(): string[] {
+        public static primaryKey() {
+            return 'id';
+        }
+
+        public static whitelist(): string[] {
             return [];
         }
-        protected defaults(): {} {
-            return {}
+        public static defaults(): {} {
+            return {};
         }
 
 
         public assign(data?: any) {
 
-            _.each(this._whitelist, (attr: string) => {
+            _.each(this.static.whitelist(), (attr: string) => {
                 this[attr] = !_.isUndefined(data[attr]) ? data[attr] : this[attr] || null;
             });
 

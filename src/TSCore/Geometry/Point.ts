@@ -1,6 +1,6 @@
 module TSCore.Geometry {
 
-    export class Point {
+    export class Point extends TSCore.BaseObject {
 
         public x:number;
         public y:number;
@@ -11,6 +11,8 @@ module TSCore.Geometry {
          * @param y Position value for y. Defaults to zero.
          */
         constructor(x:number=0, y:number=0) {
+
+            super();
 
             this.x = x;
             this.y = y;

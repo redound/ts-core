@@ -1,5 +1,10 @@
+declare module TSCore {
+    class BaseObject {
+        static: any;
+    }
+}
 declare module TSCore.Events {
-    class Event<T> {
+    class Event<T> extends TSCore.BaseObject {
         topic: string;
         private _params;
         caller: any;
@@ -13,7 +18,7 @@ declare module TSCore.Events {
     interface IEventEmitterCallback {
         (event: Event<any>): any;
     }
-    class EventEmitter {
+    class EventEmitter extends TSCore.BaseObject {
         private _eventCallbacks;
         constructor();
         on(topics: string, callback: IEventEmitterCallback, context?: any, once?: boolean): TSCore.Events.EventEmitter;
@@ -42,7 +47,7 @@ declare module TSCore.Data {
     interface IDictionaryIterator<K, V> {
         (key: K, value: V): any;
     }
-    class Dictionary<K, V> extends TSCore.Events.EventEmitter {
+    class Dictionary<K, V> extends TSCore.BaseObject {
         private static _OBJECT_UNIQUE_ID_KEY;
         private static _OBJECT_UNIQUE_ID_COUNTER;
         protected _data: IDictionaryData;
@@ -93,7 +98,7 @@ declare module TSCore {
     interface IDIServiceFactory {
         (di: DI): any;
     }
-    class DI {
+    class DI extends TSCore.BaseObject {
         private _services;
         private _cache;
         constructor();
@@ -106,7 +111,7 @@ declare module TSCore {
     }
 }
 declare module TSCore.Data {
-    class Collection<T> {
+    class Collection<T> extends TSCore.BaseObject {
         protected _data: T[];
         events: TSCore.Events.EventEmitter;
         constructor(data?: T[]);
@@ -152,7 +157,7 @@ declare module TSCore.Data {
     }
 }
 declare module TSCore.Data {
-    class List<T> {
+    class List<T> extends TSCore.BaseObject {
         protected _data: T[];
         events: TSCore.Events.EventEmitter;
         constructor(data?: T[]);
@@ -209,22 +214,25 @@ declare module TSCore.Data {
 declare module TSCore.Data {
     interface IModelInterface {
         new (data: {}): Model;
+        primaryKey(): any;
+        whitelist(): any;
+        assign(): any;
     }
-    class Model {
+    class Model extends TSCore.BaseObject {
         protected _defaults: {};
         protected _whitelist: string[];
         constructor(data?: {});
-        protected whitelist(): string[];
-        protected defaults(): {};
+        static primaryKey(): string;
+        static whitelist(): string[];
+        static defaults(): {};
         assign(data?: any): Model;
         toObject(): {};
     }
 }
 declare module TSCore.Data {
     class ModelCollection<T extends Model> extends Collection<T> {
-        protected _primaryKey: string;
         protected _modelClass: IModelInterface;
-        constructor(modelClass: IModelInterface, primaryKey?: string, data?: T[]);
+        constructor(modelClass: IModelInterface, data?: T[]);
         addManyData(data: {}[]): T[];
         addData(data: {}): T;
         contains(item: T): boolean;
@@ -234,9 +242,8 @@ declare module TSCore.Data {
 }
 declare module TSCore.Data {
     class ModelDictionary<K, V extends Model> extends Dictionary<K, V> {
-        protected _primaryKey: string;
         protected _modelClass: IModelInterface;
-        constructor(modelClass: IModelInterface, primaryKey?: string, data?: IDictionaryData);
+        constructor(modelClass: IModelInterface, data?: IDictionaryData);
         addManyData(data: {}[]): V[];
         addData(data: {}): V;
         toArray(): any[];
@@ -245,7 +252,7 @@ declare module TSCore.Data {
     }
 }
 declare module TSCore.Data {
-    class SortedList<T> {
+    class SortedList<T> extends TSCore.BaseObject {
         protected _sortPredicate: any;
         protected _data: T[];
         events: TSCore.Events.EventEmitter;
@@ -318,18 +325,10 @@ declare module TSCore.Data {
     }
 }
 declare module TSCore.DateTime {
-    class DateFormatter {
-    }
-}
-declare module TSCore.DateTime {
-    class DateTime {
-    }
-}
-declare module TSCore.DateTime {
     interface ITimerTickCallback {
         (tickCount: number, elapsedTime: number): void;
     }
-    class Timer {
+    class Timer extends TSCore.BaseObject {
         timeout: number;
         tickCallback: ITimerTickCallback;
         repeats: boolean;
@@ -385,11 +384,11 @@ declare module TSCore.DateTime {
     }
 }
 declare module TSCore.Exception {
-    class ArgumentException {
+    class ArgumentException extends TSCore.BaseObject {
     }
 }
 declare module TSCore.Exception {
-    class Exception {
+    class Exception extends TSCore.BaseObject {
         message: string;
         code: number;
         data: {};
@@ -399,7 +398,7 @@ declare module TSCore.Exception {
     }
 }
 declare module TSCore.Geometry {
-    class Point {
+    class Point extends TSCore.BaseObject {
         x: number;
         y: number;
         constructor(x?: number, y?: number);
@@ -407,7 +406,7 @@ declare module TSCore.Geometry {
     }
 }
 declare module TSCore.Geometry {
-    class Rect {
+    class Rect extends TSCore.BaseObject {
         origin: Point;
         size: Size;
         x: number;
@@ -432,7 +431,7 @@ declare module TSCore.Geometry {
     }
 }
 declare module TSCore.Geometry {
-    class Size {
+    class Size extends TSCore.BaseObject {
         width: number;
         height: number;
         constructor(width?: number, height?: number);
@@ -440,12 +439,8 @@ declare module TSCore.Geometry {
         halfHeight(): number;
     }
 }
-declare module TSCore.Text {
-    class Language {
-    }
-}
 declare module TSCore.Logger {
-    interface IStream {
+    interface IStream extends TSCore.BaseObject {
         exec(options: ILogOptions): any;
     }
 }
@@ -467,7 +462,7 @@ declare module TSCore.Logger {
         level: LogLevel;
         stream: TSCore.Logger.IStream;
     }
-    class Logger {
+    class Logger extends TSCore.BaseObject {
         protected _streams: TSCore.Data.Dictionary<string, IStreamEntry>;
         protected _parent: Logger;
         protected _tag: string;
@@ -491,7 +486,7 @@ declare module TSCore.Logger.Stream {
         warn(): any;
         error(): any;
     }
-    class Console implements TSCore.Logger.IStream {
+    class Console extends TSCore.BaseObject implements TSCore.Logger.IStream {
         private _console;
         colorsEnabled: boolean;
         constructor(_console: IConsole, colorsEnabled?: boolean);
@@ -507,15 +502,14 @@ declare module TSCore {
     }
 }
 declare module TSCore.Utils {
-    class Base64 {
+    class Base64 extends TSCore.BaseObject {
         private static keyStr;
-        constructor();
         encode(input: any): string;
         decode(input: any): string;
     }
 }
 declare module TSCore.Utils {
-    class Random {
+    class Random extends TSCore.BaseObject {
         private static _uuidLut;
         private static uuidLut;
         static number(min: number, max: number): number;
@@ -526,7 +520,7 @@ declare module TSCore.Utils {
     }
 }
 declare module TSCore.Utils {
-    class Text {
+    class Text extends TSCore.BaseObject {
         private static HtmlEntityMap;
         static escapeHtml(input: string): string;
         static truncate(input: string, maxLength: number, suffix?: string): string;
@@ -538,7 +532,7 @@ declare module TSCore.Utils {
     }
 }
 declare module TSCore.Utils {
-    class URL {
+    class URL extends TSCore.BaseObject {
         private _absoluteString;
         private _absoluteUrl;
         private _basePath;

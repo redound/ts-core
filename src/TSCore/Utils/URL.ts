@@ -1,6 +1,6 @@
 module TSCore.Utils {
 
-    export class URL {
+    export class URL extends TSCore.BaseObject {
 
         private _absoluteString: string;
         private _absoluteUrl: string;
@@ -22,6 +22,8 @@ module TSCore.Utils {
         private _user: string;
 
         constructor(path) {
+
+            super();
 
             this._path = path;
         }

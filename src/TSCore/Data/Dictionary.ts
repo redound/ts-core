@@ -8,7 +8,7 @@ module TSCore.Data {
         (key:K, value:V);
     }
 
-    export class Dictionary<K, V> extends TSCore.Events.EventEmitter {
+    export class Dictionary<K, V> extends TSCore.BaseObject {
 
         private static _OBJECT_UNIQUE_ID_KEY = '__TSCore_Object_Unique_ID';
         private static _OBJECT_UNIQUE_ID_COUNTER = 1;

@@ -4,13 +4,11 @@ module TSCore.Data {
 
     export class ModelDictionary<K, V extends Model> extends Dictionary<K, V> {
 
-        protected _primaryKey:string;
         protected _modelClass:IModelInterface;
 
-        constructor(modelClass:IModelInterface, primaryKey?: string, data?: IDictionaryData){
+        constructor(modelClass:IModelInterface, data?: IDictionaryData){
 
             this._modelClass = modelClass;
-            this._primaryKey = primaryKey || 'id';
 
             super(data);
         }
@@ -22,7 +20,7 @@ module TSCore.Data {
             _.each(data, (item) => {
 
                 var instance = this._instantiateModel(item);
-                this.set(item[this._primaryKey], instance);
+                this.set(item[this._modelClass.primaryKey()], instance);
 
                 addedItems.push(instance);
             });
@@ -33,7 +31,7 @@ module TSCore.Data {
         public addData(data: {}): V {
 
             var instance = this._instantiateModel(data);
-            this.set(data[this._primaryKey], instance);
+            this.set(data[this._modelClass.primaryKey()], instance);
 
             return instance;
         }

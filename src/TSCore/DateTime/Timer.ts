@@ -4,7 +4,7 @@ module TSCore.DateTime {
         (tickCount: number, elapsedTime:number):void;
     }
 
-    export class Timer {
+    export class Timer extends TSCore.BaseObject {
 
         public timeout: number;
         public tickCallback: ITimerTickCallback;
@@ -41,6 +41,8 @@ module TSCore.DateTime {
          * @param repeats Whether the timer should repeat.
          */
         constructor(timeout:number, tickCallback: ITimerTickCallback = null, repeats: boolean = false){
+
+            super();
 
             this.timeout = timeout;
             this.tickCallback = tickCallback;

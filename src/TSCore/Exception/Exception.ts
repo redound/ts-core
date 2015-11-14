@@ -1,6 +1,6 @@
 module TSCore.Exception {
 
-    export class Exception {
+    export class Exception extends TSCore.BaseObject {
 
         public message:string;
         public code:number;
@@ -11,6 +11,8 @@ module TSCore.Exception {
         }
 
         constructor(message:string, code:number=0, data:{}=null){
+
+            super();
 
             this.message = message;
             this.code = code;

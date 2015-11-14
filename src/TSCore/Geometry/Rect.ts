@@ -1,6 +1,6 @@
 module TSCore.Geometry {
 
-    export class Rect {
+    export class Rect extends TSCore.BaseObject {
 
         public origin: Point;
         public size: Size;
@@ -86,6 +86,8 @@ module TSCore.Geometry {
          * @param height Value for height.
          */
         constructor(x: number = 0, y: number = 0, width: number = 0, height: number = 0) {
+
+            super();
 
             this.origin = new Point(x, y);
             this.size = new Size(width, height);

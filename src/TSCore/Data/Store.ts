@@ -18,8 +18,8 @@ module TSCore.Data {
          * @param data      Initial data
          */
         constructor(protected _storage: IRemoteStorage, data?: IDictionaryData) {
-            super(data);
 
+            super(data);
             this.load();
         }
 

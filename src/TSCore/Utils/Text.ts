@@ -1,6 +1,6 @@
 module TSCore.Utils {
 
-    export class Text {
+    export class Text extends TSCore.BaseObject {
 
         private static HtmlEntityMap = {
             "&": "&amp;",

@@ -1,6 +1,7 @@
 /// <reference path="../typings/tsd.d.ts" />
 
 //grunt-start
+/// <reference path="TSCore/BaseObject.ts" />
 /// <reference path="TSCore/Config.ts" />
 /// <reference path="TSCore/DI.ts" />
 /// <reference path="TSCore/Data/Collection.ts" />
@@ -11,8 +12,6 @@
 /// <reference path="TSCore/Data/ModelDictionary.ts" />
 /// <reference path="TSCore/Data/SortedList.ts" />
 /// <reference path="TSCore/Data/Store.ts" />
-/// <reference path="TSCore/DateTime/DateFormatter.ts" />
-/// <reference path="TSCore/DateTime/DateTime.ts" />
 /// <reference path="TSCore/DateTime/Timer.ts" />
 /// <reference path="TSCore/Events/Event.ts" />
 /// <reference path="TSCore/Events/EventEmitter.ts" />
@@ -21,7 +20,6 @@
 /// <reference path="TSCore/Geometry/Point.ts" />
 /// <reference path="TSCore/Geometry/Rect.ts" />
 /// <reference path="TSCore/Geometry/Size.ts" />
-/// <reference path="TSCore/Language.ts" />
 /// <reference path="TSCore/Logger/Logger.ts" />
 /// <reference path="TSCore/Logger/Stream/Console.ts" />
 /// <reference path="TSCore/Logger/Stream/IStream.ts" />

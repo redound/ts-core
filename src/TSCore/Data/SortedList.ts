@@ -1,6 +1,6 @@
 module TSCore.Data {
 
-    export class SortedList<T> {
+    export class SortedList<T> extends TSCore.BaseObject {
 
         protected _sortPredicate;
         protected _data:T[];
@@ -31,6 +31,8 @@ module TSCore.Data {
          * @param sortPredicate Predicate to sort list to.
          */
         constructor(data:T[], sortPredicate) {
+
+            super();
 
             this._data = data || [];
             this._sortPredicate = sortPredicate;

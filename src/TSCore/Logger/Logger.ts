@@ -22,13 +22,15 @@ module TSCore.Logger {
         stream: TSCore.Logger.IStream;
     }
 
-    export class Logger {
+    export class Logger extends TSCore.BaseObject {
 
         protected _streams: TSCore.Data.Dictionary<string, IStreamEntry>;
         protected _parent: Logger;
         protected _tag: string;
 
         constructor(parent?: Logger, tag?: string) {
+
+            super();
 
             this._parent = parent;
             this._tag = tag;

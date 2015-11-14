@@ -1,5 +1,5 @@
 module TSCore.Exception {
 
-    export class ArgumentException {
+    export class ArgumentException extends TSCore.BaseObject {
     }
 }

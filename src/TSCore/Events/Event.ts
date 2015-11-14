@@ -1,6 +1,6 @@
 module TSCore.Events {
 
-    export class Event<T> {
+    export class Event<T> extends TSCore.BaseObject {
 
         public isStopped: boolean;
 
@@ -13,6 +13,7 @@ module TSCore.Events {
          */
         constructor(public topic: string, private _params: T, public caller: any) {
 
+            super();
             this.isStopped = false;
         }
 

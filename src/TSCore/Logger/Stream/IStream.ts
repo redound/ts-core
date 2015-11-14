@@ -1,6 +1,6 @@
 module TSCore.Logger {
 
-    export interface IStream {
+    export interface IStream extends TSCore.BaseObject {
         exec(options: ILogOptions);
     }
 }

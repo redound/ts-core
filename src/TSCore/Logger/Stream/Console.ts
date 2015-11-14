@@ -9,10 +9,10 @@ module TSCore.Logger.Stream {
         error();
     }
 
-    export class Console implements TSCore.Logger.IStream {
+    export class Console extends TSCore.BaseObject implements TSCore.Logger.IStream {
 
         constructor(private _console: IConsole, public colorsEnabled: boolean = true) {
-
+            super();
         }
 
         public exec(options: TSCore.Logger.ILogOptions) {

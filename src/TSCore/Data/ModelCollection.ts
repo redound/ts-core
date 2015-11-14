@@ -4,13 +4,11 @@ module TSCore.Data {
 
     export class ModelCollection<T extends Model> extends Collection<T> {
 
-        protected _primaryKey:string;
         protected _modelClass:IModelInterface;
 
-        constructor(modelClass:IModelInterface, primaryKey?: string, data?: T[]){
+        constructor(modelClass:IModelInterface, data?: T[]){
 
             this._modelClass = modelClass;
-            this._primaryKey = primaryKey || 'id';
 
             super(data);
         }
@@ -33,8 +31,10 @@ module TSCore.Data {
 
         public contains(item:T): boolean {
 
+            var primaryKey = this._modelClass.primaryKey();
+
             var predicate = {};
-            predicate[this._primaryKey] = item[this._primaryKey];
+            predicate[primaryKey] = item[primaryKey];
 
             return this.whereFirst(predicate) != null;
         }

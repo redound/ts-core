@@ -1,11 +1,13 @@
 module TSCore.Data {
 
-    export class List<T> {
+    export class List<T> extends TSCore.BaseObject {
 
         protected _data:T[];
         public events: TSCore.Events.EventEmitter = new TSCore.Events.EventEmitter();
 
         constructor(data?:T[]){
+
+            super();
             this._data = data || [];
         }
 

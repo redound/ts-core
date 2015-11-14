@@ -18,7 +18,7 @@ module TSCore {
         shared: boolean
     }
 
-    export class DI {
+    export class DI extends TSCore.BaseObject {
 
         private _services: Dictionary<string, IDIServiceItem>;
         private _cache: Dictionary<string, any>;
@@ -27,6 +27,9 @@ module TSCore {
          * Constructor function.
          */
         constructor() {
+
+            super();
+
             this._services = new Dictionary<string, IDIServiceItem>();
             this._cache = new Dictionary<string, any>();
         }
