@@ -1,1 +1,1 @@
-/// <reference path="../../build/tscore.d.ts" />
+/// <reference path="../../build/ts-core.d.ts" />

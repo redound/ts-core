@@ -1753,4 +1753,4 @@ var TSCore;
 /// <reference path="TSCore/Utils/Random.ts" />
 /// <reference path="TSCore/Utils/Text.ts" />
 /// <reference path="TSCore/Utils/URL.ts" />
-//# sourceMappingURL=tscore.js.map
+//# sourceMappingURL=ts-core.js.map

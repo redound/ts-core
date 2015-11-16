@@ -8,9 +8,9 @@
   ],
   "description": "TypeScript Core Library",
   "main": [
-    "build/tscore.js",
-    "build/tscore.min.js",
-    "build/tscore.d.ts"
+    "build/ts-core.js",
+    "build/ts-core.min.js",
+    "build/ts-core.d.ts"
   ],
   "dependencies": {
     "underscore": "^1.8.3"

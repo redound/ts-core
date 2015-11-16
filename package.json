@@ -2,11 +2,9 @@
   "name": "ts-core",
   "version": "0.4.2",
   "description": "TypeScript Core Library",
-  "main": "build/tscore.js",
+  "main": "build/ts-core.js",
   "scripts": {
-    "test": "grunt test",
-    "install": "node node_modules/tsd/build/cli install",
-    "prepublish": "grunt build"
+    "test": "grunt test"
   },
   "dependencies": {
     "tsd": "^0.6.3",

@@ -6,8 +6,8 @@ module.exports = function(grunt) {
         ts: {
             build: {
                 src: ['src/TSCore/**/*.ts', '!node_modules/**/*.ts'],
-                out: 'build/tscore.js',
-                reference: 'src/tscore.r.ts',
+                out: 'build/ts-core.js',
+                reference: 'src/ts-core.r.ts',
                 options: {
                     fast: 'never',
                     declaration: true,
@@ -16,7 +16,7 @@ module.exports = function(grunt) {
             },
             test: {
                 src: ['test/**/*.ts', '!node_modules/**/*.spec.ts'],
-                out: 'test/tscore.spec.js',
+                out: 'test/ts-core.spec.js',
                 options: {
                     fast: 'never',
                     sourceMap: false
@@ -27,7 +27,7 @@ module.exports = function(grunt) {
         uglify: {
             build: {
                 files: {
-                    'build/tscore.min.js': ['build/tscore.js']
+                    'build/ts-core.min.js': ['build/ts-core.js']
                 }
             }
         },
@@ -62,9 +62,9 @@ module.exports = function(grunt) {
     grunt.registerTask('stripref', function() {
 
 
-        var contents = grunt.file.read('./build/tscore.d.ts');
+        var contents = grunt.file.read('./build/ts-core.d.ts');
         contents = contents.replace("/// <reference path=\"../typings/tsd.d.ts\" />\n", "");
-        grunt.file.write('./build/tscore.d.ts', contents);
+        grunt.file.write('./build/ts-core.d.ts', contents);
     });
 
     /** Development **/

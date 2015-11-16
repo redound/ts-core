@@ -1,4 +1,4 @@
-/// <reference path="../../build/tscore.d.ts" /> 
+/// <reference path="../../build/ts-core.d.ts" /> 
 /// <reference path="TSCore.spec.ts" />
 describe("TSCore.Config", function () {
     var config = new TSCore.Config();
