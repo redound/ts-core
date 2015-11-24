@@ -509,6 +509,16 @@ declare module TSCore.Utils {
     }
 }
 declare module TSCore.Utils {
+    class Enum {
+        static names(e: any): string[];
+        static values(e: any): number[];
+        static object(e: any): {
+            name: string;
+            value: number;
+        }[];
+    }
+}
+declare module TSCore.Utils {
     class Random extends TSCore.BaseObject {
         private static _uuidLut;
         private static uuidLut;

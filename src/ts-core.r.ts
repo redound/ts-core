@@ -25,6 +25,7 @@
 /// <reference path="TSCore/Logger/Stream/IStream.ts" />
 /// <reference path="TSCore/TSCore.ts" />
 /// <reference path="TSCore/Utils/Base64.ts" />
+/// <reference path="TSCore/Utils/Enum.ts" />
 /// <reference path="TSCore/Utils/Random.ts" />
 /// <reference path="TSCore/Utils/Text.ts" />
 /// <reference path="TSCore/Utils/URL.ts" />

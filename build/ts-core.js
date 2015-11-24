@@ -1562,6 +1562,32 @@ var TSCore;
 (function (TSCore) {
     var Utils;
     (function (Utils) {
+        var Enum = (function () {
+            function Enum() {
+            }
+            Enum.names = function (e) {
+                return Object.keys(e).filter(function (v) { return isNaN(parseInt(v, 10)); });
+            };
+            Enum.values = function (e) {
+                return Object.keys(e).map(function (v) { return parseInt(v, 10); }).filter(function (v) { return !isNaN(v); });
+            };
+            Enum.object = function (e) {
+                return Enum.values(e).map(function (v) {
+                    return {
+                        name: e[v],
+                        value: v
+                    };
+                });
+            };
+            return Enum;
+        })();
+        Utils.Enum = Enum;
+    })(Utils = TSCore.Utils || (TSCore.Utils = {}));
+})(TSCore || (TSCore = {}));
+var TSCore;
+(function (TSCore) {
+    var Utils;
+    (function (Utils) {
         var Random = (function (_super) {
             __extends(Random, _super);
             function Random() {
@@ -1750,6 +1776,7 @@ var TSCore;
 /// <reference path="TSCore/Logger/Stream/IStream.ts" />
 /// <reference path="TSCore/TSCore.ts" />
 /// <reference path="TSCore/Utils/Base64.ts" />
+/// <reference path="TSCore/Utils/Enum.ts" />
 /// <reference path="TSCore/Utils/Random.ts" />
 /// <reference path="TSCore/Utils/Text.ts" />
 /// <reference path="TSCore/Utils/URL.ts" />
