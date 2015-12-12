@@ -10,6 +10,7 @@
 /// <reference path="TSCore/Data/Model.ts" />
 /// <reference path="TSCore/Data/ModelCollection.ts" />
 /// <reference path="TSCore/Data/ModelDictionary.ts" />
+/// <reference path="TSCore/Data/ModelList.ts" />
 /// <reference path="TSCore/Data/SortedList.ts" />
 /// <reference path="TSCore/DateTime/Timer.ts" />
 /// <reference path="TSCore/Events/Event.ts" />

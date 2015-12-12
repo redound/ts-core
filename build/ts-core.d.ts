@@ -255,6 +255,17 @@ declare module TSCore.Data {
     }
 }
 declare module TSCore.Data {
+    class ModelList<T extends Model> extends List<T> {
+        protected _modelClass: IModelInterface;
+        constructor(modelClass: IModelInterface, data?: T[]);
+        addManyData(data: {}[]): void;
+        addData(data: {}): void;
+        contains(item: T): boolean;
+        toArray(): any[];
+        protected _instantiateModel(data: {}): T;
+    }
+}
+declare module TSCore.Data {
     class SortedList<T> extends TSCore.BaseObject {
         protected _sortPredicate: any;
         protected _data: T[];
