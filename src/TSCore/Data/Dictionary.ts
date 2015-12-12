@@ -14,7 +14,7 @@ module TSCore.Data {
         private static _OBJECT_UNIQUE_ID_COUNTER = 1;
 
         protected _data: IDictionaryData;
-        protected _itemCount:number = 0;
+        protected _itemCount: number = 0;
 
         public events: TSCore.Events.EventEmitter = new TSCore.Events.EventEmitter();
 
@@ -22,7 +22,9 @@ module TSCore.Data {
         constructor(data?: IDictionaryData){
 
             super();
+
             this._data = data || {};
+            this._itemCount = Object.keys(this._data).length;
         }
 
         /**
@@ -196,6 +198,10 @@ module TSCore.Data {
 
         public toArray(): V[] {
             return this.values();
+        }
+
+        public clone(): Dictionary<K, V> {
+            return new Dictionary<K, V>(this._data);
         }
 
 

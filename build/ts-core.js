@@ -227,6 +227,7 @@ var TSCore;
                 this._itemCount = 0;
                 this.events = new TSCore.Events.EventEmitter();
                 this._data = data || {};
+                this._itemCount = Object.keys(this._data).length;
             }
             Dictionary.prototype.get = function (key) {
                 var foundPair = this._getPair(key);
@@ -308,6 +309,9 @@ var TSCore;
             };
             Dictionary.prototype.toArray = function () {
                 return this.values();
+            };
+            Dictionary.prototype.clone = function () {
+                return new Dictionary(this._data);
             };
             Dictionary.prototype._getPair = function (key) {
                 var keyString = this._getKeyString(key);
@@ -517,6 +521,9 @@ var TSCore;
             Collection.prototype.toArray = function () {
                 return _.clone(this._data);
             };
+            Collection.prototype.clone = function () {
+                return new Collection(_.clone(this._data));
+            };
             return Collection;
         })(TSCore.BaseObject);
         Data.Collection = Collection;
@@ -652,6 +659,9 @@ var TSCore;
             };
             List.prototype.toArray = function () {
                 return _.clone(this._data);
+            };
+            List.prototype.clone = function () {
+                return new List(_.clone(this._data));
             };
             return List;
         })(TSCore.BaseObject);
@@ -924,6 +934,9 @@ var TSCore;
             SortedList.prototype.toArray = function () {
                 return _.clone(this._data);
             };
+            SortedList.prototype.clone = function () {
+                return new SortedList(_.clone(this._data), this._sortPredicate);
+            };
             SortedList.prototype.sort = function () {
                 if (this._sortPredicate === null || this._sortPredicate === undefined) {
                     return;
@@ -947,43 +960,6 @@ var TSCore;
                 Events.SORT = "sort";
             })(Events = SortedList.Events || (SortedList.Events = {}));
         })(SortedList = Data.SortedList || (Data.SortedList = {}));
-    })(Data = TSCore.Data || (TSCore.Data = {}));
-})(TSCore || (TSCore = {}));
-/// <reference path="./Dictionary.ts" />
-var TSCore;
-(function (TSCore) {
-    var Data;
-    (function (Data) {
-        var Store = (function (_super) {
-            __extends(Store, _super);
-            function Store(_storage, data) {
-                _super.call(this, data);
-                this._storage = _storage;
-                this.load();
-            }
-            Store.prototype.load = function () {
-                for (var key in this._storage) {
-                    this.set(key, this._storage[key]);
-                }
-            };
-            Store.prototype.get = function (key) {
-                _super.prototype.get.call(this, key);
-            };
-            Store.prototype.set = function (key, value) {
-                _super.prototype.set.call(this, key, value);
-                this._storage.setItem(key, value);
-            };
-            Store.prototype.remove = function (key) {
-                _super.prototype.remove.call(this, key);
-                this._storage.removeItem(key);
-            };
-            Store.prototype.clear = function () {
-                _super.prototype.clear.call(this);
-                this._storage.clear();
-            };
-            return Store;
-        })(TSCore.Data.Dictionary);
-        Data.Store = Store;
     })(Data = TSCore.Data || (TSCore.Data = {}));
 })(TSCore || (TSCore = {}));
 var TSCore;
@@ -1762,7 +1738,6 @@ var TSCore;
 /// <reference path="TSCore/Data/ModelCollection.ts" />
 /// <reference path="TSCore/Data/ModelDictionary.ts" />
 /// <reference path="TSCore/Data/SortedList.ts" />
-/// <reference path="TSCore/Data/Store.ts" />
 /// <reference path="TSCore/DateTime/Timer.ts" />
 /// <reference path="TSCore/Events/Event.ts" />
 /// <reference path="TSCore/Events/EventEmitter.ts" />

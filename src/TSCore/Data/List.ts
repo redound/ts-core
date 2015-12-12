@@ -314,6 +314,10 @@ module TSCore.Data {
         public toArray():T[] {
             return _.clone(this._data);
         }
+
+        public clone(): List<T> {
+            return new List<T>(_.clone(this._data));
+        }
     }
 
     export module List.Events {

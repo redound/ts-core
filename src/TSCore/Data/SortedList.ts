@@ -293,6 +293,10 @@ module TSCore.Data {
             return _.clone(this._data);
         }
 
+        public clone(): SortedList<T> {
+            return new SortedList<T>(_.clone(this._data), this._sortPredicate);
+        }
+
 
         /**
          * Sort list.

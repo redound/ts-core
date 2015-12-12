@@ -67,6 +67,7 @@ declare module TSCore.Data {
         clear(): void;
         toObject(): {};
         toArray(): V[];
+        clone(): Dictionary<K, V>;
         protected _getPair(key: K): IKeyValuePair;
         protected _getKeyString(key: K): string;
         protected _assignUniqueID(object: Object): void;
@@ -133,6 +134,7 @@ declare module TSCore.Data {
         whereFirst(properties: {}): T;
         contains(item: T): boolean;
         toArray(): T[];
+        clone(): Collection<T>;
     }
     module Collection.Events {
         const ADD: string;
@@ -188,6 +190,7 @@ declare module TSCore.Data {
         whereFirst(properties: {}): T;
         contains(item: T): boolean;
         toArray(): T[];
+        clone(): List<T>;
     }
     module List.Events {
         const ADD: string;
@@ -280,6 +283,7 @@ declare module TSCore.Data {
         whereFirst(properties: {}): T;
         contains(item: T): boolean;
         toArray(): T[];
+        clone(): SortedList<T>;
         sort(): void;
     }
     module SortedList.Events {
@@ -305,23 +309,6 @@ declare module TSCore.Data {
             source: T;
             replacement: T;
         }
-    }
-}
-declare module TSCore.Data {
-    interface IRemoteStorage {
-        getItem(key: any): any;
-        setItem(key: string, value: any): void;
-        removeItem(key: string): void;
-        clear(): void;
-    }
-    class Store extends TSCore.Data.Dictionary<string, any> {
-        protected _storage: IRemoteStorage;
-        constructor(_storage: IRemoteStorage, data?: IDictionaryData);
-        load(): void;
-        get(key: string): any;
-        set(key: string, value: any): void;
-        remove(key: string): void;
-        clear(): void;
     }
 }
 declare module TSCore.DateTime {

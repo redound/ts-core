@@ -11,7 +11,6 @@
 /// <reference path="TSCore/Data/ModelCollection.ts" />
 /// <reference path="TSCore/Data/ModelDictionary.ts" />
 /// <reference path="TSCore/Data/SortedList.ts" />
-/// <reference path="TSCore/Data/Store.ts" />
 /// <reference path="TSCore/DateTime/Timer.ts" />
 /// <reference path="TSCore/Events/Event.ts" />
 /// <reference path="TSCore/Events/EventEmitter.ts" />

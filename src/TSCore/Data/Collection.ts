@@ -4,7 +4,7 @@ module TSCore.Data {
 
     export class Collection<T> extends TSCore.BaseObject {
 
-        protected _data:T[];
+        protected _data: T[];
         public events: TSCore.Events.EventEmitter = new TSCore.Events.EventEmitter();
 
 
@@ -243,8 +243,12 @@ module TSCore.Data {
          *
          * @returns {any[]}
          */
-        public toArray():T[] {
+        public toArray() :T[] {
             return _.clone(this._data);
+        }
+
+        public clone(): Collection<T> {
+            return new Collection<T>(_.clone(this._data));
         }
     }
 
