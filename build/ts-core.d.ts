@@ -1,3 +1,4 @@
+/// <reference path="../typings/tsd.d.ts" />
 declare module TSCore {
     class BaseObject {
         static: any;
