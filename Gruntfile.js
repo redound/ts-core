@@ -9,16 +9,13 @@ module.exports = function(grunt) {
                 out: 'build/ts-core.js',
                 reference: 'src/ts-core.r.ts',
                 options: {
-                    fast: 'never',
-                    declaration: true,
-                    //noResolve: true
+                    declaration: true
                 }
             },
             test: {
                 src: ['test/**/*.ts', '!node_modules/**/*.spec.ts'],
                 out: 'test/ts-core.spec.js',
                 options: {
-                    fast: 'never',
                     sourceMap: false
                 }
             }
@@ -48,7 +45,7 @@ module.exports = function(grunt) {
                 indentation: '    ', // four spaces
                 beforeRelease: [
                     'build'
-                ],
+                ]
             }
         }
     });

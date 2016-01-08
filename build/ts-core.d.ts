@@ -1,4 +1,3 @@
-/// <reference path="../typings/tsd.d.ts" />
 declare module TSCore {
     class BaseObject {
         static: any;
@@ -43,10 +42,15 @@ declare module TSCore {
 }
 declare module TSCore.Data {
     interface IDictionaryData {
-        [key: string]: IKeyValuePair;
+        [key: string]: IDictionaryKeyValuePair;
     }
     interface IDictionaryIterator<K, V> {
         (key: K, value: V): any;
+    }
+    interface IDictionaryKeyValuePair {
+        key: any;
+        originalKey: any;
+        value: any;
     }
     class Dictionary<K, V> extends TSCore.BaseObject {
         private static _OBJECT_UNIQUE_ID_KEY;
@@ -69,7 +73,7 @@ declare module TSCore.Data {
         toObject(): {};
         toArray(): V[];
         clone(): Dictionary<K, V>;
-        protected _getPair(key: K): IKeyValuePair;
+        protected _getPair(key: K): IDictionaryKeyValuePair;
         protected _getKeyString(key: K): string;
         protected _assignUniqueID(object: Object): void;
     }

@@ -244,6 +244,7 @@ var TSCore;
                 var keyString = this._getKeyString(key);
                 this._data[keyString] = {
                     key: keyString,
+                    originalKey: key,
                     value: value
                 };
                 if (!alreadyExisted) {
@@ -279,14 +280,14 @@ var TSCore;
             };
             Dictionary.prototype.each = function (iterator) {
                 _.each(this._data, function (pair) {
-                    return iterator(pair.key, pair.value);
+                    return iterator(pair.originalKey, pair.value);
                 });
             };
             Dictionary.prototype.values = function () {
                 return _.pluck(_.values(this._data), 'value');
             };
             Dictionary.prototype.keys = function () {
-                return _.pluck(_.values(this._data), 'key');
+                return _.pluck(_.values(this._data), 'originalKey');
             };
             Dictionary.prototype.count = function () {
                 return this._itemCount;

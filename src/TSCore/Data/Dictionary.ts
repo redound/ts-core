@@ -2,10 +2,16 @@
 
 module TSCore.Data {
 
-    export interface IDictionaryData { [key:string]: IKeyValuePair }
+    export interface IDictionaryData { [key:string]: IDictionaryKeyValuePair }
 
     export interface IDictionaryIterator<K, V> {
         (key:K, value:V);
+    }
+
+    export interface IDictionaryKeyValuePair {
+        key:any,
+        originalKey: any,
+        value:any
     }
 
     export class Dictionary<K, V> extends TSCore.BaseObject {
@@ -60,6 +66,7 @@ module TSCore.Data {
             var keyString = this._getKeyString(key);
             this._data[keyString] = {
                 key: keyString,
+                originalKey: key,
                 value: value
             };
 
@@ -130,7 +137,7 @@ module TSCore.Data {
         public each(iterator:IDictionaryIterator<K,V>): void {
 
             _.each(this._data, (pair) => {
-                return iterator(pair.key, pair.value);
+                return iterator(pair.originalKey, pair.value);
             });
         }
 
@@ -144,13 +151,12 @@ module TSCore.Data {
         }
 
         /**
-         * TODO: Return right keys.
          * Get all keys in dictionary.
          *
          * @returns {K[]}
          */
         public keys(): K[] {
-            return _.pluck(_.values(this._data), 'key');
+            return _.pluck(_.values(this._data), 'originalKey');
         }
 
         /**
@@ -189,7 +195,7 @@ module TSCore.Data {
 
             var result = {};
 
-            _.each(_.values(this._data), (item: IKeyValuePair) => {
+            _.each(_.values(this._data), (item: IDictionaryKeyValuePair) => {
                 result[item.key] = item.value;
             });
 
@@ -209,13 +215,13 @@ module TSCore.Data {
          * Get pair for key in dictionary.
          *
          * @param key Key to get pair for.
-         * @returns {IKeyValuePair}
+         * @returns {IDictionaryKeyValuePair}
          * @private
          */
-        protected _getPair(key: K): IKeyValuePair {
+        protected _getPair(key: K): IDictionaryKeyValuePair {
 
             var keyString = this._getKeyString(key);
-            var foundPair:IKeyValuePair = null;
+            var foundPair:IDictionaryKeyValuePair = null;
 
             if(keyString != null && keyString != undefined){
                 foundPair = this._data[keyString];
