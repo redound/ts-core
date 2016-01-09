@@ -690,7 +690,7 @@ var TSCore;
                 _super.call(this);
                 _.defaults(this, this.static.defaults());
                 if (data) {
-                    this.assign(data);
+                    this.assignAll(data);
                 }
             }
             Model.primaryKey = function () {
@@ -702,6 +702,9 @@ var TSCore;
             Model.defaults = function () {
                 return {};
             };
+            Model.prototype.getId = function () {
+                return this[this.static.primaryKey()];
+            };
             Model.prototype.assign = function (data) {
                 var _this = this;
                 _.each(this.static.whitelist(), function (attr) {
@@ -709,18 +712,42 @@ var TSCore;
                 });
                 return this;
             };
-            Model.prototype.toObject = function () {
+            Model.prototype.assignAll = function (data) {
                 var _this = this;
-                var result = {};
-                _.each(_.keys(this), function (key) {
-                    var value = _this[key];
-                    if (key.slice(0, '_'.length) != '_') {
-                        var parsedValue = value;
-                        if (value instanceof Model) {
-                            parsedValue = value.toObject();
-                        }
-                        result[key] = parsedValue;
+                _.each(data, function (value, attr) {
+                    _this[attr] = data[attr] || null;
+                });
+                return this;
+            };
+            Model.prototype.merge = function (model) {
+                this.assignAll(model.toObject());
+            };
+            Model.prototype.equals = function (data) {
+                var _this = this;
+                var equal = true;
+                _.each(this.getDataKeys(), function (key) {
+                    if (equal && _this[key] != data[key]) {
+                        equal = false;
                     }
+                });
+                return equal;
+            };
+            Model.prototype.getDataKeys = function () {
+                return _.filter(_.keys(this), function (key) {
+                    return key.slice(0, 1) != '_';
+                });
+            };
+            Model.prototype.toObject = function (recursive) {
+                var _this = this;
+                if (recursive === void 0) { recursive = false; }
+                var result = {};
+                _.each(this.getDataKeys(), function (key) {
+                    var value = _this[key];
+                    var parsedValue = value;
+                    if (recursive && value instanceof Model) {
+                        parsedValue = value.toObject();
+                    }
+                    result[key] = parsedValue;
                 });
                 return result;
             };

@@ -20,7 +20,7 @@ module TSCore.Data {
             _.defaults(this, this.static.defaults());
 
             if(data) {
-               this.assign(data);
+               this.assignAll(data);
             }
         }
 
@@ -35,6 +35,10 @@ module TSCore.Data {
             return {};
         }
 
+        public getId(){
+
+            return this[this.static.primaryKey()];
+        }
 
         public assign(data?: any) {
 
@@ -45,24 +49,56 @@ module TSCore.Data {
             return this;
         }
 
-        public toObject() {
+        public assignAll(data?: any) {
+
+            _.each(data, (value: any, attr: string) => {
+                this[attr] = data[attr] || null;
+            });
+
+            return this;
+        }
+
+        public merge(model: Model) {
+
+            this.assignAll(model.toObject());
+        }
+
+        public equals(data: any): boolean {
+
+            var equal: boolean = true;
+
+            _.each(this.getDataKeys(), (key) => {
+
+                if(equal && this[key] != data[key]){
+                    equal = false;
+                }
+            });
+
+            return equal;
+        }
+
+        public getDataKeys(): string[] {
+
+            return _.filter(_.keys(this), (key) => {
+
+                return key.slice(0, 1) != '_';
+            });
+        }
+
+        public toObject(recursive: boolean = false) {
 
             var result = {};
 
-            _.each(_.keys(this), (key) => {
+            _.each(this.getDataKeys(), (key) => {
 
                 var value = this[key];
+                var parsedValue = value;
 
-                if(key.slice(0, '_'.length) != '_'){
-
-                    var parsedValue = value;
-
-                    if(value instanceof Model){
-                        parsedValue = (<Model>value).toObject();
-                    }
-
-                    result[key] = parsedValue;
+                if(recursive && value instanceof Model){
+                    parsedValue = (<Model>value).toObject();
                 }
+
+                result[key] = parsedValue;
             });
 
             return result;

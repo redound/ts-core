@@ -233,8 +233,13 @@ declare module TSCore.Data {
         static primaryKey(): string;
         static whitelist(): string[];
         static defaults(): {};
+        getId(): any;
         assign(data?: any): Model;
-        toObject(): {};
+        assignAll(data?: any): Model;
+        merge(model: Model): void;
+        equals(data: any): boolean;
+        getDataKeys(): string[];
+        toObject(recursive?: boolean): {};
     }
 }
 declare module TSCore.Data {
