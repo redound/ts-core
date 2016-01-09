@@ -65,6 +65,10 @@ module TSCore.Data {
 
         public equals(data: any): boolean {
 
+            if(data instanceof Model){
+                data = data.toObject();
+            }
+
             var equal: boolean = true;
 
             _.each(this.getDataKeys(), (key) => {

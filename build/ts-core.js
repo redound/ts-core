@@ -724,6 +724,9 @@ var TSCore;
             };
             Model.prototype.equals = function (data) {
                 var _this = this;
+                if (data instanceof Model) {
+                    data = data.toObject();
+                }
                 var equal = true;
                 _.each(this.getDataKeys(), function (key) {
                     if (equal && _this[key] != data[key]) {
