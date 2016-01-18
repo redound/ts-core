@@ -6,6 +6,7 @@
 /// <reference path="TSCore/DI.ts" />
 /// <reference path="TSCore/Data/Collection.ts" />
 /// <reference path="TSCore/Data/Dictionary.ts" />
+/// <reference path="TSCore/Data/DynamicList.ts" />
 /// <reference path="TSCore/Data/List.ts" />
 /// <reference path="TSCore/Data/Model.ts" />
 /// <reference path="TSCore/Data/ModelCollection.ts" />

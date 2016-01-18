@@ -220,6 +220,13 @@ declare module TSCore.Data {
     }
 }
 declare module TSCore.Data {
+    class DynamicList<T> extends List<T> {
+        setRange(start: number, items: T[]): void;
+        containsRange(start: number, length: number): boolean;
+        getRange(start: number, length: number): T[];
+    }
+}
+declare module TSCore.Data {
     interface IModel {
         new (data?: any): Model;
         primaryKey(): any;

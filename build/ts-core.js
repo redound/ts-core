@@ -680,6 +680,57 @@ var TSCore;
         })(List = Data.List || (Data.List = {}));
     })(Data = TSCore.Data || (TSCore.Data = {}));
 })(TSCore || (TSCore = {}));
+///<reference path="List.ts"/>
+var TSCore;
+(function (TSCore) {
+    var Data;
+    (function (Data) {
+        var DynamicList = (function (_super) {
+            __extends(DynamicList, _super);
+            function DynamicList() {
+                _super.apply(this, arguments);
+            }
+            DynamicList.prototype.setRange = function (start, items) {
+                if (start < 0) {
+                    throw 'Start index less than 0 (zero) not allowed.';
+                }
+                var rangeStartIndex = start;
+                var rangeEndIndex = start + items.length;
+                var dataEndIndex = Math.max(this._data.length, 0);
+                for (var dataIndex = Math.min(dataEndIndex, rangeEndIndex); dataIndex < rangeEndIndex; dataIndex++) {
+                    this._data[dataIndex] = items[dataIndex - rangeStartIndex];
+                    if (this._data[dataIndex] === undefined) {
+                        this._data[dataIndex] = null;
+                    }
+                }
+            };
+            DynamicList.prototype.containsRange = function (start, length) {
+                var rangeStartIndex = start;
+                var rangeEndIndex = start + length;
+                for (var dataIndex = rangeStartIndex; dataIndex < rangeEndIndex; dataIndex++) {
+                    if (!this._data[dataIndex]) {
+                        return false;
+                    }
+                }
+                return true;
+            };
+            DynamicList.prototype.getRange = function (start, length) {
+                var rangeStartIndex = start;
+                var rangeEndIndex = start + length;
+                var items = [];
+                for (var dataIndex = rangeStartIndex; dataIndex < rangeEndIndex; dataIndex++) {
+                    if (!this._data[dataIndex]) {
+                        return null;
+                    }
+                    items.push(this._data[dataIndex]);
+                }
+                return items;
+            };
+            return DynamicList;
+        })(Data.List);
+        Data.DynamicList = DynamicList;
+    })(Data = TSCore.Data || (TSCore.Data = {}));
+})(TSCore || (TSCore = {}));
 var TSCore;
 (function (TSCore) {
     var Data;
@@ -1779,6 +1830,7 @@ var TSCore;
 /// <reference path="TSCore/DI.ts" />
 /// <reference path="TSCore/Data/Collection.ts" />
 /// <reference path="TSCore/Data/Dictionary.ts" />
+/// <reference path="TSCore/Data/DynamicList.ts" />
 /// <reference path="TSCore/Data/List.ts" />
 /// <reference path="TSCore/Data/Model.ts" />
 /// <reference path="TSCore/Data/ModelCollection.ts" />
