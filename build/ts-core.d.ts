@@ -264,13 +264,6 @@ declare module TSCore.Data {
 }
 declare module TSCore.Data {
     class ModelList<T extends Model> extends List<T> {
-        protected _modelClass: IModel;
-        constructor(modelClass: IModel, data?: T[]);
-        addManyData(data: {}[]): void;
-        addData(data: {}): void;
-        contains(item: T): boolean;
-        toArray(): any[];
-        protected _instantiateModel(data: {}): T;
     }
 }
 declare module TSCore.Data {

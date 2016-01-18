@@ -853,37 +853,9 @@ var TSCore;
     (function (Data) {
         var ModelList = (function (_super) {
             __extends(ModelList, _super);
-            function ModelList(modelClass, data) {
-                this._modelClass = modelClass;
-                _super.call(this, data);
+            function ModelList() {
+                _super.apply(this, arguments);
             }
-            ModelList.prototype.addManyData = function (data) {
-                var _this = this;
-                var createdModels = [];
-                _.each(data, function (item) {
-                    createdModels.push(_this._instantiateModel(item));
-                });
-                return this.addMany(createdModels);
-            };
-            ModelList.prototype.addData = function (data) {
-                return this.add(this._instantiateModel(data));
-            };
-            ModelList.prototype.contains = function (item) {
-                var primaryKey = this._modelClass.primaryKey();
-                var predicate = {};
-                predicate[primaryKey] = item[primaryKey];
-                return this.whereFirst(predicate) != null;
-            };
-            ModelList.prototype.toArray = function () {
-                var result = [];
-                this.each(function (item) {
-                    result.push(item.toObject());
-                });
-                return result;
-            };
-            ModelList.prototype._instantiateModel = function (data) {
-                return new this._modelClass(data);
-            };
             return ModelList;
         })(Data.List);
         Data.ModelList = ModelList;
