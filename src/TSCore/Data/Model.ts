@@ -1,19 +1,15 @@
 module TSCore.Data {
 
-    export interface IModelInterface {
-        new (data: {}): Model;
-
+    export interface IModel {
+        new (data?: any): Model;
         primaryKey();
-        whitelist();
-        assign();
+        whitelist(): string[];
+        defaults();
     }
 
     export class Model extends TSCore.BaseObject {
 
-        protected _defaults: {};
-        protected _whitelist: string[];
-
-        constructor(data?:{}) {
+        constructor(data?: any) {
 
             super();
 
@@ -31,11 +27,11 @@ module TSCore.Data {
         public static whitelist(): string[] {
             return [];
         }
-        public static defaults(): {} {
+        public static defaults(): any {
             return {};
         }
 
-        public getId(){
+        public getId() {
 
             return this[this.static.primaryKey()];
         }

@@ -4,9 +4,9 @@ module TSCore.Data {
 
     export class ModelCollection<T extends Model> extends Collection<T> {
 
-        protected _modelClass:IModelInterface;
+        protected _modelClass:IModel;
 
-        constructor(modelClass:IModelInterface, data?: T[]){
+        constructor(modelClass:IModel, data?: T[]){
 
             this._modelClass = modelClass;
 

@@ -220,19 +220,17 @@ declare module TSCore.Data {
     }
 }
 declare module TSCore.Data {
-    interface IModelInterface {
-        new (data: {}): Model;
+    interface IModel {
+        new (data?: any): Model;
         primaryKey(): any;
-        whitelist(): any;
-        assign(): any;
+        whitelist(): string[];
+        defaults(): any;
     }
     class Model extends TSCore.BaseObject {
-        protected _defaults: {};
-        protected _whitelist: string[];
-        constructor(data?: {});
+        constructor(data?: any);
         static primaryKey(): string;
         static whitelist(): string[];
-        static defaults(): {};
+        static defaults(): any;
         getId(): any;
         assign(data?: any): Model;
         assignAll(data?: any): Model;
@@ -244,8 +242,8 @@ declare module TSCore.Data {
 }
 declare module TSCore.Data {
     class ModelCollection<T extends Model> extends Collection<T> {
-        protected _modelClass: IModelInterface;
-        constructor(modelClass: IModelInterface, data?: T[]);
+        protected _modelClass: IModel;
+        constructor(modelClass: IModel, data?: T[]);
         addManyData(data: {}[]): T[];
         addData(data: {}): T;
         contains(item: T): boolean;
@@ -255,8 +253,8 @@ declare module TSCore.Data {
 }
 declare module TSCore.Data {
     class ModelDictionary<K, V extends Model> extends Dictionary<K, V> {
-        protected _modelClass: IModelInterface;
-        constructor(modelClass: IModelInterface, data?: IDictionaryData);
+        protected _modelClass: IModel;
+        constructor(modelClass: IModel, data?: IDictionaryData);
         addManyData(data: {}[]): V[];
         addData(data: {}): V;
         toArray(): any[];
@@ -266,8 +264,8 @@ declare module TSCore.Data {
 }
 declare module TSCore.Data {
     class ModelList<T extends Model> extends List<T> {
-        protected _modelClass: IModelInterface;
-        constructor(modelClass: IModelInterface, data?: T[]);
+        protected _modelClass: IModel;
+        constructor(modelClass: IModel, data?: T[]);
         addManyData(data: {}[]): void;
         addData(data: {}): void;
         contains(item: T): boolean;

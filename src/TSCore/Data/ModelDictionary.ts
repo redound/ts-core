@@ -4,9 +4,9 @@ module TSCore.Data {
 
     export class ModelDictionary<K, V extends Model> extends Dictionary<K, V> {
 
-        protected _modelClass:IModelInterface;
+        protected _modelClass:IModel;
 
-        constructor(modelClass:IModelInterface, data?: IDictionaryData){
+        constructor(modelClass:IModel, data?: IDictionaryData){
 
             this._modelClass = modelClass;
 
