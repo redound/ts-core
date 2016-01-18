@@ -16,7 +16,7 @@ module TSCore.Data {
 
             var dataEndIndex = Math.max(this._data.length, 0);
 
-            for (var dataIndex = Math.min(dataEndIndex, rangeEndIndex); dataIndex < rangeEndIndex; dataIndex++) {
+            for (var dataIndex = Math.min(dataEndIndex, rangeStartIndex); dataIndex < rangeEndIndex; dataIndex++) {
 
                 this._data[dataIndex] = items[dataIndex - rangeStartIndex];
 
