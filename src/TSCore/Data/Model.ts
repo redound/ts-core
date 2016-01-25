@@ -39,7 +39,10 @@ module TSCore.Data {
         public assign(data?: any) {
 
             _.each(this.static.whitelist(), (attr: string) => {
-                this[attr] = !_.isUndefined(data[attr]) ? data[attr] : this[attr] || null;
+
+                if (!_.isUndefined(data[attr])) {
+                    this[attr] = data[attr];
+                }
             });
 
             return this;

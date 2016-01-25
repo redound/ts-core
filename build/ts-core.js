@@ -759,7 +759,9 @@ var TSCore;
             Model.prototype.assign = function (data) {
                 var _this = this;
                 _.each(this.static.whitelist(), function (attr) {
-                    _this[attr] = !_.isUndefined(data[attr]) ? data[attr] : _this[attr] || null;
+                    if (!_.isUndefined(data[attr])) {
+                        _this[attr] = data[attr];
+                    }
                 });
                 return this;
             };
