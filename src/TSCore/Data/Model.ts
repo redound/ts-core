@@ -51,7 +51,9 @@ module TSCore.Data {
         public assignAll(data?: any) {
 
             _.each(data, (value: any, attr: string) => {
-                this[attr] = data[attr] || null;
+                if (!_.isUndefined(data[attr])) {
+                    this[attr] = data[attr];
+                }
             });
 
             return this;
