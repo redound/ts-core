@@ -768,7 +768,9 @@ var TSCore;
             Model.prototype.assignAll = function (data) {
                 var _this = this;
                 _.each(data, function (value, attr) {
-                    _this[attr] = data[attr] || null;
+                    if (!_.isUndefined(data[attr])) {
+                        _this[attr] = data[attr];
+                    }
                 });
                 return this;
             };
