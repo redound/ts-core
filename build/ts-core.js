@@ -1563,6 +1563,9 @@ var TSCore;
                 _super.apply(this, arguments);
             }
             Base64.prototype.encode = function (input) {
+                if (!input) {
+                    return input;
+                }
                 var keyStr = Base64.keyStr;
                 var output = "";
                 var chr1, chr2, chr3 = "";
@@ -1593,6 +1596,9 @@ var TSCore;
                 return output;
             };
             Base64.prototype.decode = function (input) {
+                if (!input) {
+                    return input;
+                }
                 var keyStr = Base64.keyStr;
                 var output = "";
                 var chr1, chr2, chr3 = "";

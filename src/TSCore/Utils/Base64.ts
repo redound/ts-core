@@ -15,6 +15,10 @@ module TSCore.Utils {
 
         public encode(input: any): string {
 
+            if (!input) {
+                return input;
+            }
+
             var keyStr = Base64.keyStr;
             var output: any = "";
             var chr1, chr2, chr3: any = "";
@@ -50,6 +54,10 @@ module TSCore.Utils {
         }
 
         public decode(input: any): string {
+
+            if (!input) {
+                return input;
+            }
 
             var keyStr = Base64.keyStr;
             var output: any = "";
