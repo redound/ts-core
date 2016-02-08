@@ -304,7 +304,7 @@ var TSCore;
             Dictionary.prototype.toObject = function () {
                 var result = {};
                 _.each(_.values(this._data), function (item) {
-                    result[item.key] = item.value;
+                    result[item.originalKey] = item.value;
                 });
                 return result;
             };

@@ -196,7 +196,7 @@ module TSCore.Data {
             var result = {};
 
             _.each(_.values(this._data), (item: IDictionaryKeyValuePair) => {
-                result[item.key] = item.value;
+                result[item.originalKey] = item.value;
             });
 
             return result;
