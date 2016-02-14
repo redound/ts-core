@@ -138,6 +138,7 @@ declare module TSCore.Data {
         where(properties: {}): T[];
         whereFirst(properties: {}): T;
         contains(item: T): boolean;
+        map(iterator: _.ListIterator<T, any>, context?: any): Collection<T>;
         toArray(): T[];
         clone(): Collection<T>;
     }
@@ -235,6 +236,7 @@ declare module TSCore.Data {
     }
     class Model extends TSCore.BaseObject {
         constructor(data?: any);
+        get(key: string): any;
         static primaryKey(): string;
         static whitelist(): string[];
         static defaults(): any;

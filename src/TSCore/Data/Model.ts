@@ -20,6 +20,10 @@ module TSCore.Data {
             }
         }
 
+        public get(key: string) {
+            return this[key];
+        }
+
         public static primaryKey() {
             return 'id';
         }

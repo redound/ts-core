@@ -238,6 +238,11 @@ module TSCore.Data {
             return _.contains(this._data, item);
         }
 
+        public map(iterator:_.ListIterator<T, any>, context?: any): Collection<T> {
+            this._data = _.map(this._data, iterator, context);
+            return this;
+        }
+
         /**
          * Convert Collection to array.
          *

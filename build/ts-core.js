@@ -519,6 +519,10 @@ var TSCore;
             Collection.prototype.contains = function (item) {
                 return _.contains(this._data, item);
             };
+            Collection.prototype.map = function (iterator, context) {
+                this._data = _.map(this._data, iterator, context);
+                return this;
+            };
             Collection.prototype.toArray = function () {
                 return _.clone(this._data);
             };
@@ -744,6 +748,9 @@ var TSCore;
                     this.assignAll(data);
                 }
             }
+            Model.prototype.get = function (key) {
+                return this[key];
+            };
             Model.primaryKey = function () {
                 return 'id';
             };
