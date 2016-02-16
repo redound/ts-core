@@ -520,8 +520,8 @@ var TSCore;
                 return _.contains(this._data, item);
             };
             Collection.prototype.map = function (iterator, context) {
-                this._data = _.map(this._data, iterator, context);
-                return this;
+                var data = _.map(this._data, iterator, context);
+                return new TSCore.Data.Collection(data);
             };
             Collection.prototype.toArray = function () {
                 return _.clone(this._data);
@@ -567,14 +567,24 @@ var TSCore;
                 return this._data.length;
             };
             List.prototype.add = function (item) {
-                this._data.push(item);
-                this.events.trigger(TSCore.Data.List.Events.ADD, { items: [item] });
+                var count = this._data.push(item);
+                var addedItems = [{ item: item, index: count - 1 }];
+                this.events.trigger(TSCore.Data.List.Events.ADD, { operations: addedItems });
                 this.events.trigger(TSCore.Data.List.Events.CHANGE);
             };
             List.prototype.addMany = function (items) {
                 if (items === void 0) { items = []; }
                 this._data = this._data.concat(items);
-                this.events.trigger(TSCore.Data.List.Events.ADD, { items: items });
+                var index = this._data.length;
+                var addedItems = [];
+                _.each(items, function (item) {
+                    addedItems.push({
+                        item: item,
+                        index: index
+                    });
+                    index++;
+                });
+                this.events.trigger(TSCore.Data.List.Events.ADD, { operations: addedItems });
                 this.events.trigger(TSCore.Data.List.Events.CHANGE);
             };
             List.prototype.prepend = function (item) {
@@ -582,22 +592,51 @@ var TSCore;
             };
             List.prototype.prependMany = function (items) {
                 this._data = items.concat(this._data);
-                this.events.trigger(TSCore.Data.List.Events.ADD, { items: items });
+                var index = 0;
+                var addedItems = [];
+                _.each(items, function (item) {
+                    addedItems.push({
+                        item: item,
+                        index: index
+                    });
+                    index++;
+                });
+                this.events.trigger(TSCore.Data.List.Events.ADD, { operations: addedItems });
                 this.events.trigger(TSCore.Data.List.Events.CHANGE);
             };
             List.prototype.insert = function (item, index) {
                 this._data.splice(index, 0, item);
-                this.events.trigger(TSCore.Data.List.Events.ADD, { items: [item] });
+                var addedItems = [{
+                        item: item,
+                        index: index
+                    }];
+                this.events.trigger(TSCore.Data.List.Events.ADD, { operations: addedItems });
                 this.events.trigger(TSCore.Data.List.Events.CHANGE);
             };
             List.prototype.remove = function (item) {
+                var index = this.indexOf(item);
                 this._data = _.without(this._data, item);
-                this.events.trigger(TSCore.Data.List.Events.REMOVE, { items: [item] });
+                var removedItems = [{
+                        item: item,
+                        index: index
+                    }];
+                this.events.trigger(TSCore.Data.List.Events.REMOVE, { operations: removedItems });
                 this.events.trigger(TSCore.Data.List.Events.CHANGE);
             };
+            List.prototype.removeAt = function (index) {
+                var item = this.get(index);
+                this.remove(item);
+            };
             List.prototype.removeMany = function (items) {
+                var _this = this;
+                var removedItems = _.map(items, function (item) {
+                    return {
+                        item: item,
+                        index: _this.indexOf(item)
+                    };
+                });
                 this._data = _.difference(this._data, items);
-                this.events.trigger(TSCore.Data.List.Events.REMOVE, { items: items });
+                this.events.trigger(TSCore.Data.List.Events.REMOVE, { operations: removedItems });
                 this.events.trigger(TSCore.Data.List.Events.CHANGE);
             };
             List.prototype.removeWhere = function (properties) {
@@ -617,13 +656,24 @@ var TSCore;
                 return currentItem;
             };
             List.prototype.clear = function () {
+                var removedItems = _.map(this._data, function (item, index) {
+                    return {
+                        item: item,
+                        index: index
+                    };
+                });
+                var items = this.toArray();
                 this._data = [];
-                this.events.trigger(TSCore.Data.List.Events.REMOVE, { items: this.toArray() });
+                this.events.trigger(TSCore.Data.List.Events.REMOVE, { operations: removedItems });
                 this.events.trigger(TSCore.Data.List.Events.CLEAR);
                 this.events.trigger(TSCore.Data.List.Events.CHANGE);
             };
             List.prototype.each = function (iterator) {
                 _.each(this._data, iterator);
+            };
+            List.prototype.map = function (iterator, context) {
+                var data = _.map(this._data, iterator, context);
+                return new List(data);
             };
             List.prototype.pluck = function (propertyName) {
                 return _.pluck(this._data, propertyName);
@@ -743,11 +793,15 @@ var TSCore;
             __extends(Model, _super);
             function Model(data) {
                 _super.call(this);
+                this.events = new TSCore.Events.EventEmitter();
                 _.defaults(this, this.static.defaults());
                 if (data) {
                     this.assignAll(data);
                 }
             }
+            Model.prototype.set = function (key, value) {
+                this[key] = value;
+            };
             Model.prototype.get = function (key) {
                 return this[key];
             };

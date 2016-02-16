@@ -138,7 +138,7 @@ declare module TSCore.Data {
         where(properties: {}): T[];
         whereFirst(properties: {}): T;
         contains(item: T): boolean;
-        map(iterator: _.ListIterator<T, any>, context?: any): Collection<T>;
+        map<S>(iterator: _.ListIterator<T, any>, context?: any): Collection<S>;
         toArray(): T[];
         clone(): Collection<T>;
     }
@@ -165,6 +165,10 @@ declare module TSCore.Data {
     }
 }
 declare module TSCore.Data {
+    interface IListOperation {
+        item: any;
+        index: number;
+    }
     class List<T> extends TSCore.BaseObject {
         protected _data: T[];
         events: TSCore.Events.EventEmitter;
@@ -177,12 +181,14 @@ declare module TSCore.Data {
         prependMany(items: T[]): void;
         insert(item: T, index: number): void;
         remove(item: T): void;
+        removeAt(index: number): void;
         removeMany(items: T[]): void;
         removeWhere(properties: any): void;
         replaceItem(source: T, replacement: T): T;
         replace(index: number, replacement: T): T;
         clear(): void;
         each(iterator: _.ListIterator<T, void>): void;
+        map<S>(iterator: _.ListIterator<T, any>, context?: any): List<S>;
         pluck(propertyName: string): any[];
         isEmpty(): boolean;
         first(): T;
@@ -235,7 +241,9 @@ declare module TSCore.Data {
         defaults(): any;
     }
     class Model extends TSCore.BaseObject {
+        events: TSCore.Events.EventEmitter;
         constructor(data?: any);
+        set(key: string, value: any): void;
         get(key: string): any;
         static primaryKey(): string;
         static whitelist(): string[];

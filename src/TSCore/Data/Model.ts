@@ -9,6 +9,8 @@ module TSCore.Data {
 
     export class Model extends TSCore.BaseObject {
 
+        public events: TSCore.Events.EventEmitter = new TSCore.Events.EventEmitter();
+
         constructor(data?: any) {
 
             super();
@@ -18,6 +20,10 @@ module TSCore.Data {
             if(data) {
                this.assignAll(data);
             }
+        }
+
+        public set(key: string, value: any) {
+            this[key] = value;
         }
 
         public get(key: string) {

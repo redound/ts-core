@@ -1,5 +1,10 @@
 module TSCore.Data {
 
+    export interface IListOperation {
+        item: any,
+        index: number
+    }
+
     export class List<T> extends TSCore.BaseObject {
 
         protected _data:T[];
@@ -36,9 +41,11 @@ module TSCore.Data {
          */
         public add(item:T) {
 
-            this._data.push(item);
+            var count = this._data.push(item);
 
-            this.events.trigger(TSCore.Data.List.Events.ADD, { items: [item] });
+            var addedItems = [{ item: item, index: count - 1 }];
+
+            this.events.trigger(TSCore.Data.List.Events.ADD, { operations: addedItems });
             this.events.trigger(TSCore.Data.List.Events.CHANGE);
         }
 
@@ -51,7 +58,18 @@ module TSCore.Data {
 
             this._data = this._data.concat(items);
 
-            this.events.trigger(TSCore.Data.List.Events.ADD, { items: items });
+            var index = this._data.length;
+            var addedItems = [];
+
+            _.each(items, item => {
+                addedItems.push({
+                    item: item,
+                    index: index
+                });
+                index++;
+            });
+
+            this.events.trigger(TSCore.Data.List.Events.ADD, { operations: addedItems });
             this.events.trigger(TSCore.Data.List.Events.CHANGE);
         }
 
@@ -73,7 +91,18 @@ module TSCore.Data {
 
             this._data = items.concat(this._data);
 
-            this.events.trigger(TSCore.Data.List.Events.ADD, { items: items });
+            var index = 0;
+            var addedItems = [];
+
+            _.each(items, item => {
+                addedItems.push({
+                    item: item,
+                    index: index
+                });
+                index++;
+            });
+
+            this.events.trigger(TSCore.Data.List.Events.ADD, { operations: addedItems });
             this.events.trigger(TSCore.Data.List.Events.CHANGE);
         }
 
@@ -83,11 +112,16 @@ module TSCore.Data {
          * @param item  Item to be inserted.
          * @param index Index to insert item at.
          */
-        public insert(item:T, index:number){
+        public insert(item:T, index:number) {
 
             this._data.splice(index, 0, item);
 
-            this.events.trigger(TSCore.Data.List.Events.ADD, { items: [item] });
+            var addedItems = [{
+                item: item,
+                index: index
+            }];
+
+            this.events.trigger(TSCore.Data.List.Events.ADD, { operations: addedItems });
             this.events.trigger(TSCore.Data.List.Events.CHANGE);
         }
 
@@ -98,10 +132,22 @@ module TSCore.Data {
          */
         public remove(item: T) {
 
+            var index = this.indexOf(item);
             this._data = _.without(this._data, item);
 
-            this.events.trigger(TSCore.Data.List.Events.REMOVE, { items: [item] });
+            var removedItems = [{
+                item: item,
+                index: index
+            }];
+
+            this.events.trigger(TSCore.Data.List.Events.REMOVE, { operations: removedItems });
             this.events.trigger(TSCore.Data.List.Events.CHANGE);
+        }
+
+        public removeAt(index: number) {
+
+            var item = this.get(index);
+            this.remove(item);
         }
 
         /**
@@ -111,9 +157,16 @@ module TSCore.Data {
          */
         public removeMany(items: T[]) {
 
+            var removedItems = _.map(items, item => {
+                return {
+                    item: item,
+                    index: this.indexOf(item)
+                };
+            });
+
             this._data = _.difference(this._data, items);
 
-            this.events.trigger(TSCore.Data.List.Events.REMOVE, { items: items });
+            this.events.trigger(TSCore.Data.List.Events.REMOVE, { operations: removedItems });
             this.events.trigger(TSCore.Data.List.Events.CHANGE);
         }
 
@@ -164,9 +217,16 @@ module TSCore.Data {
          */
         public clear() {
 
-            this._data = [];
+            var removedItems = _.map(this._data, (item, index) => {
+                return {
+                    item: item,
+                    index: index
+                }
+            });
 
-            this.events.trigger(TSCore.Data.List.Events.REMOVE, { items: this.toArray() });
+            var items = this.toArray();
+            this._data = [];
+            this.events.trigger(TSCore.Data.List.Events.REMOVE, { operations: removedItems });
             this.events.trigger(TSCore.Data.List.Events.CLEAR);
             this.events.trigger(TSCore.Data.List.Events.CHANGE);
         }
@@ -178,6 +238,11 @@ module TSCore.Data {
          */
         public each(iterator:_.ListIterator<T, void>){
             _.each(this._data, iterator);
+        }
+
+        public map<S>(iterator:_.ListIterator<T, any>, context?: any): List<S> {
+            var data = _.map<T, S>(this._data, iterator, context);
+            return new List(data);
         }
 
         /**

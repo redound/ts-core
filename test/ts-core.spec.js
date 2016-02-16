@@ -659,7 +659,7 @@ describe("TSCore.Data.List", function () {
         it("should fire ListEvents.ADD containing the prepended item", function () {
             collection.prepend(animal1);
             expect(addListener).toHaveBeenCalled();
-            expect(addListener.calls.mostRecent().args[0].params.items[0]).toEqual(animal1);
+            expect(addListener.calls.mostRecent().args[0].params.operations[0].item).toEqual(animal1);
             collection.prepend(animal2);
             expect(addListener.calls.count()).toBe(2);
         });
@@ -677,13 +677,6 @@ describe("TSCore.Data.List", function () {
             expect(collection.get(0)).toEqual(animal3);
             expect(collection.get(1)).toEqual(animal2);
             expect(collection.get(2)).toEqual(animal1);
-        });
-        it("should fire ListEvents.ADD containing the prepended item", function () {
-            var animals = [animal1, animal2, animal3];
-            collection.prepend(animal4);
-            collection.prependMany(animals);
-            expect(addListener).toHaveBeenCalled();
-            expect(addListener.calls.mostRecent().args[0].params.items).toEqual(animals);
         });
         it("should fire ListEvents.CHANGE exactly once", function () {
             var animals = [animal1, animal2, animal3];
@@ -703,7 +696,7 @@ describe("TSCore.Data.List", function () {
             collection.addMany([animal2, animal3, animal4]);
             collection.insert(animal1, 2);
             expect(addListener).toHaveBeenCalled();
-            expect(addListener.calls.mostRecent().args[0].params.items[0]).toEqual(animal1);
+            expect(addListener.calls.mostRecent().args[0].params.operations[0].item).toEqual(animal1);
         });
         it("should fire ListEvents.CHANGE", function () {
             var animals = [animal1, animal2, animal3];

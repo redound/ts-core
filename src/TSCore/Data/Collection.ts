@@ -238,9 +238,9 @@ module TSCore.Data {
             return _.contains(this._data, item);
         }
 
-        public map(iterator:_.ListIterator<T, any>, context?: any): Collection<T> {
-            this._data = _.map(this._data, iterator, context);
-            return this;
+        public map<S>(iterator:_.ListIterator<T, any>, context?: any): Collection<S> {
+            var data = _.map<T, S>(this._data, iterator, context);
+            return new TSCore.Data.Collection<S>(data);
         }
 
         /**
