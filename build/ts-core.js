@@ -499,7 +499,8 @@ var TSCore;
                 _.each(this._data, iterator);
             };
             Collection.prototype.pluck = function (propertyName) {
-                return _.pluck(this._data, propertyName);
+                var data = _.pluck(_.clone(this._data), propertyName);
+                return new TSCore.Data.Collection(data);
             };
             Collection.prototype.isEmpty = function () {
                 return this.count() === 0;
@@ -522,6 +523,10 @@ var TSCore;
             Collection.prototype.map = function (iterator, context) {
                 var data = _.map(_.clone(this._data), iterator, context);
                 return new TSCore.Data.Collection(data);
+            };
+            Collection.prototype.transform = function (iterator, context) {
+                this._data = _.map(this._data, iterator, context);
+                return this;
             };
             Collection.prototype.reject = function (iterator, context) {
                 var data = _.reject(_.clone(this._data), iterator, context);

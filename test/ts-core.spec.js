@@ -428,7 +428,8 @@ describe("TSCore.Data.Collection", function () {
                     id: 19,
                     name: 'Lion'
                 }]);
-            var names = basicSet.pluck('name');
+            var namesCollection = basicSet.pluck('name');
+            var names = namesCollection.toArray();
             expect(names[0]).toBe('Dog');
             expect(names[1]).toBe('Cat');
             expect(names[2]).toBe('Lion');

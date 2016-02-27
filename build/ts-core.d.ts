@@ -131,7 +131,7 @@ declare module TSCore.Data {
         replaceItem(source: T, replacement: T): T;
         clear(): void;
         each(iterator: _.ListIterator<T, void>): void;
-        pluck(propertyName: string): any[];
+        pluck(propertyName: string): TSCore.Data.Collection<string>;
         isEmpty(): boolean;
         filter(iterator?: _.ListIterator<T, boolean>): T[];
         find(iterator?: _.ListIterator<T, boolean>): T;
@@ -139,6 +139,7 @@ declare module TSCore.Data {
         whereFirst(properties: {}): T;
         contains(item: T): boolean;
         map<S>(iterator: _.ListIterator<T, any>, context?: any): Collection<S>;
+        transform(iterator: _.ListIterator<T, any>, context?: any): Collection<T>;
         reject(iterator: _.ListIterator<T, any>, context?: any): Collection<T>;
         toArray(): T[];
         clone(): Collection<T>;

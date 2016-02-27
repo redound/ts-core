@@ -162,14 +162,14 @@ module TSCore.Data {
         }
 
         /**
-         * A convenient version of what is perhaps the most common use-case for map:
-         * extracting a list of property values.
+         * The pluck method retrieves all of the collection values for a given key
          *
-         * @param propertyName Property name to pluck.
-         * @returns {any[]}
+         * @param propertyName
+         * @returns {TSCore.Data.Collection<string>|TSCore.Data.Collection}
          */
-        public pluck(propertyName:string) : any[] {
-            return _.pluck(this._data, propertyName);
+        public pluck(propertyName:string) : TSCore.Data.Collection<string> {
+            var data = _.pluck(_.clone(this._data), propertyName);
+            return new TSCore.Data.Collection<string>(data);
         }
 
         /**
@@ -239,7 +239,7 @@ module TSCore.Data {
         }
 
         /**
-         * Map values using an iterator
+         * Map values using an iterator returning a new instance
          * @param iterator
          * @param context
          * @returns {TSCore.Data.Collection<S>|TSCore.Data.Collection} returns new Collection
@@ -250,12 +250,23 @@ module TSCore.Data {
         }
 
         /**
+         * Tranform values using an iterator
+         * @param iterator
+         * @param context
+         * @returns {TSCore.Data.Collection|TSCore.Data.Collection}
+         */
+        public transform(iterator:_.ListIterator<T, any>, context?: any): Collection<T> {
+            this._data = _.map<T, T>(this._data, iterator, context);
+            return this;
+        }
+
+        /**
          * Reject values using an iterator
          * @param iterator
          * @param context
          * @returns {TSCore.Data.Collection} Returns new Collection
          */
-        public reject(iterator:_.ListIterator<T, any>, context?: any) {
+        public reject(iterator:_.ListIterator<T, any>, context?: any): Collection<T> {
             var data = _.reject<T>(_.clone(this._data), iterator, context);
             return new TSCore.Data.Collection(data);
         }
