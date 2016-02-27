@@ -68,7 +68,9 @@ module TSCore.Data {
             this._data.push(item);
             this.sort();
 
-            this.events.trigger(TSCore.Data.SortedList.Events.ADD, { items: [item] });
+            var addedItems = [{ item: item, index: this.indexOf(item) }];
+
+            this.events.trigger(TSCore.Data.SortedList.Events.ADD, { operations: addedItems });
             this.events.trigger(TSCore.Data.SortedList.Events.CHANGE);
         }
 
@@ -82,7 +84,16 @@ module TSCore.Data {
             this._data = this._data.concat(items);
             this.sort();
 
-            this.events.trigger(TSCore.Data.SortedList.Events.ADD, { items: items });
+            var addedItems = [];
+
+            _.each(items, item => {
+                addedItems.push({
+                    item: item,
+                    index: this.indexOf(item)
+                });
+            });
+
+            this.events.trigger(TSCore.Data.SortedList.Events.ADD, { operations: addedItems });
             this.events.trigger(TSCore.Data.SortedList.Events.CHANGE);
         }
 
@@ -96,7 +107,12 @@ module TSCore.Data {
             this._data = _.without(this._data, item);
             this.sort();
 
-            this.events.trigger(TSCore.Data.SortedList.Events.REMOVE, { items: [item] });
+            var removedItems = [{
+                item: item,
+                index: this.indexOf(item)
+            }];
+
+            this.events.trigger(TSCore.Data.SortedList.Events.REMOVE, { operations: removedItems });
             this.events.trigger(TSCore.Data.SortedList.Events.CHANGE);
         }
 
@@ -110,7 +126,14 @@ module TSCore.Data {
             this._data = _.difference(this._data, items);
             this.sort();
 
-            this.events.trigger(TSCore.Data.SortedList.Events.REMOVE, { items: items });
+            var removedItems = _.map(items, item => {
+                return {
+                    item: item,
+                    index: this.indexOf(item)
+                };
+            });
+
+            this.events.trigger(TSCore.Data.SortedList.Events.REMOVE, { operations: removedItems });
             this.events.trigger(TSCore.Data.SortedList.Events.CHANGE);
         }
 
@@ -154,9 +177,15 @@ module TSCore.Data {
          */
         public clear() {
 
-            this._data = [];
+            var removedItems = _.map(this._data, (item, index) => {
+                return {
+                    item: item,
+                    index: index
+                }
+            });
 
-            this.events.trigger(TSCore.Data.SortedList.Events.REMOVE, { items: this.toArray() });
+            this._data = [];
+            this.events.trigger(TSCore.Data.SortedList.Events.REMOVE, { operations: removedItems });
             this.events.trigger(TSCore.Data.SortedList.Events.CLEAR);
             this.events.trigger(TSCore.Data.SortedList.Events.CHANGE);
         }
@@ -330,11 +359,11 @@ module TSCore.Data {
         export interface ISortParams<T> {}
 
         export interface IAddParams<T> {
-            items: T[]
+            operations: T[]
         }
 
         export interface IRemoveParams<T> {
-            items: T[]
+            operations: T[]
         }
 
         export interface IReplaceParams<T> {

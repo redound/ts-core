@@ -144,6 +144,10 @@ module TSCore.Data {
             this.events.trigger(TSCore.Data.List.Events.CHANGE);
         }
 
+        /**
+         * Remove item at index
+         * @param index
+         */
         public removeAt(index: number) {
 
             var item = this.get(index);
@@ -224,7 +228,6 @@ module TSCore.Data {
                 }
             });
 
-            var items = this.toArray();
             this._data = [];
             this.events.trigger(TSCore.Data.List.Events.REMOVE, { operations: removedItems });
             this.events.trigger(TSCore.Data.List.Events.CLEAR);
@@ -397,11 +400,11 @@ module TSCore.Data {
         export interface IClearParams<T> {}
 
         export interface IAddParams<T> {
-            items: T[]
+            operations: T[]
         }
 
         export interface IRemoveParams<T> {
-            items: T[]
+            operations: T[]
         }
 
         export interface IReplaceParams<T> {

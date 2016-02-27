@@ -238,9 +238,26 @@ module TSCore.Data {
             return _.contains(this._data, item);
         }
 
+        /**
+         * Map values using an iterator
+         * @param iterator
+         * @param context
+         * @returns {TSCore.Data.Collection<S>|TSCore.Data.Collection} returns new Collection
+         */
         public map<S>(iterator:_.ListIterator<T, any>, context?: any): Collection<S> {
-            var data = _.map<T, S>(this._data, iterator, context);
+            var data = _.map<T, S>(_.clone(this._data), iterator, context);
             return new TSCore.Data.Collection<S>(data);
+        }
+
+        /**
+         * Reject values using an iterator
+         * @param iterator
+         * @param context
+         * @returns {TSCore.Data.Collection} Returns new Collection
+         */
+        public reject(iterator:_.ListIterator<T, any>, context?: any) {
+            var data = _.reject<T>(_.clone(this._data), iterator, context);
+            return new TSCore.Data.Collection(data);
         }
 
         /**
@@ -269,11 +286,11 @@ module TSCore.Data {
         export interface IClearParams<T> {}
 
         export interface IAddParams<T> {
-            items: T[]
+            operations: T[]
         }
 
         export interface IRemoveParams<T> {
-            items: T[]
+            operations: T[]
         }
 
         export interface IReplaceParams<T> {
