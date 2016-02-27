@@ -441,7 +441,7 @@ describe("TSCore.Data.Collection", function () {
             expect(basicSet.isEmpty()).toBe(true);
         });
     });
-    describe("find()", function () {
+    describe("filter()", function () {
         it("should return items that are allowed by listiterator", function () {
             basicSet.clear();
             basicSet.addMany([{
@@ -454,7 +454,7 @@ describe("TSCore.Data.Collection", function () {
                     id: 3,
                     name: 'Leopard'
                 }]);
-            var found = basicSet.find(function (item) {
+            var found = basicSet.filter(function (item) {
                 return item.name !== 'Panther';
             });
             expect(found.length).toBe(2);
@@ -471,11 +471,11 @@ describe("TSCore.Data.Collection", function () {
                     id: 3,
                     name: 'Leopard'
                 }]);
-            var found = basicSet.find();
+            var found = basicSet.filter();
             expect(found.length).toBe(3);
         });
     });
-    describe("findFirst()", function () {
+    describe("find()", function () {
         it("should return the first item that is allowed by listiterator", function () {
             basicSet.clear();
             basicSet.addMany([{
@@ -488,7 +488,7 @@ describe("TSCore.Data.Collection", function () {
                     id: 3,
                     name: 'Leopard'
                 }]);
-            var found = basicSet.findFirst(function (item) {
+            var found = basicSet.find(function (item) {
                 return item.name.length > 4;
             });
             expect(found.name).toBe('Panther');

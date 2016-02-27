@@ -133,12 +133,13 @@ declare module TSCore.Data {
         each(iterator: _.ListIterator<T, void>): void;
         pluck(propertyName: string): any[];
         isEmpty(): boolean;
-        find(iterator?: _.ListIterator<T, boolean>): T[];
-        findFirst(iterator?: _.ListIterator<T, boolean>): T;
+        filter(iterator?: _.ListIterator<T, boolean>): T[];
+        find(iterator?: _.ListIterator<T, boolean>): T;
         where(properties: {}): T[];
         whereFirst(properties: {}): T;
         contains(item: T): boolean;
         map<S>(iterator: _.ListIterator<T, any>, context?: any): Collection<S>;
+        reject(iterator: _.ListIterator<T, any>, context?: any): Collection<T>;
         toArray(): T[];
         clone(): Collection<T>;
     }
@@ -153,10 +154,10 @@ declare module TSCore.Data {
         interface IClearParams<T> {
         }
         interface IAddParams<T> {
-            items: T[];
+            operations: T[];
         }
         interface IRemoveParams<T> {
-            items: T[];
+            operations: T[];
         }
         interface IReplaceParams<T> {
             source: T;
@@ -215,10 +216,10 @@ declare module TSCore.Data {
         interface IClearParams<T> {
         }
         interface IAddParams<T> {
-            items: T[];
+            operations: T[];
         }
         interface IRemoveParams<T> {
-            items: T[];
+            operations: T[];
         }
         interface IReplaceParams<T> {
             source: T;
@@ -329,10 +330,10 @@ declare module TSCore.Data {
         interface ISortParams<T> {
         }
         interface IAddParams<T> {
-            items: T[];
+            operations: T[];
         }
         interface IRemoveParams<T> {
-            items: T[];
+            operations: T[];
         }
         interface IReplaceParams<T> {
             source: T;

@@ -437,7 +437,7 @@ describe("TSCore.Data.Collection", () => {
         });
     });
 
-    describe("find()", () => {
+    describe("filter()", () => {
 
         it("should return items that are allowed by listiterator", () => {
 
@@ -455,7 +455,7 @@ describe("TSCore.Data.Collection", () => {
             }]);
 
             // Test
-            var found = basicSet.find((item) => {
+            var found = basicSet.filter((item) => {
 
                 return item.name !== 'Panther';
             });
@@ -478,12 +478,12 @@ describe("TSCore.Data.Collection", () => {
             }]);
 
             // Test
-            var found = basicSet.find();
+            var found = basicSet.filter();
             expect(found.length).toBe(3);
         });
     });
 
-    describe("findFirst()", () => {
+    describe("find()", () => {
 
         it("should return the first item that is allowed by listiterator", () => {
 
@@ -501,7 +501,7 @@ describe("TSCore.Data.Collection", () => {
             }]);
 
             // Test
-            var found = basicSet.findFirst((item) => {
+            var found = basicSet.find((item) => {
 
                 return item.name.length > 4;
             });

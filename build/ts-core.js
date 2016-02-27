@@ -504,10 +504,10 @@ var TSCore;
             Collection.prototype.isEmpty = function () {
                 return this.count() === 0;
             };
-            Collection.prototype.find = function (iterator) {
+            Collection.prototype.filter = function (iterator) {
                 return _.filter(this._data, iterator);
             };
-            Collection.prototype.findFirst = function (iterator) {
+            Collection.prototype.find = function (iterator) {
                 return _.find(this._data, iterator);
             };
             Collection.prototype.where = function (properties) {
@@ -520,7 +520,11 @@ var TSCore;
                 return _.contains(this._data, item);
             };
             Collection.prototype.map = function (iterator, context) {
-                var data = _.map(this._data, iterator, context);
+                var data = _.map(_.clone(this._data), iterator, context);
+                return new TSCore.Data.Collection(data);
+            };
+            Collection.prototype.reject = function (iterator, context) {
+                var data = _.reject(_.clone(this._data), iterator, context);
                 return new TSCore.Data.Collection(data);
             };
             Collection.prototype.toArray = function () {
@@ -662,7 +666,6 @@ var TSCore;
                         index: index
                     };
                 });
-                var items = this.toArray();
                 this._data = [];
                 this.events.trigger(TSCore.Data.List.Events.REMOVE, { operations: removedItems });
                 this.events.trigger(TSCore.Data.List.Events.CLEAR);
@@ -1014,26 +1017,46 @@ var TSCore;
             SortedList.prototype.add = function (item) {
                 this._data.push(item);
                 this.sort();
-                this.events.trigger(TSCore.Data.SortedList.Events.ADD, { items: [item] });
+                var addedItems = [{ item: item, index: this.indexOf(item) }];
+                this.events.trigger(TSCore.Data.SortedList.Events.ADD, { operations: addedItems });
                 this.events.trigger(TSCore.Data.SortedList.Events.CHANGE);
             };
             SortedList.prototype.addMany = function (items) {
+                var _this = this;
                 if (items === void 0) { items = []; }
                 this._data = this._data.concat(items);
                 this.sort();
-                this.events.trigger(TSCore.Data.SortedList.Events.ADD, { items: items });
+                var addedItems = [];
+                _.each(items, function (item) {
+                    addedItems.push({
+                        item: item,
+                        index: _this.indexOf(item)
+                    });
+                });
+                this.events.trigger(TSCore.Data.SortedList.Events.ADD, { operations: addedItems });
                 this.events.trigger(TSCore.Data.SortedList.Events.CHANGE);
             };
             SortedList.prototype.remove = function (item) {
                 this._data = _.without(this._data, item);
                 this.sort();
-                this.events.trigger(TSCore.Data.SortedList.Events.REMOVE, { items: [item] });
+                var removedItems = [{
+                        item: item,
+                        index: this.indexOf(item)
+                    }];
+                this.events.trigger(TSCore.Data.SortedList.Events.REMOVE, { operations: removedItems });
                 this.events.trigger(TSCore.Data.SortedList.Events.CHANGE);
             };
             SortedList.prototype.removeMany = function (items) {
+                var _this = this;
                 this._data = _.difference(this._data, items);
                 this.sort();
-                this.events.trigger(TSCore.Data.SortedList.Events.REMOVE, { items: items });
+                var removedItems = _.map(items, function (item) {
+                    return {
+                        item: item,
+                        index: _this.indexOf(item)
+                    };
+                });
+                this.events.trigger(TSCore.Data.SortedList.Events.REMOVE, { operations: removedItems });
                 this.events.trigger(TSCore.Data.SortedList.Events.CHANGE);
             };
             SortedList.prototype.removeWhere = function (properties) {
@@ -1052,8 +1075,14 @@ var TSCore;
                 return currentItem;
             };
             SortedList.prototype.clear = function () {
+                var removedItems = _.map(this._data, function (item, index) {
+                    return {
+                        item: item,
+                        index: index
+                    };
+                });
                 this._data = [];
-                this.events.trigger(TSCore.Data.SortedList.Events.REMOVE, { items: this.toArray() });
+                this.events.trigger(TSCore.Data.SortedList.Events.REMOVE, { operations: removedItems });
                 this.events.trigger(TSCore.Data.SortedList.Events.CLEAR);
                 this.events.trigger(TSCore.Data.SortedList.Events.CHANGE);
             };
