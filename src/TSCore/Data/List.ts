@@ -1,9 +1,9 @@
+/// <reference path="../Events/EventEmitter.ts" />
+/// <reference path="ListEvents.ts" />
+
 module TSCore.Data {
 
-    export interface IListOperation {
-        item: any,
-        index: number
-    }
+    import ListEvents = TSCore.Data.ListEvents;
 
     export class List<T> extends TSCore.BaseObject {
 
@@ -45,8 +45,8 @@ module TSCore.Data {
 
             var addedItems = [{ item: item, index: count - 1 }];
 
-            this.events.trigger(TSCore.Data.List.Events.ADD, { operations: addedItems });
-            this.events.trigger(TSCore.Data.List.Events.CHANGE);
+            this.events.trigger(ListEvents.ADD, { operations: addedItems });
+            this.events.trigger(ListEvents.CHANGE);
         }
 
         /**
@@ -69,8 +69,8 @@ module TSCore.Data {
                 index++;
             });
 
-            this.events.trigger(TSCore.Data.List.Events.ADD, { operations: addedItems });
-            this.events.trigger(TSCore.Data.List.Events.CHANGE);
+            this.events.trigger(ListEvents.ADD, { operations: addedItems });
+            this.events.trigger(ListEvents.CHANGE);
         }
 
         /**
@@ -102,8 +102,8 @@ module TSCore.Data {
                 index++;
             });
 
-            this.events.trigger(TSCore.Data.List.Events.ADD, { operations: addedItems });
-            this.events.trigger(TSCore.Data.List.Events.CHANGE);
+            this.events.trigger(ListEvents.ADD, { operations: addedItems });
+            this.events.trigger(ListEvents.CHANGE);
         }
 
         /**
@@ -121,8 +121,8 @@ module TSCore.Data {
                 index: index
             }];
 
-            this.events.trigger(TSCore.Data.List.Events.ADD, { operations: addedItems });
-            this.events.trigger(TSCore.Data.List.Events.CHANGE);
+            this.events.trigger(ListEvents.ADD, { operations: addedItems });
+            this.events.trigger(ListEvents.CHANGE);
         }
 
         /**
@@ -140,8 +140,8 @@ module TSCore.Data {
                 index: index
             }];
 
-            this.events.trigger(TSCore.Data.List.Events.REMOVE, { operations: removedItems });
-            this.events.trigger(TSCore.Data.List.Events.CHANGE);
+            this.events.trigger(ListEvents.REMOVE, { operations: removedItems });
+            this.events.trigger(ListEvents.CHANGE);
         }
 
         /**
@@ -170,8 +170,8 @@ module TSCore.Data {
 
             this._data = _.difference(this._data, items);
 
-            this.events.trigger(TSCore.Data.List.Events.REMOVE, { operations: removedItems });
-            this.events.trigger(TSCore.Data.List.Events.CHANGE);
+            this.events.trigger(ListEvents.REMOVE, { operations: removedItems });
+            this.events.trigger(ListEvents.CHANGE);
         }
 
         /**
@@ -210,8 +210,8 @@ module TSCore.Data {
             var currentItem = this._data[index];
             this._data[index] = replacement;
 
-            this.events.trigger(TSCore.Data.List.Events.REPLACE, { source: currentItem, replacement: replacement });
-            this.events.trigger(TSCore.Data.List.Events.CHANGE);
+            this.events.trigger(ListEvents.REPLACE, { source: currentItem, replacement: replacement });
+            this.events.trigger(ListEvents.CHANGE);
 
             return currentItem;
         }
@@ -229,9 +229,9 @@ module TSCore.Data {
             });
 
             this._data = [];
-            this.events.trigger(TSCore.Data.List.Events.REMOVE, { operations: removedItems });
-            this.events.trigger(TSCore.Data.List.Events.CLEAR);
-            this.events.trigger(TSCore.Data.List.Events.CHANGE);
+            this.events.trigger(ListEvents.REMOVE, { operations: removedItems, clear: true });
+            this.events.trigger(ListEvents.CLEAR);
+            this.events.trigger(ListEvents.CHANGE);
         }
 
         /**
@@ -314,7 +314,7 @@ module TSCore.Data {
 
             this._data = _.sortBy(this._data, sortPredicate);
 
-            this.events.trigger(TSCore.Data.List.Events.CHANGE);
+            this.events.trigger(ListEvents.CHANGE);
         }
 
         /**
@@ -385,31 +385,6 @@ module TSCore.Data {
 
         public clone(): List<T> {
             return new List<T>(_.clone(this._data));
-        }
-    }
-
-    export module List.Events {
-
-        export const ADD:string = "add";
-        export const CHANGE:string = "change";
-        export const REMOVE:string = "remove";
-        export const REPLACE:string = "replace";
-        export const CLEAR:string = "clear";
-
-        export interface IChangeParams<T> {}
-        export interface IClearParams<T> {}
-
-        export interface IAddParams<T> {
-            operations: T[]
-        }
-
-        export interface IRemoveParams<T> {
-            operations: T[]
-        }
-
-        export interface IReplaceParams<T> {
-            source: T,
-            replacement: T
         }
     }
 }
