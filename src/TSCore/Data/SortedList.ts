@@ -1,5 +1,10 @@
+///<reference path="SortedListEvents.ts"/>
+
+
 module TSCore.Data {
 
+    import SortedListEvents = TSCore.Data.SortedListEvents;
+    
     export class SortedList<T> extends TSCore.BaseObject {
 
         protected _sortPredicate;
@@ -70,8 +75,8 @@ module TSCore.Data {
 
             var addedItems = [{ item: item, index: this.indexOf(item) }];
 
-            this.events.trigger(TSCore.Data.SortedList.Events.ADD, { operations: addedItems });
-            this.events.trigger(TSCore.Data.SortedList.Events.CHANGE);
+            this.events.trigger(SortedListEvents.ADD, { operations: addedItems });
+            this.events.trigger(SortedListEvents.CHANGE);
         }
 
         /**
@@ -93,8 +98,8 @@ module TSCore.Data {
                 });
             });
 
-            this.events.trigger(TSCore.Data.SortedList.Events.ADD, { operations: addedItems });
-            this.events.trigger(TSCore.Data.SortedList.Events.CHANGE);
+            this.events.trigger(SortedListEvents.ADD, { operations: addedItems });
+            this.events.trigger(SortedListEvents.CHANGE);
         }
 
         /**
@@ -112,8 +117,8 @@ module TSCore.Data {
                 index: this.indexOf(item)
             }];
 
-            this.events.trigger(TSCore.Data.SortedList.Events.REMOVE, { operations: removedItems });
-            this.events.trigger(TSCore.Data.SortedList.Events.CHANGE);
+            this.events.trigger(SortedListEvents.REMOVE, { operations: removedItems, clear: false });
+            this.events.trigger(SortedListEvents.CHANGE);
         }
 
         /**
@@ -133,8 +138,8 @@ module TSCore.Data {
                 };
             });
 
-            this.events.trigger(TSCore.Data.SortedList.Events.REMOVE, { operations: removedItems });
-            this.events.trigger(TSCore.Data.SortedList.Events.CHANGE);
+            this.events.trigger(SortedListEvents.REMOVE, { operations: removedItems, clear: false });
+            this.events.trigger(SortedListEvents.CHANGE);
         }
 
         /**
@@ -166,8 +171,8 @@ module TSCore.Data {
 
             this.sort();
 
-            this.events.trigger(TSCore.Data.SortedList.Events.REPLACE, { source: source, replacement: replacement });
-            this.events.trigger(TSCore.Data.SortedList.Events.CHANGE);
+            this.events.trigger(SortedListEvents.REPLACE, { source: source, replacement: replacement });
+            this.events.trigger(SortedListEvents.CHANGE);
 
             return currentItem;
         }
@@ -185,9 +190,9 @@ module TSCore.Data {
             });
 
             this._data = [];
-            this.events.trigger(TSCore.Data.SortedList.Events.REMOVE, { operations: removedItems });
-            this.events.trigger(TSCore.Data.SortedList.Events.CLEAR);
-            this.events.trigger(TSCore.Data.SortedList.Events.CHANGE);
+            this.events.trigger<SortedListEvents.IRemoveParams<T>>(SortedListEvents.REMOVE, { operations: removedItems, clear: true });
+            this.events.trigger(SortedListEvents.CLEAR);
+            this.events.trigger(SortedListEvents.CHANGE);
         }
 
         /**
@@ -340,35 +345,8 @@ module TSCore.Data {
 
             this._data = _.sortBy(this._data, this._sortPredicate);
 
-            this.events.trigger(TSCore.Data.SortedList.Events.SORT);
-            this.events.trigger(TSCore.Data.SortedList.Events.CHANGE);
-        }
-    }
-
-    export module SortedList.Events {
-
-        export const ADD:string = "add";
-        export const CHANGE:string = "change";
-        export const REMOVE:string = "remove";
-        export const REPLACE:string = "replace";
-        export const CLEAR:string = "clear";
-        export const SORT:string = "sort";
-
-        export interface IChangeParams<T> {}
-        export interface IClearParams<T> {}
-        export interface ISortParams<T> {}
-
-        export interface IAddParams<T> {
-            operations: T[]
-        }
-
-        export interface IRemoveParams<T> {
-            operations: T[]
-        }
-
-        export interface IReplaceParams<T> {
-            source: T,
-            replacement: T
+            this.events.trigger(SortedListEvents.SORT);
+            this.events.trigger(SortedListEvents.CHANGE);
         }
     }
 }
