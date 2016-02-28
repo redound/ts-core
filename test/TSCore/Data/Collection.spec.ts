@@ -2,6 +2,8 @@
 
 declare var describe, it, expect, jasmine;
 
+import CollectionEvents = TSCore.Data.CollectionEvents;
+
 describe("TSCore.Data.Collection", () => {
 
     var animal1 = {
@@ -33,23 +35,23 @@ describe("TSCore.Data.Collection", () => {
 
     // Setup for testing SetEvents.ADD
     var addListener = jasmine.createSpy("CollectionEvents.ADD listener");
-    eventSet.events.on(TSCore.Data.Collection.Events.ADD, addListener);
+    eventSet.events.on(CollectionEvents.ADD, addListener);
 
     // Setup for testing SetEvents.ADD
     var changeListener = jasmine.createSpy("CollectionEvents.CHANGE listener");
-    eventSet.events.on(TSCore.Data.Collection.Events.CHANGE, changeListener);
+    eventSet.events.on(CollectionEvents.CHANGE, changeListener);
 
     // Setup for testing SetEvents.REMOVE
     var removeListener = jasmine.createSpy("CollectionEvents.REMOVE listener");
-    eventSet.events.on(TSCore.Data.Collection.Events.REMOVE, removeListener);
+    eventSet.events.on(CollectionEvents.REMOVE, removeListener);
 
     // Setup for testing SetEvents.REPLACE
     var replaceListener = jasmine.createSpy("CollectionEvents.REPLACE listener");
-    eventSet.events.on(TSCore.Data.Collection.Events.REPLACE, replaceListener);
+    eventSet.events.on(CollectionEvents.REPLACE, replaceListener);
 
     // Setup for testing SetEvents.REMOVE
     var clearListener = jasmine.createSpy("CollectionEvents.CLEAR listener");
-    eventSet.events.on(TSCore.Data.Collection.Events.CLEAR, clearListener);
+    eventSet.events.on(CollectionEvents.CLEAR, clearListener);
 
     describe("General", () => {
 

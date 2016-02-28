@@ -1,6 +1,9 @@
 /// <reference path="../Events/EventEmitter.ts" />
+/// <reference path="CollectionEvents.ts" />
 
 module TSCore.Data {
+
+    import CollectionEvents = TSCore.Data.CollectionEvents;
 
     export class Collection<T> extends TSCore.BaseObject {
 
@@ -45,8 +48,8 @@ module TSCore.Data {
 
             this._data.push(item);
 
-            this.events.trigger(TSCore.Data.Collection.Events.ADD, { items: [item] });
-            this.events.trigger(TSCore.Data.Collection.Events.CHANGE);
+            this.events.trigger(CollectionEvents.ADD, { items: [item] });
+            this.events.trigger(CollectionEvents.CHANGE);
 
             return item;
         }
@@ -72,8 +75,8 @@ module TSCore.Data {
 
                 this._data = this._data.concat(itemsToAdd);
 
-                this.events.trigger(TSCore.Data.Collection.Events.ADD, {items: itemsToAdd});
-                this.events.trigger(TSCore.Data.Collection.Events.CHANGE);
+                this.events.trigger(CollectionEvents.ADD, {items: itemsToAdd});
+                this.events.trigger(CollectionEvents.CHANGE);
             }
 
             return itemsToAdd;
@@ -88,8 +91,8 @@ module TSCore.Data {
 
             this._data = _.without(this._data, item);
 
-            this.events.trigger(TSCore.Data.Collection.Events.REMOVE, { items: [item] });
-            this.events.trigger(TSCore.Data.Collection.Events.CHANGE);
+            this.events.trigger(CollectionEvents.REMOVE, { items: [item], clear: false });
+            this.events.trigger(CollectionEvents.CHANGE);
         }
 
         /**
@@ -101,8 +104,8 @@ module TSCore.Data {
 
             this._data = _.difference(this._data, items);
 
-            this.events.trigger(TSCore.Data.Collection.Events.REMOVE, { items: items });
-            this.events.trigger(TSCore.Data.Collection.Events.CHANGE);
+            this.events.trigger(CollectionEvents.REMOVE, { items: items, clear: false });
+            this.events.trigger(CollectionEvents.CHANGE);
         }
 
         /**
@@ -134,8 +137,8 @@ module TSCore.Data {
             var currentItem = this._data[index];
             this._data[index] = replacement;
 
-            this.events.trigger(TSCore.Data.Collection.Events.REPLACE, { source: source, replacement: replacement });
-            this.events.trigger(TSCore.Data.Collection.Events.CHANGE);
+            this.events.trigger(CollectionEvents.REPLACE, { source: source, replacement: replacement });
+            this.events.trigger(CollectionEvents.CHANGE);
 
             return currentItem;
         }
@@ -145,11 +148,18 @@ module TSCore.Data {
          */
         public clear() {
 
+            var removedItems = _.map(this._data, (item, index) => {
+                return {
+                    item: item,
+                    index: index
+                }
+            });
+
             this._data = [];
 
-            this.events.trigger(TSCore.Data.Collection.Events.REMOVE, { items: this.toArray() });
-            this.events.trigger(TSCore.Data.Collection.Events.CLEAR);
-            this.events.trigger(TSCore.Data.Collection.Events.CHANGE);
+            this.events.trigger(CollectionEvents.REMOVE, { operations: removedItems, clear: true });
+            this.events.trigger(CollectionEvents.CLEAR);
+            this.events.trigger(CollectionEvents.CHANGE);
         }
 
         /**
@@ -282,31 +292,6 @@ module TSCore.Data {
 
         public clone(): Collection<T> {
             return new Collection<T>(_.clone(this._data));
-        }
-    }
-
-    export module Collection.Events {
-
-        export const ADD:string = "add";
-        export const CHANGE:string = "change";
-        export const REMOVE:string = "remove";
-        export const REPLACE:string = "replace";
-        export const CLEAR:string = "clear";
-
-        export interface IChangeParams<T> {}
-        export interface IClearParams<T> {}
-
-        export interface IAddParams<T> {
-            operations: T[]
-        }
-
-        export interface IRemoveParams<T> {
-            operations: T[]
-        }
-
-        export interface IReplaceParams<T> {
-            source: T,
-            replacement: T
         }
     }
 }
