@@ -1,6 +1,9 @@
 /// <reference path="../Events/EventEmitter.ts" />
+/// <reference path="DictionaryEvents.ts" />
 
 module TSCore.Data {
+
+    import DictionaryEvents = TSCore.Data.DictionaryEvents;
 
     export interface IDictionaryData { [key:string]: IDictionaryKeyValuePair }
 
@@ -74,8 +77,8 @@ module TSCore.Data {
                 this._itemCount++;
             }
 
-            this.events.trigger(TSCore.Data.Dictionary.Events.ADD, { key: key, value: value });
-            this.events.trigger(TSCore.Data.Dictionary.Events.CHANGE);
+            this.events.trigger(DictionaryEvents.ADD, { key: key, value: value });
+            this.events.trigger(DictionaryEvents.CHANGE);
         }
 
         /**
@@ -96,8 +99,8 @@ module TSCore.Data {
 
                 this._itemCount--;
 
-                this.events.trigger(TSCore.Data.Dictionary.Events.REMOVE, { key: key, value: removedItem });
-                this.events.trigger(TSCore.Data.Dictionary.Events.CHANGE);
+                this.events.trigger(DictionaryEvents.REMOVE, { key: key, value: removedItem });
+                this.events.trigger(DictionaryEvents.CHANGE);
             }
 
             return removedItem;
@@ -187,8 +190,8 @@ module TSCore.Data {
             this._data = {};
             this._itemCount = 0;
 
-            this.events.trigger(TSCore.Data.Dictionary.Events.CLEAR);
-            this.events.trigger(TSCore.Data.Dictionary.Events.CHANGE);
+            this.events.trigger(DictionaryEvents.CLEAR);
+            this.events.trigger(DictionaryEvents.CHANGE);
         }
 
         public toObject(): {} {
@@ -264,27 +267,6 @@ module TSCore.Data {
 
             object[Dictionary._OBJECT_UNIQUE_ID_KEY] = '_' + Dictionary._OBJECT_UNIQUE_ID_COUNTER;
             Dictionary._OBJECT_UNIQUE_ID_COUNTER++;
-        }
-    }
-
-    export module Dictionary.Events {
-
-        export const ADD:string = "add";
-        export const CHANGE:string = "change";
-        export const REMOVE:string = "remove";
-        export const CLEAR:string = "clear";
-
-        export interface IChangeParams {}
-        export interface IClearParams {}
-
-        export interface IAddParams<K, V> {
-            key: K,
-            value: V
-        }
-
-        export interface IRemoveParams<K, V> {
-            key: K,
-            value: V
         }
     }
 }
