@@ -2,6 +2,8 @@
 
 declare var describe, it, expect, jasmine, beforeEach;
 
+import ListEvents = TSCore.Data.ListEvents;
+
 describe("TSCore.Data.List", () => {
 
     /** Setup for items **/
@@ -30,23 +32,23 @@ describe("TSCore.Data.List", () => {
 
     // Setup for testing CollectionEvents.ADD
     var addListener = jasmine.createSpy("ListEvents.ADD listener");
-    collection.events.on(TSCore.Data.List.Events.ADD, addListener);
+    collection.events.on(ListEvents.ADD, addListener);
 
     // Setup for testing CollectionEvents.ADD
     var changeListener = jasmine.createSpy("ListEvents.CHANGE listener");
-    collection.events.on(TSCore.Data.List.Events.CHANGE, changeListener);
+    collection.events.on(ListEvents.CHANGE, changeListener);
 
     // Setup for testing CollectionEvents.REMOVE
     var removeListener = jasmine.createSpy("ListEvents.REMOVE listener");
-    collection.events.on(TSCore.Data.List.Events.REMOVE, removeListener);
+    collection.events.on(ListEvents.REMOVE, removeListener);
 
     // Setup for testing CollectionEvents.REPLACE
     var replaceListener = jasmine.createSpy("ListEvents.REPLACE listener");
-    collection.events.on(TSCore.Data.List.Events.REPLACE, replaceListener);
+    collection.events.on(ListEvents.REPLACE, replaceListener);
 
     // Setup for testing CollectionEvents.REMOVE
     var clearListener = jasmine.createSpy("ListEvents.CLEAR listener");
-    collection.events.on(TSCore.Data.List.Events.CLEAR, clearListener);
+    collection.events.on(ListEvents.CLEAR, clearListener);
 
     beforeEach(() => {
 
