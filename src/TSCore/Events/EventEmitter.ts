@@ -122,7 +122,7 @@ module TSCore.Events {
          * @param args          Arguments to pass along event.
          * @returns             {TSCore.Events.EventEmitter}
          */
-        public trigger(topic: string, params?: {}, caller?: any): TSCore.Events.EventEmitter {
+        public trigger<T>(topic: string, params?: T, caller?: any): TSCore.Events.EventEmitter {
 
             var callbackArray = this._eventCallbacks[topic];
 
