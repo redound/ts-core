@@ -24,7 +24,7 @@ declare module TSCore.Events {
         on(topics: string, callback: IEventEmitterCallback, context?: any, once?: boolean): TSCore.Events.EventEmitter;
         once(topics: string, callback: IEventEmitterCallback, context?: any): TSCore.Events.EventEmitter;
         off(topics: string, callback?: Function, context?: any): TSCore.Events.EventEmitter;
-        trigger(topic: string, params?: {}, caller?: any): TSCore.Events.EventEmitter;
+        trigger<T>(topic: string, params?: T, caller?: any): TSCore.Events.EventEmitter;
         reset(): TSCore.Events.EventEmitter;
     }
 }
@@ -38,6 +38,26 @@ declare module TSCore {
         load(value: any): TSCore.Config;
         has(key: string): boolean;
         clear(key?: string): TSCore.Config;
+    }
+}
+declare module TSCore.Data {
+    module DictionaryEvents {
+        const ADD: string;
+        const CHANGE: string;
+        const REMOVE: string;
+        const CLEAR: string;
+        interface IChangeParams {
+        }
+        interface IClearParams {
+        }
+        interface IAddParams<K, V> {
+            key: K;
+            value: V;
+        }
+        interface IRemoveParams<K, V> {
+            key: K;
+            value: V;
+        }
     }
 }
 declare module TSCore.Data {
@@ -77,24 +97,6 @@ declare module TSCore.Data {
         protected _getKeyString(key: K): string;
         protected _assignUniqueID(object: Object): void;
     }
-    module Dictionary.Events {
-        const ADD: string;
-        const CHANGE: string;
-        const REMOVE: string;
-        const CLEAR: string;
-        interface IChangeParams {
-        }
-        interface IClearParams {
-        }
-        interface IAddParams<K, V> {
-            key: K;
-            value: V;
-        }
-        interface IRemoveParams<K, V> {
-            key: K;
-            value: V;
-        }
-    }
 }
 declare module TSCore {
     interface IDIInjectable {
@@ -114,6 +116,36 @@ declare module TSCore {
         setShared(key: string, service: IDIServiceFactory | any): TSCore.DI;
         reset(): TSCore.DI;
         private _instantiate(service);
+    }
+}
+declare module TSCore.Data {
+    interface ICollectionOperation<T> {
+        item: T;
+        index: number;
+    }
+}
+declare module TSCore.Data {
+    module CollectionEvents {
+        const ADD: string;
+        const CHANGE: string;
+        const REMOVE: string;
+        const REPLACE: string;
+        const CLEAR: string;
+        interface IChangeParams<T> {
+        }
+        interface IClearParams<T> {
+        }
+        interface IAddParams<T> {
+            operations: ICollectionOperation<T>[];
+        }
+        interface IRemoveParams<T> {
+            operations: ICollectionOperation<T>[];
+            clear: boolean;
+        }
+        interface IReplaceParams<T> {
+            source: T;
+            replacement: T;
+        }
     }
 }
 declare module TSCore.Data {
@@ -144,7 +176,15 @@ declare module TSCore.Data {
         toArray(): T[];
         clone(): Collection<T>;
     }
-    module Collection.Events {
+}
+declare module TSCore.Data {
+    interface IListOperation<T> {
+        item: T;
+        index: number;
+    }
+}
+declare module TSCore.Data {
+    module ListEvents {
         const ADD: string;
         const CHANGE: string;
         const REMOVE: string;
@@ -155,10 +195,11 @@ declare module TSCore.Data {
         interface IClearParams<T> {
         }
         interface IAddParams<T> {
-            operations: T[];
+            operations: IListOperation<T>[];
+            clear: boolean;
         }
         interface IRemoveParams<T> {
-            operations: T[];
+            operations: IListOperation<T>[];
         }
         interface IReplaceParams<T> {
             source: T;
@@ -167,10 +208,6 @@ declare module TSCore.Data {
     }
 }
 declare module TSCore.Data {
-    interface IListOperation {
-        item: any;
-        index: number;
-    }
     class List<T> extends TSCore.BaseObject {
         protected _data: T[];
         events: TSCore.Events.EventEmitter;
@@ -206,33 +243,18 @@ declare module TSCore.Data {
         toArray(): T[];
         clone(): List<T>;
     }
-    module List.Events {
-        const ADD: string;
-        const CHANGE: string;
-        const REMOVE: string;
-        const REPLACE: string;
-        const CLEAR: string;
-        interface IChangeParams<T> {
-        }
-        interface IClearParams<T> {
-        }
-        interface IAddParams<T> {
-            operations: T[];
-        }
-        interface IRemoveParams<T> {
-            operations: T[];
-        }
-        interface IReplaceParams<T> {
-            source: T;
-            replacement: T;
-        }
-    }
 }
 declare module TSCore.Data {
     class DynamicList<T> extends List<T> {
         setRange(start: number, items: T[]): void;
         containsRange(start: number, length: number): boolean;
         getRange(start: number, length: number): T[];
+    }
+}
+declare module TSCore.Data {
+    interface ISortedListOperation<T> {
+        item: T;
+        index: number;
     }
 }
 declare module TSCore.Data {
@@ -286,6 +308,33 @@ declare module TSCore.Data {
     }
 }
 declare module TSCore.Data {
+    module SortedListEvents {
+        const ADD: string;
+        const CHANGE: string;
+        const REMOVE: string;
+        const REPLACE: string;
+        const CLEAR: string;
+        const SORT: string;
+        interface IChangeParams<T> {
+        }
+        interface IClearParams<T> {
+        }
+        interface ISortParams<T> {
+        }
+        interface IAddParams<T> {
+            operations: ISortedListOperation<T>[];
+        }
+        interface IRemoveParams<T> {
+            operations: ISortedListOperation<T>[];
+            clear: boolean;
+        }
+        interface IReplaceParams<T> {
+            source: T;
+            replacement: T;
+        }
+    }
+}
+declare module TSCore.Data {
     class SortedList<T> extends TSCore.BaseObject {
         protected _sortPredicate: any;
         protected _data: T[];
@@ -316,30 +365,6 @@ declare module TSCore.Data {
         toArray(): T[];
         clone(): SortedList<T>;
         sort(): void;
-    }
-    module SortedList.Events {
-        const ADD: string;
-        const CHANGE: string;
-        const REMOVE: string;
-        const REPLACE: string;
-        const CLEAR: string;
-        const SORT: string;
-        interface IChangeParams<T> {
-        }
-        interface IClearParams<T> {
-        }
-        interface ISortParams<T> {
-        }
-        interface IAddParams<T> {
-            operations: T[];
-        }
-        interface IRemoveParams<T> {
-            operations: T[];
-        }
-        interface IReplaceParams<T> {
-            source: T;
-            replacement: T;
-        }
     }
 }
 declare module TSCore.DateTime {
