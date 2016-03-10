@@ -1028,20 +1028,3 @@ describe("TSCore.Utils.Text", function () {
         });
     });
 });
-/// <reference path="../TSCore.spec.ts" />
-describe("TSCore.Utils.URL", function () {
-    var host = "www.example.com";
-    var basePath = "http://" + host + "/";
-    var relativePath = "home/index";
-    var path = basePath + relativePath;
-    var url = new TSCore.Utils.URL(path);
-    it("should return valid host", function () {
-        expect(url.host).toBe(host);
-    });
-    it("should return valid basePath", function () {
-        expect(url.basePath).toBe(basePath);
-    });
-    it("should return valid relativePath", function () {
-        expect(url.relativePath).toBe(relativePath);
-    });
-});

@@ -468,7 +468,11 @@ var TSCore;
                     return null;
                 }
                 this._data.push(item);
-                this.events.trigger(CollectionEvents.ADD, { items: [item] });
+                var addedItems = [{
+                        item: item,
+                        index: this.indexOf(item)
+                    }];
+                this.events.trigger(CollectionEvents.ADD, { operations: addedItems });
                 this.events.trigger(CollectionEvents.CHANGE);
                 return item;
             };
@@ -482,19 +486,36 @@ var TSCore;
                 });
                 if (itemsToAdd.length > 0) {
                     this._data = this._data.concat(itemsToAdd);
-                    this.events.trigger(CollectionEvents.ADD, { items: itemsToAdd });
+                    var addedItems = _.map(itemsToAdd, function (item) {
+                        return {
+                            item: item,
+                            index: _this.indexOf(item)
+                        };
+                    });
+                    this.events.trigger(CollectionEvents.ADD, { operations: addedItems });
                     this.events.trigger(CollectionEvents.CHANGE);
                 }
                 return itemsToAdd;
             };
             Collection.prototype.remove = function (item) {
+                var removedItems = [{
+                        item: item,
+                        index: this.indexOf(item)
+                    }];
                 this._data = _.without(this._data, item);
-                this.events.trigger(CollectionEvents.REMOVE, { items: [item], clear: false });
+                this.events.trigger(CollectionEvents.REMOVE, { operations: removedItems, clear: false });
                 this.events.trigger(CollectionEvents.CHANGE);
             };
             Collection.prototype.removeMany = function (items) {
+                var _this = this;
+                var removedItems = _.map(items, function (item) {
+                    return {
+                        item: item,
+                        index: _this.indexOf(item)
+                    };
+                });
                 this._data = _.difference(this._data, items);
-                this.events.trigger(CollectionEvents.REMOVE, { items: items, clear: false });
+                this.events.trigger(CollectionEvents.REMOVE, { operations: removedItems, clear: false });
                 this.events.trigger(CollectionEvents.CHANGE);
             };
             Collection.prototype.removeWhere = function (properties) {
@@ -535,6 +556,9 @@ var TSCore;
             };
             Collection.prototype.filter = function (iterator) {
                 return _.filter(this._data, iterator);
+            };
+            Collection.prototype.indexOf = function (item) {
+                return _.indexOf(this._data, item);
             };
             Collection.prototype.find = function (iterator) {
                 return _.find(this._data, iterator);
@@ -719,7 +743,8 @@ var TSCore;
                 return new List(data);
             };
             List.prototype.pluck = function (propertyName) {
-                return _.pluck(this._data, propertyName);
+                var data = _.pluck(_.clone(this._data), propertyName);
+                return new TSCore.Data.List(data);
             };
             List.prototype.isEmpty = function () {
                 return this.count() === 0;
@@ -1916,49 +1941,6 @@ var TSCore;
         Utils.Text = Text;
     })(Utils = TSCore.Utils || (TSCore.Utils = {}));
 })(TSCore || (TSCore = {}));
-var TSCore;
-(function (TSCore) {
-    var Utils;
-    (function (Utils) {
-        var URL = (function (_super) {
-            __extends(URL, _super);
-            function URL(path) {
-                _super.call(this);
-                this._path = path;
-            }
-            Object.defineProperty(URL.prototype, "path", {
-                get: function () {
-                    return this._path;
-                },
-                enumerable: true,
-                configurable: true
-            });
-            Object.defineProperty(URL.prototype, "host", {
-                get: function () {
-                    return "www.example.com";
-                },
-                enumerable: true,
-                configurable: true
-            });
-            Object.defineProperty(URL.prototype, "basePath", {
-                get: function () {
-                    return "http://www.example.com/";
-                },
-                enumerable: true,
-                configurable: true
-            });
-            Object.defineProperty(URL.prototype, "relativePath", {
-                get: function () {
-                    return "home/index";
-                },
-                enumerable: true,
-                configurable: true
-            });
-            return URL;
-        })(TSCore.BaseObject);
-        Utils.URL = URL;
-    })(Utils = TSCore.Utils || (TSCore.Utils = {}));
-})(TSCore || (TSCore = {}));
 /// <reference path="../typings/tsd.d.ts" />
 /// <reference path="TSCore/BaseObject.ts" />
 /// <reference path="TSCore/Config.ts" />
@@ -1995,5 +1977,4 @@ var TSCore;
 /// <reference path="TSCore/Utils/Enum.ts" />
 /// <reference path="TSCore/Utils/Random.ts" />
 /// <reference path="TSCore/Utils/Text.ts" />
-/// <reference path="TSCore/Utils/URL.ts" />
 //# sourceMappingURL=ts-core.js.map

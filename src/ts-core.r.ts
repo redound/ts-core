@@ -36,5 +36,4 @@
 /// <reference path="TSCore/Utils/Enum.ts" />
 /// <reference path="TSCore/Utils/Random.ts" />
 /// <reference path="TSCore/Utils/Text.ts" />
-/// <reference path="TSCore/Utils/URL.ts" />
 //grunt-end

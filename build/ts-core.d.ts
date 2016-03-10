@@ -163,9 +163,10 @@ declare module TSCore.Data {
         replaceItem(source: T, replacement: T): T;
         clear(): void;
         each(iterator: _.ListIterator<T, void>): void;
-        pluck(propertyName: string): TSCore.Data.Collection<string>;
+        pluck<S>(propertyName: string): TSCore.Data.Collection<S>;
         isEmpty(): boolean;
         filter(iterator?: _.ListIterator<T, boolean>): T[];
+        indexOf(item: T): number;
         find(iterator?: _.ListIterator<T, boolean>): T;
         where(properties: {}): T[];
         whereFirst(properties: {}): T;
@@ -228,7 +229,7 @@ declare module TSCore.Data {
         clear(): void;
         each(iterator: _.ListIterator<T, void>): void;
         map<S>(iterator: _.ListIterator<T, any>, context?: any): List<S>;
-        pluck(propertyName: string): any[];
+        pluck<S>(propertyName: string): TSCore.Data.List<S>;
         isEmpty(): boolean;
         first(): T;
         last(): T;
@@ -582,32 +583,5 @@ declare module TSCore.Utils {
         static ucFirst(input: string): string;
         static startsWith(source: string, search: string): boolean;
         static endsWith(source: string, search: string): boolean;
-    }
-}
-declare module TSCore.Utils {
-    class URL extends TSCore.BaseObject {
-        private _absoluteString;
-        private _absoluteUrl;
-        private _basePath;
-        private _fragment;
-        private _lastPathComponent;
-        private _parameterString;
-        private _password;
-        private _path;
-        private _pathComponents;
-        private _pathExtension;
-        private _port;
-        private _query;
-        private _relativePath;
-        private _relativeString;
-        private _resourceSpecifier;
-        private _scheme;
-        private _standardizedUrl;
-        private _user;
-        constructor(path: any);
-        path: string;
-        host: string;
-        basePath: string;
-        relativePath: string;
     }
 }

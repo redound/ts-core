@@ -249,14 +249,14 @@ module TSCore.Data {
         }
 
         /**
-         * A convenient version of what is perhaps the most common use-case for map:
-         * extracting a list of property values.
+         * The pluck method retrieves all of the list values for a given key
          *
-         * @param propertyName Property name to pluck.
-         * @returns {any[]}
+         * @param propertyName
+         * @returns {TSCore.Data.List<S>|TSCore.Data.List}
          */
-        public pluck(propertyName:string) : any[] {
-            return _.pluck(this._data, propertyName);
+        public pluck<S>(propertyName:string) : TSCore.Data.List<S> {
+            var data = _.pluck(_.clone(this._data), propertyName);
+            return new TSCore.Data.List<S>(data);
         }
 
         /**
