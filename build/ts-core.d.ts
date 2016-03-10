@@ -92,6 +92,7 @@ declare module TSCore.Data {
         clear(): void;
         toObject(): {};
         toArray(): V[];
+        all(): V[];
         clone(): Dictionary<K, V>;
         protected _getPair(key: K): IDictionaryKeyValuePair;
         protected _getKeyString(key: K): string;
@@ -175,6 +176,7 @@ declare module TSCore.Data {
         transform(iterator: _.ListIterator<T, any>, context?: any): Collection<T>;
         reject(iterator: _.ListIterator<T, any>, context?: any): Collection<T>;
         toArray(): T[];
+        all(): T[];
         clone(): Collection<T>;
     }
 }
@@ -242,6 +244,7 @@ declare module TSCore.Data {
         whereFirst(properties: {}): T;
         contains(item: T): boolean;
         toArray(): T[];
+        all(): T[];
         clone(): List<T>;
     }
 }

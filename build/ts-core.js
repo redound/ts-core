@@ -326,6 +326,9 @@ var TSCore;
             Dictionary.prototype.toArray = function () {
                 return this.values();
             };
+            Dictionary.prototype.all = function () {
+                return this.values();
+            };
             Dictionary.prototype.clone = function () {
                 return new Dictionary(this._data);
             };
@@ -587,6 +590,9 @@ var TSCore;
             Collection.prototype.toArray = function () {
                 return _.clone(this._data);
             };
+            Collection.prototype.all = function () {
+                return _.clone(this._data);
+            };
             Collection.prototype.clone = function () {
                 return new Collection(_.clone(this._data));
             };
@@ -781,6 +787,9 @@ var TSCore;
                 return _.contains(this._data, item);
             };
             List.prototype.toArray = function () {
+                return _.clone(this._data);
+            };
+            List.prototype.all = function () {
                 return _.clone(this._data);
             };
             List.prototype.clone = function () {

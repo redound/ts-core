@@ -209,6 +209,10 @@ module TSCore.Data {
             return this.values();
         }
 
+        public all(): V[] {
+            return this.values();
+        }
+
         public clone(): Dictionary<K, V> {
             return new Dictionary<K, V>(this._data);
         }
