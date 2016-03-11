@@ -339,15 +339,20 @@ declare module TSCore.Data {
     }
 }
 declare module TSCore.Data {
+    enum SortedListDirection {
+        ASCENDING = 0,
+        DESCENDING = 1,
+    }
     class SortedList<T> extends TSCore.BaseObject {
         protected _sortPredicate: any;
+        protected _sortDirection: SortedListDirection;
         protected _data: T[];
         events: TSCore.Events.EventEmitter;
-        sortPredicate: any;
-        constructor(data: T[], sortPredicate: any);
+        constructor(data?: T[], sortPredicate?: any, direction?: SortedListDirection);
         length: number;
         count(): number;
         add(item: T): void;
+        protected sortedIndex(item: T): number;
         addMany(items?: T[]): void;
         remove(item: T): void;
         removeMany(items: T[]): void;
@@ -355,6 +360,7 @@ declare module TSCore.Data {
         replaceItem(source: T, replacement: T): T;
         clear(): void;
         each(iterator: _.ListIterator<T, void>): void;
+        map<S>(iterator: _.ListIterator<T, any>, context?: any): SortedList<S>;
         pluck(propertyName: string): any[];
         isEmpty(): boolean;
         first(): T;
@@ -368,7 +374,12 @@ declare module TSCore.Data {
         contains(item: T): boolean;
         toArray(): T[];
         clone(): SortedList<T>;
-        sort(): void;
+        resort(): void;
+        sort(predicate: any, direction?: SortedListDirection): void;
+        getSortPredicate(): any;
+        isAscending(): boolean;
+        isDescending(): boolean;
+        getSortDirection(): SortedListDirection;
     }
 }
 declare module TSCore.DateTime {

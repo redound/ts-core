@@ -4,45 +4,33 @@
 module TSCore.Data {
 
     import SortedListEvents = TSCore.Data.SortedListEvents;
+
+    export enum SortedListDirection {
+        ASCENDING,
+        DESCENDING
+    }
     
     export class SortedList<T> extends TSCore.BaseObject {
 
         protected _sortPredicate;
+        protected _sortDirection: SortedListDirection;
         protected _data:T[];
         public events: TSCore.Events.EventEmitter = new TSCore.Events.EventEmitter();
-
-
-        /**
-         * Magic getter for sortPredicate.
-         *
-         * @returns {any}
-         */
-        public get sortPredicate() {
-            return this._sortPredicate;
-        }
-
-        /** Magic setter for sortPredicate
-         *
-         * @param predicate Predicate to set.
-         */
-        public set sortPredicate(predicate) {
-            this._sortPredicate = predicate;
-            this.sort();
-        }
 
         /**
          * Constructor function
          * @param data Data to populate list of instance with.
          * @param sortPredicate Predicate to sort list to.
          */
-        constructor(data:T[], sortPredicate) {
+        constructor(data:T[] = null, sortPredicate = null, direction: SortedListDirection = SortedListDirection.ASCENDING) {
 
             super();
 
             this._data = data || [];
             this._sortPredicate = sortPredicate;
+            this._sortDirection = direction;
 
-            this.sort();
+            this.resort();
         }
 
         /**
@@ -70,13 +58,25 @@ module TSCore.Data {
          */
         public add(item:T) {
 
-            this._data.push(item);
-            this.sort();
+            var sortedIndex = this.sortedIndex(item);
 
-            var addedItems = [{ item: item, index: this.indexOf(item) }];
+            this._data.splice(sortedIndex, 0, item);
+
+            var addedItems = [{ item: item, index: sortedIndex }];
 
             this.events.trigger(SortedListEvents.ADD, { operations: addedItems });
             this.events.trigger(SortedListEvents.CHANGE);
+        }
+
+        protected sortedIndex(item: T) {
+
+            var target = _.clone(this._data);
+
+            if (this._sortDirection === SortedListDirection.DESCENDING) {
+                target.reverse();
+            }
+
+            return _.sortedIndex(target, item, this._sortPredicate);
         }
 
         /**
@@ -87,7 +87,7 @@ module TSCore.Data {
         public addMany(items:T[] = []) {
 
             this._data = this._data.concat(items);
-            this.sort();
+            this.resort();
 
             var addedItems = [];
 
@@ -109,13 +109,13 @@ module TSCore.Data {
          */
         public remove(item: T) {
 
-            this._data = _.without(this._data, item);
-            this.sort();
-
             var removedItems = [{
                 item: item,
                 index: this.indexOf(item)
             }];
+
+            this._data = _.without(this._data, item);
+            this.resort();
 
             this.events.trigger(SortedListEvents.REMOVE, { operations: removedItems, clear: false });
             this.events.trigger(SortedListEvents.CHANGE);
@@ -128,15 +128,15 @@ module TSCore.Data {
          */
         public removeMany(items: T[]) {
 
-            this._data = _.difference(this._data, items);
-            this.sort();
-
             var removedItems = _.map(items, item => {
                 return {
                     item: item,
                     index: this.indexOf(item)
                 };
             });
+
+            this._data = _.difference(this._data, items);
+            this.resort();
 
             this.events.trigger(SortedListEvents.REMOVE, { operations: removedItems, clear: false });
             this.events.trigger(SortedListEvents.CHANGE);
@@ -169,7 +169,7 @@ module TSCore.Data {
             var currentItem = this._data[index];
             this._data[index] = replacement;
 
-            this.sort();
+            this.resort();
 
             this.events.trigger(SortedListEvents.REPLACE, { source: source, replacement: replacement });
             this.events.trigger(SortedListEvents.CHANGE);
@@ -202,6 +202,11 @@ module TSCore.Data {
          */
         public each(iterator:_.ListIterator<T, void>){
             _.each(this._data, iterator);
+        }
+
+        public map<S>(iterator:_.ListIterator<T, any>, context?: any): SortedList<S> {
+            var data = _.map<T, S>(this._data, iterator, context);
+            return new SortedList(data, this._sortPredicate, this._sortDirection);
         }
 
         /**
@@ -333,11 +338,11 @@ module TSCore.Data {
 
 
         /**
-         * Sort list.
+         * Resort list.
          *
          * @returns {void}
          */
-        public sort(): void {
+        public resort(): void {
 
             if(this._sortPredicate === null || this._sortPredicate === undefined) {
                 return;
@@ -345,8 +350,43 @@ module TSCore.Data {
 
             this._data = _.sortBy(this._data, this._sortPredicate);
 
+            if (this._sortDirection === SortedListDirection.DESCENDING) {
+                this._data.reverse();
+            }
+
             this.events.trigger(SortedListEvents.SORT);
             this.events.trigger(SortedListEvents.CHANGE);
+        }
+
+        /** Set sortPredicate along with the sort direction
+         *
+         * @param predicate Predicate to set.
+         * @param direction Direction to sort list to (ASC&DESC)
+         */
+        public sort(predicate, direction: SortedListDirection = SortedListDirection.ASCENDING) {
+            this._sortPredicate = predicate;
+            this._sortDirection = direction;
+            this.resort();
+        }
+
+        /**
+         * Get the current sortPredicate
+         * @returns {any}
+         */
+        public getSortPredicate() {
+            return this._sortPredicate;
+        }
+
+        public isAscending() {
+            return this._sortDirection === SortedListDirection.ASCENDING;
+        }
+
+        public isDescending() {
+            return this._sortDirection === SortedListDirection.DESCENDING;
+        }
+
+        public getSortDirection(): SortedListDirection {
+            return this._sortDirection;
         }
     }
 }
