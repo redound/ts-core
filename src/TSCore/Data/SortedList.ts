@@ -30,7 +30,7 @@ module TSCore.Data {
             this._sortPredicate = sortPredicate;
             this._sortDirection = direction;
 
-            this.resort();
+            this.sort();
         }
 
         /**
@@ -87,7 +87,7 @@ module TSCore.Data {
         public addMany(items:T[] = []) {
 
             this._data = this._data.concat(items);
-            this.resort();
+            this.sort();
 
             var addedItems = [];
 
@@ -115,7 +115,7 @@ module TSCore.Data {
             }];
 
             this._data = _.without(this._data, item);
-            this.resort();
+            this.sort();
 
             this.events.trigger(SortedListEvents.REMOVE, { operations: removedItems, clear: false });
             this.events.trigger(SortedListEvents.CHANGE);
@@ -136,7 +136,7 @@ module TSCore.Data {
             });
 
             this._data = _.difference(this._data, items);
-            this.resort();
+            this.sort();
 
             this.events.trigger(SortedListEvents.REMOVE, { operations: removedItems, clear: false });
             this.events.trigger(SortedListEvents.CHANGE);
@@ -169,7 +169,7 @@ module TSCore.Data {
             var currentItem = this._data[index];
             this._data[index] = replacement;
 
-            this.resort();
+            this.sort();
 
             this.events.trigger(SortedListEvents.REPLACE, { source: source, replacement: replacement });
             this.events.trigger(SortedListEvents.CHANGE);
@@ -342,7 +342,7 @@ module TSCore.Data {
          *
          * @returns {void}
          */
-        public resort(): void {
+        public sort(): void {
 
             if(this._sortPredicate === null || this._sortPredicate === undefined) {
                 return;
@@ -363,10 +363,10 @@ module TSCore.Data {
          * @param predicate Predicate to set.
          * @param direction Direction to sort list to (ASC&DESC)
          */
-        public sort(predicate, direction: SortedListDirection = SortedListDirection.ASCENDING) {
+        public setSortPredicate(predicate, direction: SortedListDirection = SortedListDirection.ASCENDING) {
             this._sortPredicate = predicate;
             this._sortDirection = direction;
-            this.resort();
+            this.sort();
         }
 
         /**

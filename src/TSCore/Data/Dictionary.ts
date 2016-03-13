@@ -205,10 +205,6 @@ module TSCore.Data {
             return result;
         }
 
-        public toArray(): V[] {
-            return this.values();
-        }
-
         public all(): V[] {
             return this.values();
         }

@@ -40,11 +40,20 @@ module TSCore.Data {
         }
 
         /**
+         * Retrieve copy of data as an array
+         *
+         * @returns {any[]}
+         */
+        public all(): T[] {
+            return _.clone(this._data);
+        }
+
+        /**
          * Convert Collection to array.
          *
          * @returns {any[]}
          */
-        public toArray():any[] {
+        public toArray():T[] {
 
             var result = [];
 

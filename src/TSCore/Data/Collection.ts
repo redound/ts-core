@@ -318,16 +318,7 @@ module TSCore.Data {
         }
 
         /**
-         * Convert Collection to array.
-         *
-         * @returns {any[]}
-         */
-        public toArray() :T[] {
-            return _.clone(this._data);
-        }
-
-        /**
-         * Will return a copy of the data array.
+         * Retrieve copy of data as an array
          *
          * @returns {any[]}
          */
