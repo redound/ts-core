@@ -292,7 +292,8 @@ declare module TSCore.Data {
         addManyData(data: {}[]): T[];
         addData(data: {}): T;
         contains(item: T): boolean;
-        toArray(): any[];
+        all(): T[];
+        toArray(): T[];
         protected _instantiateModel(data: {}): T;
     }
 }
@@ -373,9 +374,10 @@ declare module TSCore.Data {
         whereFirst(properties: {}): T;
         contains(item: T): boolean;
         toArray(): T[];
+        all(): T[];
         clone(): SortedList<T>;
-        resort(): void;
-        sort(predicate: any, direction?: SortedListDirection): void;
+        sort(): void;
+        setSortPredicate(predicate: any, direction?: SortedListDirection): void;
         getSortPredicate(): any;
         isAscending(): boolean;
         isDescending(): boolean;
