@@ -1,4 +1,4 @@
-/// <reference path="../typings/tsd.d.ts" />
+/// <reference path="../typings/main.d.ts" />
 
 //grunt-start
 /// <reference path="TSCore/BaseObject.ts" />
