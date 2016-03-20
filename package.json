@@ -1,6 +1,6 @@
 {
   "name": "ts-core",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "description": "TypeScript Core Library",
   "main": "build/ts-core.js",
   "scripts": {
