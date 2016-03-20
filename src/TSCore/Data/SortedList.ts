@@ -332,10 +332,18 @@ module TSCore.Data {
             return _.clone(this._data);
         }
 
+        /**
+         * Retrieve copy of data as an array
+         *
+         * @returns {any[]}
+         */
+        public all(): T[] {
+            return _.clone(this._data);
+        }
+
         public clone(): SortedList<T> {
             return new SortedList<T>(_.clone(this._data), this._sortPredicate);
         }
-
 
         /**
          * Resort list.

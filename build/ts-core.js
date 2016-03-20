@@ -969,6 +969,9 @@ var TSCore;
                 predicate[primaryKey] = item[primaryKey];
                 return this.whereFirst(predicate) != null;
             };
+            ModelCollection.prototype.all = function () {
+                return _.clone(this._data);
+            };
             ModelCollection.prototype.toArray = function () {
                 var result = [];
                 this.each(function (item) {
@@ -1081,7 +1084,7 @@ var TSCore;
                 this._data = data || [];
                 this._sortPredicate = sortPredicate;
                 this._sortDirection = direction;
-                this.resort();
+                this.sort();
             }
             Object.defineProperty(SortedList.prototype, "length", {
                 get: function () {
@@ -1111,7 +1114,7 @@ var TSCore;
                 var _this = this;
                 if (items === void 0) { items = []; }
                 this._data = this._data.concat(items);
-                this.resort();
+                this.sort();
                 var addedItems = [];
                 _.each(items, function (item) {
                     addedItems.push({
@@ -1128,7 +1131,7 @@ var TSCore;
                         index: this.indexOf(item)
                     }];
                 this._data = _.without(this._data, item);
-                this.resort();
+                this.sort();
                 this.events.trigger(SortedListEvents.REMOVE, { operations: removedItems, clear: false });
                 this.events.trigger(SortedListEvents.CHANGE);
             };
@@ -1141,7 +1144,7 @@ var TSCore;
                     };
                 });
                 this._data = _.difference(this._data, items);
-                this.resort();
+                this.sort();
                 this.events.trigger(SortedListEvents.REMOVE, { operations: removedItems, clear: false });
                 this.events.trigger(SortedListEvents.CHANGE);
             };
@@ -1155,7 +1158,7 @@ var TSCore;
                 }
                 var currentItem = this._data[index];
                 this._data[index] = replacement;
-                this.resort();
+                this.sort();
                 this.events.trigger(SortedListEvents.REPLACE, { source: source, replacement: replacement });
                 this.events.trigger(SortedListEvents.CHANGE);
                 return currentItem;
@@ -1215,10 +1218,13 @@ var TSCore;
             SortedList.prototype.toArray = function () {
                 return _.clone(this._data);
             };
+            SortedList.prototype.all = function () {
+                return _.clone(this._data);
+            };
             SortedList.prototype.clone = function () {
                 return new SortedList(_.clone(this._data), this._sortPredicate);
             };
-            SortedList.prototype.resort = function () {
+            SortedList.prototype.sort = function () {
                 if (this._sortPredicate === null || this._sortPredicate === undefined) {
                     return;
                 }
@@ -1229,11 +1235,11 @@ var TSCore;
                 this.events.trigger(SortedListEvents.SORT);
                 this.events.trigger(SortedListEvents.CHANGE);
             };
-            SortedList.prototype.sort = function (predicate, direction) {
+            SortedList.prototype.setSortPredicate = function (predicate, direction) {
                 if (direction === void 0) { direction = SortedListDirection.ASCENDING; }
                 this._sortPredicate = predicate;
                 this._sortDirection = direction;
-                this.resort();
+                this.sort();
             };
             SortedList.prototype.getSortPredicate = function () {
                 return this._sortPredicate;

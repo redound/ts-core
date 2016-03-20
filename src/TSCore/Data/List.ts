@@ -379,6 +379,15 @@ module TSCore.Data {
          *
          * @returns {any[]}
          */
+        public toArray(): T[] {
+            return _.clone(this._data);
+        }
+
+        /**
+         * Retrieve copy of data as an array
+         *
+         * @returns {any[]}
+         */
         public all(): T[] {
             return _.clone(this._data);
         }
