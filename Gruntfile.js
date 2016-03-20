@@ -80,6 +80,6 @@ module.exports = function(grunt) {
     grunt.registerTask('build', [
         'compile',
         'karma:build',
-        'uglify:build',
+        'uglify:build'
     ]);
 };
