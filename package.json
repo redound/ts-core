@@ -7,7 +7,6 @@
     "test": "grunt test"
   },
   "dependencies": {
-    "tsd": "^0.6.3",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
