@@ -17,8 +17,7 @@ var TSCore;
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var TSCore;
 (function (TSCore) {
@@ -48,7 +47,6 @@ var TSCore;
         Events.Event = Event;
     })(Events = TSCore.Events || (TSCore.Events = {}));
 })(TSCore || (TSCore = {}));
-/// <reference path="Event.ts" />
 var TSCore;
 (function (TSCore) {
     var Events;
@@ -129,7 +127,6 @@ var TSCore;
         Events.EventEmitter = EventEmitter;
     })(Events = TSCore.Events || (TSCore.Events = {}));
 })(TSCore || (TSCore = {}));
-/// <reference path="Events/EventEmitter.ts" />
 var TSCore;
 (function (TSCore) {
     var Config = (function (_super) {
@@ -228,8 +225,6 @@ var TSCore;
         })(DictionaryEvents = Data.DictionaryEvents || (Data.DictionaryEvents = {}));
     })(Data = TSCore.Data || (TSCore.Data = {}));
 })(TSCore || (TSCore = {}));
-/// <reference path="../Events/EventEmitter.ts" />
-/// <reference path="DictionaryEvents.ts" />
 var TSCore;
 (function (TSCore) {
     var Data;
@@ -365,7 +360,6 @@ var TSCore;
         Data.Dictionary = Dictionary;
     })(Data = TSCore.Data || (TSCore.Data = {}));
 })(TSCore || (TSCore = {}));
-/// <reference path="./Data/Dictionary.ts" />
 var TSCore;
 (function (TSCore) {
     var Dictionary = TSCore.Data.Dictionary;
@@ -427,7 +421,6 @@ var TSCore;
     })(TSCore.BaseObject);
     TSCore.DI = DI;
 })(TSCore || (TSCore = {}));
-///<reference path="ICollectionOperation.ts"/>
 var TSCore;
 (function (TSCore) {
     var Data;
@@ -442,8 +435,6 @@ var TSCore;
         })(CollectionEvents = Data.CollectionEvents || (Data.CollectionEvents = {}));
     })(Data = TSCore.Data || (TSCore.Data = {}));
 })(TSCore || (TSCore = {}));
-/// <reference path="../Events/EventEmitter.ts" />
-/// <reference path="CollectionEvents.ts" />
 var TSCore;
 (function (TSCore) {
     var Data;
@@ -601,7 +592,6 @@ var TSCore;
         Data.Collection = Collection;
     })(Data = TSCore.Data || (TSCore.Data = {}));
 })(TSCore || (TSCore = {}));
-///<reference path="IListOperation.ts"/>
 var TSCore;
 (function (TSCore) {
     var Data;
@@ -616,8 +606,6 @@ var TSCore;
         })(ListEvents = Data.ListEvents || (Data.ListEvents = {}));
     })(Data = TSCore.Data || (TSCore.Data = {}));
 })(TSCore || (TSCore = {}));
-/// <reference path="../Events/EventEmitter.ts" />
-/// <reference path="ListEvents.ts" />
 var TSCore;
 (function (TSCore) {
     var Data;
@@ -800,7 +788,6 @@ var TSCore;
         Data.List = List;
     })(Data = TSCore.Data || (TSCore.Data = {}));
 })(TSCore || (TSCore = {}));
-///<reference path="List.ts"/>
 var TSCore;
 (function (TSCore) {
     var Data;
@@ -941,7 +928,6 @@ var TSCore;
         Data.Model = Model;
     })(Data = TSCore.Data || (TSCore.Data = {}));
 })(TSCore || (TSCore = {}));
-/// <reference path="./Collection.ts" />
 var TSCore;
 (function (TSCore) {
     var Data;
@@ -987,7 +973,6 @@ var TSCore;
         Data.ModelCollection = ModelCollection;
     })(Data = TSCore.Data || (TSCore.Data = {}));
 })(TSCore || (TSCore = {}));
-/// <reference path="./Collection.ts" />
 var TSCore;
 (function (TSCore) {
     var Data;
@@ -1031,7 +1016,6 @@ var TSCore;
         Data.ModelDictionary = ModelDictionary;
     })(Data = TSCore.Data || (TSCore.Data = {}));
 })(TSCore || (TSCore = {}));
-/// <reference path="./List.ts" />
 var TSCore;
 (function (TSCore) {
     var Data;
@@ -1046,7 +1030,6 @@ var TSCore;
         Data.ModelList = ModelList;
     })(Data = TSCore.Data || (TSCore.Data = {}));
 })(TSCore || (TSCore = {}));
-///<reference path="ISortedListOperation.ts"/>
 var TSCore;
 (function (TSCore) {
     var Data;
@@ -1062,7 +1045,6 @@ var TSCore;
         })(SortedListEvents = Data.SortedListEvents || (Data.SortedListEvents = {}));
     })(Data = TSCore.Data || (TSCore.Data = {}));
 })(TSCore || (TSCore = {}));
-///<reference path="SortedListEvents.ts"/>
 var TSCore;
 (function (TSCore) {
     var Data;
@@ -1589,7 +1571,6 @@ var TSCore;
         Geometry.Size = Size;
     })(Geometry = TSCore.Geometry || (TSCore.Geometry = {}));
 })(TSCore || (TSCore = {}));
-/// <reference path="Stream/IStream.ts" />
 var TSCore;
 (function (TSCore) {
     var Logger;
@@ -1679,7 +1660,6 @@ var TSCore;
         Logger_1.Logger = Logger;
     })(Logger = TSCore.Logger || (TSCore.Logger = {}));
 })(TSCore || (TSCore = {}));
-/// <reference path="IStream.ts" />
 var TSCore;
 (function (TSCore) {
     var Logger;
@@ -1986,40 +1966,4 @@ var TSCore;
         Utils.Text = Text;
     })(Utils = TSCore.Utils || (TSCore.Utils = {}));
 })(TSCore || (TSCore = {}));
-/// <reference path="../typings/tsd.d.ts" />
-/// <reference path="TSCore/BaseObject.ts" />
-/// <reference path="TSCore/Config.ts" />
-/// <reference path="TSCore/DI.ts" />
-/// <reference path="TSCore/Data/Collection.ts" />
-/// <reference path="TSCore/Data/CollectionEvents.ts" />
-/// <reference path="TSCore/Data/Dictionary.ts" />
-/// <reference path="TSCore/Data/DictionaryEvents.ts" />
-/// <reference path="TSCore/Data/DynamicList.ts" />
-/// <reference path="TSCore/Data/ICollectionOperation.ts" />
-/// <reference path="TSCore/Data/IListOperation.ts" />
-/// <reference path="TSCore/Data/ISortedListOperation.ts" />
-/// <reference path="TSCore/Data/List.ts" />
-/// <reference path="TSCore/Data/ListEvents.ts" />
-/// <reference path="TSCore/Data/Model.ts" />
-/// <reference path="TSCore/Data/ModelCollection.ts" />
-/// <reference path="TSCore/Data/ModelDictionary.ts" />
-/// <reference path="TSCore/Data/ModelList.ts" />
-/// <reference path="TSCore/Data/SortedList.ts" />
-/// <reference path="TSCore/Data/SortedListEvents.ts" />
-/// <reference path="TSCore/DateTime/Timer.ts" />
-/// <reference path="TSCore/Events/Event.ts" />
-/// <reference path="TSCore/Events/EventEmitter.ts" />
-/// <reference path="TSCore/Exception/ArgumentException.ts" />
-/// <reference path="TSCore/Exception/Exception.ts" />
-/// <reference path="TSCore/Geometry/Point.ts" />
-/// <reference path="TSCore/Geometry/Rect.ts" />
-/// <reference path="TSCore/Geometry/Size.ts" />
-/// <reference path="TSCore/Logger/Logger.ts" />
-/// <reference path="TSCore/Logger/Stream/Console.ts" />
-/// <reference path="TSCore/Logger/Stream/IStream.ts" />
-/// <reference path="TSCore/TSCore.ts" />
-/// <reference path="TSCore/Utils/Base64.ts" />
-/// <reference path="TSCore/Utils/Enum.ts" />
-/// <reference path="TSCore/Utils/Random.ts" />
-/// <reference path="TSCore/Utils/Text.ts" />
 //# sourceMappingURL=ts-core.js.map

@@ -1,5 +1,3 @@
-/// <reference path="../../build/ts-core.d.ts" /> 
-/// <reference path="TSCore.spec.ts" />
 describe("TSCore.Config", function () {
     var config = new TSCore.Config();
     beforeEach(function () {
@@ -109,7 +107,6 @@ describe("TSCore.Config", function () {
         });
     });
 });
-/// <reference path="TSCore.spec.ts" />
 describe("TSCore.DI", function () {
     var di = new TSCore.DI();
     beforeEach(function () {
@@ -187,7 +184,6 @@ describe("TSCore.DI", function () {
         });
     });
 });
-/// <reference path="../TSCore.spec.ts" />
 var CollectionEvents = TSCore.Data.CollectionEvents;
 describe("TSCore.Data.Collection", function () {
     var animal1 = {
@@ -578,7 +574,6 @@ describe("TSCore.Data.Collection", function () {
         });
     });
 });
-/// <reference path="../TSCore.spec.ts" />
 describe("TSCore.Data.DynamicList", function () {
     beforeEach(function () {
     });
@@ -613,7 +608,6 @@ describe("TSCore.Data.DynamicList", function () {
         });
     });
 });
-/// <reference path="../TSCore.spec.ts" />
 var ListEvents = TSCore.Data.ListEvents;
 describe("TSCore.Data.List", function () {
     var animal1 = {
@@ -791,7 +785,6 @@ describe("TSCore.Data.List", function () {
         });
     });
 });
-/// <reference path="../TSCore.spec.ts" />
 jasmine.clock().install();
 describe("TSCore.DateTime.Timer", function () {
     var timer = null;
@@ -839,7 +832,6 @@ describe("TSCore.DateTime.Timer", function () {
         });
     });
 });
-/// <reference path="../TSCore.spec.ts" />
 describe("TSCore.Events.EventEmitter", function () {
     var topicA = 'topicA';
     var topicB = 'topicB';
@@ -913,14 +905,12 @@ describe("TSCore.Events.EventEmitter", function () {
         expect(counter).toBe(13);
     });
 });
-/// <reference path="../TSCore.spec.ts" />
 describe("TSCore.Geometry.Point", function () {
     describe("constructor()", function () {
     });
     describe("translate()", function () {
     });
 });
-/// <reference path="../TSCore.spec.ts" />
 describe("TSCore.Geometry.Rect", function () {
     describe("center()", function () {
     });
@@ -951,7 +941,6 @@ describe("TSCore.Geometry.Rect", function () {
     describe("reduce()", function () {
     });
 });
-/// <reference path="../TSCore.spec.ts" />
 describe("TSCore.Geometry.Size", function () {
     it("instance should have a valid width property", function () {
         var width = 10;
@@ -972,7 +961,6 @@ describe("TSCore.Geometry.Size", function () {
         expect(size.halfHeight()).toBe(height / 2);
     });
 });
-/// <reference path="../../TSCore.spec.ts" />
 describe("TSCore.Logger.Stream.Console", function () {
     var logSpy = jasmine.createSpy('logSpy');
     var infoSpy = jasmine.createSpy('infoSpy');
@@ -1001,7 +989,6 @@ describe("TSCore.Logger.Stream.Console", function () {
         });
     });
 });
-/// <reference path="../TSCore.spec.ts" />
 describe("TSCore.Utils.Text", function () {
     describe("startsWith()", function () {
         it("should return true when source Text starts with search Text", function () {

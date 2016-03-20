@@ -1,6 +1,7 @@
 .idea
 .tscache
 typings
+bower_components
 node_modules
 coverage/**
 .coveralls.yml

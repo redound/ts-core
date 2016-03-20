@@ -60,7 +60,7 @@ module.exports = function(grunt) {
 
 
         var contents = grunt.file.read('./build/ts-core.d.ts');
-        contents = contents.replace("/// <reference path=\"../typings/tsd.d.ts\" />\n", "");
+        contents = contents.replace("/// <reference path=\"../typings/main.d.ts\" />\n", "");
         grunt.file.write('./build/ts-core.d.ts', contents);
     });
 

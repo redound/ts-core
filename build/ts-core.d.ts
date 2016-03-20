@@ -277,8 +277,8 @@ declare module TSCore.Data {
         static whitelist(): string[];
         static defaults(): any;
         getId(): any;
-        assign(data?: any): Model;
-        assignAll(data?: any): Model;
+        assign(data?: any): this;
+        assignAll(data?: any): this;
         merge(model: Model): void;
         equals(data: any): boolean;
         getDataKeys(): string[];
