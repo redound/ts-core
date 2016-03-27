@@ -2,7 +2,11 @@
   "name": "ts-core",
   "description": "TypeScript Core Library",
   "version": "0.7.0",
-  "main": "ts-core.js",
+  "directories": {
+    "lib": "src"
+  },
+  "format": "cjs",
+  "registry": "jspm",
   "scripts": {
     "test": "",
     "postinstall": "typings install",
