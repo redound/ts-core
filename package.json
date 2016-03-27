@@ -1,6 +1,7 @@
 {
   "name": "ts-core",
   "description": "TypeScript Core Library",
+  "version": "0.7.0",
   "main": "ts-core.js",
   "scripts": {
     "test": "",
