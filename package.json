@@ -5,7 +5,7 @@
   "main": "ts-core.js",
   "scripts": {
     "test": "",
-    "postinstall": "tsd install",
+    "postinstall": "typings install",
     "build": "tsc && browserify ts-core.js -o ts-core.tmp.js --standalone TSCore && mv ts-core.tmp.js ts-core.js"
   },
   "dependencies": {
