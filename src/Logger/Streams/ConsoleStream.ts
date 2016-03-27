@@ -1,6 +1,5 @@
 ///<reference path="../../../typings/main.d.ts"/>
 
-import _ from "underscore";
 import {LogLevels, LogOptionsInterface, StreamInterface} from "../Logger";
 import BaseObject from "../../BaseObject";
 
@@ -11,7 +10,7 @@ export interface ConsoleInterface {
     error();
 }
 
-export default class Console extends BaseObject implements StreamInterface {
+export default class ConsoleStream extends BaseObject implements StreamInterface {
 
     constructor(private _console:ConsoleInterface, public colorsEnabled:boolean = true) {
         super();
