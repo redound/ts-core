@@ -1,6 +1,6 @@
 ///<reference path="../../typings/main.d.ts"/>
 
-import _ from "underscore";
+import * as _ from "underscore";
 import Model from "./Model";
 import {ModelInterface} from "./Model";
 import Collection from "./Collection";
