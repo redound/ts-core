@@ -5,13 +5,15 @@
   "main": "ts-core.js",
   "scripts": {
     "test": "",
+    "postinstall": "tsd install",
     "build": "tsc && browserify ts-core.js -o ts-core.tmp.js --standalone TSCore && mv ts-core.tmp.js ts-core.js"
   },
   "dependencies": {
     "underscore": "^1.8.3"
   },
   "devDependencies": {
-    "browserify": "^13.0.0"
+    "browserify": "^13.0.0",
+    "tsd": "^0.6.5"
   },
   "repository": {
     "type": "git",

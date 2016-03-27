@@ -1,5 +1,6 @@
 ///<reference path="../../../typings/main.d.ts"/>
 
+import _ from "underscore";
 import {LogLevels, LogOptionsInterface, StreamInterface} from "../Logger";
 import BaseObject from "../../BaseObject";
 
