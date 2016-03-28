@@ -1,8 +1,4 @@
-///<reference path="../../typings/main.d.ts"/>
-
-
-import Model from "./Model";
-import {ModelInterface} from "./Model";
+import Model, {ModelInterface} from "./Model";
 import Collection from "./Collection";
 
 export default class ModelCollection<T extends Model> extends Collection<T> {

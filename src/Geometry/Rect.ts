@@ -1,5 +1,3 @@
-///<reference path="../../typings/main.d.ts"/>
-
 import BaseObject from "../BaseObject";
 import Point from "./Point";
 import Size from "./Size";

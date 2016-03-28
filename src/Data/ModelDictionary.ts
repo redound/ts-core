@@ -1,22 +1,18 @@
-///<reference path="../../typings/main.d.ts"/>
-
-
 import {ModelInterface, default as Model} from "./Model";
-import Dictionary from "./Dictionary";
-import {DictionaryDataInterface} from "./Dictionary";
+import Dictionary, {DictionaryDataInterface} from "./Dictionary";
 
 export default class ModelDictionary<K, V extends Model> extends Dictionary<K, V> {
 
     protected _modelClass:ModelInterface;
 
-    constructor(modelClass:ModelInterface, data?: DictionaryDataInterface){
+    constructor(modelClass:ModelInterface, data?:DictionaryDataInterface) {
 
         super(data);
 
         this._modelClass = modelClass;
     }
 
-    public addManyData(data: {}[]): V[] {
+    public addManyData(data:{}[]):V[] {
 
         var addedItems = [];
 
@@ -31,7 +27,7 @@ export default class ModelDictionary<K, V extends Model> extends Dictionary<K, V
         return addedItems;
     }
 
-    public addData(data: {}): V {
+    public addData(data:{}):V {
 
         var instance = this._instantiateModel(data);
         this.set(data[this._modelClass.primaryKey()], instance);
@@ -39,21 +35,21 @@ export default class ModelDictionary<K, V extends Model> extends Dictionary<K, V
         return instance;
     }
 
-    public toArray(): any[] {
+    public toArray():any[] {
 
-        return _.map(super.toArray(), (item: V) => {
+        return _.map(super.toArray(), (item:V) => {
             return item.toObject();
         });
     }
 
-    public toObject(): {} {
+    public toObject():{} {
 
-        return _.mapObject(super.toObject, (item: V) => {
+        return _.mapObject(super.toObject, (item:V) => {
             return item.toObject();
         });
     }
 
-    protected _instantiateModel(data: {}): V {
+    protected _instantiateModel(data:{}):V {
         return <V>new this._modelClass(data);
     }
 }

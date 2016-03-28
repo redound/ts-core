@@ -1,5 +1,3 @@
-///<reference path="../../typings/main.d.ts"/>
-
 export default class Enum {
 
     static names(e:any) {

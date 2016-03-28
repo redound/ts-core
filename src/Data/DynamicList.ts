@@ -1,5 +1,3 @@
-///<reference path="../../typings/main.d.ts"/>
-
 import List from "./List";
 
 export default class DynamicList<T> extends List<T> {

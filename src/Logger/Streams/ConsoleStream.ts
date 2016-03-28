@@ -1,5 +1,3 @@
-///<reference path="../../../typings/main.d.ts"/>
-
 import {LogLevels, LogOptionsInterface, StreamInterface} from "../Logger";
 import BaseObject from "../../BaseObject";
 
