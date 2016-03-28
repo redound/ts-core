@@ -1,6 +1,6 @@
 ///<reference path="../../typings/main.d.ts"/>
 
-import _ from "underscore";
+
 import BaseObject from "../BaseObject";
 import EventEmitter from "../Events/EventEmitter";
 export module DictionaryEvents {
