@@ -21,4 +21,6 @@ export default class Model extends BaseObject {
     equals(data: any): boolean;
     getDataKeys(): string[];
     toObject(recursive?: boolean): {};
+    description: any;
+    toString(): any;
 }
