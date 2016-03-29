@@ -4,5 +4,32 @@
   "dependencies": {},
   "ambientDependencies": {
     "underscore": "registry:dt/underscore#1.7.0+20160316155526"
-  }
+  },
+  "typings": [
+    "./lib/Data/Collection.d.ts",
+    "./lib/Data/Dictionary.d.ts",
+    "./lib/Data/DynamicList.d.ts",
+    "./lib/Data/List.d.ts",
+    "./lib/Data/Model.d.ts",
+    "./lib/Data/ModelCollection.d.ts",
+    "./lib/Data/ModelDictionary.d.ts",
+    "./lib/Data/ModelList.d.ts",
+    "./lib/Data/SortedList.d.ts",
+    "./lib/DateTime/Timer.d.ts",
+    "./lib/Events/EventEmitter.d.ts",
+    "./lib/Exceptions/ArgumentException.d.ts",
+    "./lib/Exceptions/Exception.d.ts",
+    "./lib/Geometry/Point.d.ts",
+    "./lib/Geometry/Rect.d.ts",
+    "./lib/Geometry/Size.d.ts",
+    "./lib/Logger/Streams/ConsoleStream.d.ts",
+    "./lib/Logger/Logger.d.ts",
+    "./lib/Utils/Base64.d.ts",
+    "./lib/Utils/Enum.d.ts",
+    "./lib/Utils/Random.d.ts",
+    "./lib/Utils/Text.d.ts",
+    "./lib/BaseObject.d.ts",
+    "./lib/Config.d.ts",
+    "./lib/DI.d.ts"
+  ]
 }
