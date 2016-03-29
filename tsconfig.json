@@ -17,32 +17,7 @@
     "!./node_modules/**/*.ts"
   ],
   "files": [
-    "./src/Data/Collection.ts",
-    "./src/Data/Dictionary.ts",
-    "./src/Data/DynamicList.ts",
-    "./src/Data/List.ts",
-    "./src/Data/Model.ts",
-    "./src/Data/ModelCollection.ts",
-    "./src/Data/ModelDictionary.ts",
-    "./src/Data/ModelList.ts",
-    "./src/Data/SortedList.ts",
-    "./src/DateTime/Timer.ts",
-    "./src/Events/EventEmitter.ts",
-    "./src/Exceptions/ArgumentException.ts",
-    "./src/Exceptions/Exception.ts",
-    "./src/Geometry/Point.ts",
-    "./src/Geometry/Rect.ts",
-    "./src/Geometry/Size.ts",
-    "./src/Logger/Logger.ts",
-    "./src/Logger/Streams/ConsoleStream.ts",
-    "./src/Utils/Base64.ts",
-    "./src/Utils/Enum.ts",
-    "./src/Utils/Random.ts",
-    "./src/Utils/Text.ts",
-    "./src/BaseObject.ts",
-    "./src/Config.ts",
-    "./src/DI.ts",
-    "./src/index.ts",
+    "./src/typings.ts",
     "./typings/main.d.ts"
   ]
 }
