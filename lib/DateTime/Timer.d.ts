@@ -3,35 +3,35 @@ import EventEmitter from "../Events/EventEmitter";
 export interface TimerTickCallbackInterface {
     (tickCount: number, elapsedTime: number): void;
 }
-export declare module Events {
-    const START: string;
-    const PAUSE: string;
-    const RESUME: string;
-    const STOP: string;
-    const TICK: string;
-    interface IStartParams {
-        startDate: Date;
-    }
-    interface IPauseParams {
-        startDate: Date;
-        tickCount: number;
-        elapsedTime: number;
-    }
-    interface IResumeParams {
-        startDate: Date;
-        tickCount: number;
-        elapsedTime: number;
-    }
-    interface IStopParams {
-        startDate: Date;
-        tickCount: number;
-        elapsedTime: number;
-    }
-    interface ITickParams {
-        startDate: Date;
-        tickCount: number;
-        elapsedTime: number;
-    }
+export declare const TimerEvents: {
+    START: string;
+    PAUSE: string;
+    RESUME: string;
+    STOP: string;
+    TICK: string;
+};
+export interface TimerStartParamsInterface {
+    startDate: Date;
+}
+export interface TimerPauseParamsInterface {
+    startDate: Date;
+    tickCount: number;
+    elapsedTime: number;
+}
+export interface TimerResumeParamsInterface {
+    startDate: Date;
+    tickCount: number;
+    elapsedTime: number;
+}
+export interface TimerStopParamsInterface {
+    startDate: Date;
+    tickCount: number;
+    elapsedTime: number;
+}
+export interface TimerTickParamsInterface {
+    startDate: Date;
+    tickCount: number;
+    elapsedTime: number;
 }
 export default class Timer extends BaseObject {
     timeout: number;

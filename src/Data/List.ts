@@ -6,32 +6,32 @@ export interface ListOperationInterface<T> {
     index:number
 }
 
-export module ListEvents {
+export const ListEvents = {
+    ADD: 'add',
+    CHANGE: 'change',
+    REMOVE: 'remove',
+    REPLACE: 'replace',
+    CLEAR: 'clear'
+};
 
-    export const ADD:string = "add";
-    export const CHANGE:string = "change";
-    export const REMOVE:string = "remove";
-    export const REPLACE:string = "replace";
-    export const CLEAR:string = "clear";
+export interface ListChangeParamsInterface<T> {
+}
 
-    export interface IChangeParams<T> {
-    }
-    export interface IClearParams<T> {
-    }
+export interface ListClearParamsInterface<T> {
+}
 
-    export interface IAddParams<T> {
-        operations:ListOperationInterface<T>[],
-        clear:boolean
-    }
+export interface ListAddParamsInterface<T> {
+    operations:ListOperationInterface<T>[],
+    clear:boolean
+}
 
-    export interface IRemoveParams<T> {
-        operations:ListOperationInterface<T>[]
-    }
+export interface ListRemoveParamsInterface<T> {
+    operations:ListOperationInterface<T>[]
+}
 
-    export interface IReplaceParams<T> {
-        source:T,
-        replacement:T
-    }
+export interface ListReplaceParamsInterface<T> {
+    source:T,
+    replacement:T
 }
 
 export default class List<T> extends BaseObject {

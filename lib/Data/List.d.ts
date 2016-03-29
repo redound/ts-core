@@ -4,27 +4,27 @@ export interface ListOperationInterface<T> {
     item: T;
     index: number;
 }
-export declare module ListEvents {
-    const ADD: string;
-    const CHANGE: string;
-    const REMOVE: string;
-    const REPLACE: string;
-    const CLEAR: string;
-    interface IChangeParams<T> {
-    }
-    interface IClearParams<T> {
-    }
-    interface IAddParams<T> {
-        operations: ListOperationInterface<T>[];
-        clear: boolean;
-    }
-    interface IRemoveParams<T> {
-        operations: ListOperationInterface<T>[];
-    }
-    interface IReplaceParams<T> {
-        source: T;
-        replacement: T;
-    }
+export declare const ListEvents: {
+    ADD: string;
+    CHANGE: string;
+    REMOVE: string;
+    REPLACE: string;
+    CLEAR: string;
+};
+export interface ListChangeParamsInterface<T> {
+}
+export interface ListClearParamsInterface<T> {
+}
+export interface ListAddParamsInterface<T> {
+    operations: ListOperationInterface<T>[];
+    clear: boolean;
+}
+export interface ListRemoveParamsInterface<T> {
+    operations: ListOperationInterface<T>[];
+}
+export interface ListReplaceParamsInterface<T> {
+    source: T;
+    replacement: T;
 }
 export default class List<T> extends BaseObject {
     protected _data: T[];

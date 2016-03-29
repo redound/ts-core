@@ -5,41 +5,40 @@ export interface TimerTickCallbackInterface {
     (tickCount:number, elapsedTime:number):void;
 }
 
-export module Events {
+export const TimerEvents = {
+    START: 'start',
+    PAUSE: 'pause',
+    RESUME: 'resume',
+    STOP: 'stop',
+    TICK: 'tick'
+}
 
-    export const START:string = "start";
-    export const PAUSE:string = "pause";
-    export const RESUME:string = "resume";
-    export const STOP:string = "stop";
-    export const TICK:string = "tick";
+export interface TimerStartParamsInterface {
+    startDate:Date,
+}
 
-    export interface IStartParams {
-        startDate:Date,
-    }
+export interface TimerPauseParamsInterface {
+    startDate:Date,
+    tickCount:number,
+    elapsedTime:number
+}
 
-    export interface IPauseParams {
-        startDate:Date,
-        tickCount:number,
-        elapsedTime:number
-    }
+export interface TimerResumeParamsInterface {
+    startDate:Date,
+    tickCount:number,
+    elapsedTime:number
+}
 
-    export interface IResumeParams {
-        startDate:Date,
-        tickCount:number,
-        elapsedTime:number
-    }
+export interface TimerStopParamsInterface {
+    startDate:Date,
+    tickCount:number,
+    elapsedTime:number
+}
 
-    export interface IStopParams {
-        startDate:Date,
-        tickCount:number,
-        elapsedTime:number
-    }
-
-    export interface ITickParams {
-        startDate:Date,
-        tickCount:number,
-        elapsedTime:number
-    }
+export interface TimerTickParamsInterface {
+    startDate:Date,
+    tickCount:number,
+    elapsedTime:number
 }
 
 export default class Timer extends BaseObject {
@@ -109,7 +108,7 @@ export default class Timer extends BaseObject {
         this._tickCount = 0;
         this._startDate = new Date();
 
-        this.events.trigger(Events.START, {
+        this.events.trigger(TimerEvents.START, {
             startDate: this._startDate
         });
 
@@ -132,7 +131,7 @@ export default class Timer extends BaseObject {
 
         this._isStarted = true;
 
-        this.events.trigger(Events.RESUME, {
+        this.events.trigger(TimerEvents.RESUME, {
             startDate: this._startDate,
             tickCount: this._tickCount,
             elapsedTime: this.elapsedTime
@@ -155,7 +154,7 @@ export default class Timer extends BaseObject {
 
         this._isStarted = false;
 
-        this.events.trigger(Events.PAUSE, {
+        this.events.trigger(TimerEvents.PAUSE, {
             startDate: this._startDate,
             tickCount: this._tickCount,
             elapsedTime: this.elapsedTime
@@ -188,7 +187,7 @@ export default class Timer extends BaseObject {
 
         this.reset();
 
-        this.events.trigger(Events.STOP, eventParams);
+        this.events.trigger(TimerEvents.STOP, eventParams);
     }
 
     /**
@@ -236,7 +235,7 @@ export default class Timer extends BaseObject {
             this.tickCallback(this._tickCount, this.elapsedTime);
         }
 
-        this.events.trigger(Events.TICK, {
+        this.events.trigger(TimerEvents.TICK, {
             startDate: this._startDate,
             tickCount: this._tickCount,
             elapsedTime: this.elapsedTime

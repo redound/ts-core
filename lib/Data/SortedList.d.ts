@@ -4,30 +4,30 @@ export interface ISortedListOperation<T> {
     item: T;
     index: number;
 }
-export declare module SortedListEvents {
-    const ADD: string;
-    const CHANGE: string;
-    const REMOVE: string;
-    const REPLACE: string;
-    const CLEAR: string;
-    const SORT: string;
-    interface IChangeParams<T> {
-    }
-    interface IClearParams<T> {
-    }
-    interface ISortParams<T> {
-    }
-    interface IAddParams<T> {
-        operations: ISortedListOperation<T>[];
-    }
-    interface IRemoveParams<T> {
-        operations: ISortedListOperation<T>[];
-        clear: boolean;
-    }
-    interface IReplaceParams<T> {
-        source: T;
-        replacement: T;
-    }
+export declare const SortedListEvents: {
+    ADD: string;
+    CHANGE: string;
+    REMOVE: string;
+    REPLACE: string;
+    CLEAR: string;
+    SORT: string;
+};
+export interface SortedListChangeParamsInterface<T> {
+}
+export interface SortedListClearParamsInterface<T> {
+}
+export interface SortedListSortParamsInterface<T> {
+}
+export interface SortedListAddParamsInterface<T> {
+    operations: ISortedListOperation<T>[];
+}
+export interface SortedListRemoveParamsInterface<T> {
+    operations: ISortedListOperation<T>[];
+    clear: boolean;
+}
+export interface SortedListReplaceParamsInterface<T> {
+    source: T;
+    replacement: T;
 }
 export declare enum SortedListDirection {
     ASCENDING = 0,

@@ -6,35 +6,36 @@ export interface ISortedListOperation<T> {
     index:number
 }
 
-export module SortedListEvents {
+export const SortedListEvents = {
+    ADD: 'add',
+    CHANGE: 'change',
+    REMOVE: 'remove',
+    REPLACE: 'replace',
+    CLEAR: 'clear',
+    SORT: 'sort'
+};
 
-    export const ADD:string = "add";
-    export const CHANGE:string = "change";
-    export const REMOVE:string = "remove";
-    export const REPLACE:string = "replace";
-    export const CLEAR:string = "clear";
-    export const SORT:string = "sort";
+export interface SortedListChangeParamsInterface<T> {
+}
 
-    export interface IChangeParams<T> {
-    }
-    export interface IClearParams<T> {
-    }
-    export interface ISortParams<T> {
-    }
+export interface SortedListClearParamsInterface<T> {
+}
 
-    export interface IAddParams<T> {
-        operations:ISortedListOperation<T>[]
-    }
+export interface SortedListSortParamsInterface<T> {
+}
 
-    export interface IRemoveParams<T> {
-        operations:ISortedListOperation<T>[],
-        clear:boolean
-    }
+export interface SortedListAddParamsInterface<T> {
+    operations:ISortedListOperation<T>[]
+}
 
-    export interface IReplaceParams<T> {
-        source:T,
-        replacement:T
-    }
+export interface SortedListRemoveParamsInterface<T> {
+    operations:ISortedListOperation<T>[],
+    clear:boolean
+}
+
+export interface SortedListReplaceParamsInterface<T> {
+    source:T,
+    replacement:T
 }
 
 export enum SortedListDirection {
@@ -222,7 +223,7 @@ export default class SortedList<T> extends BaseObject {
         });
 
         this._data = [];
-        this.events.trigger<SortedListEvents.IRemoveParams<T>>(SortedListEvents.REMOVE, {
+        this.events.trigger<SortedListRemoveParamsInterface<T>>(SortedListEvents.REMOVE, {
             operations: removedItems,
             clear: true
         });

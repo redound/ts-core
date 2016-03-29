@@ -1,30 +1,30 @@
 import BaseObject from "../BaseObject";
 import EventEmitter from "../Events/EventEmitter";
-export interface ICollectionOperation<T> {
+export interface CollectionOperationInterface<T> {
     item: T;
     index: number;
 }
-export declare module CollectionEvents {
-    const ADD: string;
-    const CHANGE: string;
-    const REMOVE: string;
-    const REPLACE: string;
-    const CLEAR: string;
-    interface IChangeParams<T> {
-    }
-    interface IClearParams<T> {
-    }
-    interface IAddParams<T> {
-        operations: ICollectionOperation<T>[];
-    }
-    interface IRemoveParams<T> {
-        operations: ICollectionOperation<T>[];
-        clear: boolean;
-    }
-    interface IReplaceParams<T> {
-        source: T;
-        replacement: T;
-    }
+export declare const CollectionEvents: {
+    ADD: string;
+    CHANGE: string;
+    REMOVE: string;
+    REPLACE: string;
+    CLEAR: string;
+};
+export interface CollectionChangeParamsInterface<T> {
+}
+export interface CollectionClearParamsInterface<T> {
+}
+export interface CollectionAddParamsInterface<T> {
+    operations: CollectionOperationInterface<T>[];
+}
+export interface CollectionRemoveParamsInterface<T> {
+    operations: CollectionOperationInterface<T>[];
+    clear: boolean;
+}
+export interface CollectionReplaceParamsInterface<T> {
+    source: T;
+    replacement: T;
 }
 export default class Collection<T> extends BaseObject {
     protected _data: T[];

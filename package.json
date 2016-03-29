@@ -8,12 +8,8 @@
     "postinstall": "typings install",
     "build": "tsc"
   },
-  "dependencies": {
-    "underscore": "^1.8.3"
-  },
-  "devDependencies": {
-    "tsd": "^0.6.5"
-  },
+  "dependencies": {},
+  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ts-core/ts-core.git"

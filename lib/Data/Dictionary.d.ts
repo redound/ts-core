@@ -1,22 +1,22 @@
 import BaseObject from "../BaseObject";
 import EventEmitter from "../Events/EventEmitter";
-export declare module DictionaryEvents {
-    const ADD: string;
-    const CHANGE: string;
-    const REMOVE: string;
-    const CLEAR: string;
-    interface ChangeParamsInterface {
-    }
-    interface ChangeParamsInterface {
-    }
-    interface AddParamsInterface<K, V> {
-        key: K;
-        value: V;
-    }
-    interface RemoveParamsInterface<K, V> {
-        key: K;
-        value: V;
-    }
+export declare const DictionaryEvents: {
+    ADD: string;
+    CHANGE: string;
+    REMOVE: string;
+    CLEAR: string;
+};
+export interface DictionaryChangeParamsInterface {
+}
+export interface DictionaryChangeParamsInterface {
+}
+export interface DictionaryAddParamsInterface<K, V> {
+    key: K;
+    value: V;
+}
+export interface DictionaryRemoveParamsInterface<K, V> {
+    key: K;
+    value: V;
 }
 export interface DictionaryDataInterface {
     [key: string]: DictionaryKeyValuePairInterface;
