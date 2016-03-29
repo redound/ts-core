@@ -1,6 +1,6 @@
 {
   "name": "ts-core",
-  "main": "ts-core.d.ts",
+  "main": "lib",
   "version": false,
   "dependencies": {},
   "ambientDependencies": {
