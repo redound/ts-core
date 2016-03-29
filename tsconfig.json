@@ -17,7 +17,7 @@
     "!./node_modules/**/*.ts"
   ],
   "files": [
-    "./src/typings.ts",
+    "./src/ts-core.ts",
     "./typings/main.d.ts"
   ]
 }

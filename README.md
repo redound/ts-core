@@ -1,19 +1,25 @@
 TSCore 
 =========
 
-*TypeScript Core Library*
+> Typescript Core Library.
 
-This library is in it's early stages of development.
+## Usage
 
-## Installing ##
-Install using npm.
-````
-npm install ts-core
-````
+```ts
+import * as TSCore from 'ts-core'
+```
 
-## Documentation ##
-Read the full [documentation](http://ts-core.readme.io)
+## Contributing
 
-## Contributing ##
-Please file issues under GitHub, or submit a pull request if you'd like to directly contribute.
+```sh
+# Installation
+# Fork this repo (https://github.com/redound/ts-core)
+# Clone the fork (E.g. `https://github.com/<your_username>/ts-core.git`)
 
+cd ts-core
+
+```
+
+## License
+
+MIT

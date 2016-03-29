@@ -2,8 +2,8 @@
   "name": "ts-core",
   "description": "TypeScript Core Library",
   "version": "0.7.0",
-  "main": "lib/typings.js",
-  "typings": "lib/typings.d.ts",
+  "main": "lib/ts-core.js",
+  "typings": "lib/ts-core.d.ts",
   "scripts": {
     "test": "",
     "postinstall": "typings install",
