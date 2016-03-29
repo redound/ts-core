@@ -3,7 +3,6 @@
   "description": "TypeScript Core Library",
   "version": "0.7.0",
   "main": "lib/ts-core.js",
-  "typings": "lib/ts-core.d.ts",
   "scripts": {
     "test": "",
     "postinstall": "typings install",
