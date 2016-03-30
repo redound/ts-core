@@ -1,13 +1,13 @@
 import BaseObject from "../BaseObject";
 
-interface IEventEmitterCallbackItem {
+interface EventEmitterCallbackItemInterface {
     topic:string,
-    callback:IEventEmitterCallback,
+    callback:EventEmitterCallbackInterface,
     context?:any,
     once:boolean,
 }
 
-export interface IEventEmitterCallback {
+export interface EventEmitterCallbackInterface {
     (event:Event<any>);
 }
 
@@ -72,12 +72,12 @@ export default class EventEmitter extends BaseObject {
      * @param once          Run the callback for emitted event exactly one
      * @returns             {EventEmitter}
      */
-    public on(topics:string, callback:IEventEmitterCallback, context?, once:boolean = false):this {
+    public on(topics:string, callback:EventEmitterCallbackInterface, context?, once:boolean = false):this {
 
         _.each(topics.split(' '), (topic:string) => {
 
             // Get or create event collection
-            var callbackArray:IEventEmitterCallbackItem[] = this._eventCallbacks[topic];
+            var callbackArray:EventEmitterCallbackItemInterface[] = this._eventCallbacks[topic];
 
             if (!callbackArray) {
 
@@ -104,7 +104,7 @@ export default class EventEmitter extends BaseObject {
      * @param context       Context for the callback
      * @returns             {EventEmitter}
      */
-    public once(topics:string, callback:IEventEmitterCallback, context?):this {
+    public once(topics:string, callback:EventEmitterCallbackInterface, context?):this {
 
         return this.on.apply(this, [topics, callback, context, true]);
     }
@@ -171,7 +171,7 @@ export default class EventEmitter extends BaseObject {
         // create event
         var event = new Event(topic, params, caller);
 
-        _.each(callbackArray, (item:IEventEmitterCallbackItem) => {
+        _.each(callbackArray, (item:EventEmitterCallbackItemInterface) => {
 
             if (event.isStopped) {
                 return;

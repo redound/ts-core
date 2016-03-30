@@ -1,5 +1,5 @@
 import BaseObject from "../BaseObject";
-export interface IEventEmitterCallback {
+export interface EventEmitterCallbackInterface {
     (event: Event<any>): any;
 }
 export declare class Event<T> extends BaseObject {
@@ -14,8 +14,8 @@ export declare class Event<T> extends BaseObject {
 export default class EventEmitter extends BaseObject {
     private _eventCallbacks;
     constructor();
-    on(topics: string, callback: IEventEmitterCallback, context?: any, once?: boolean): this;
-    once(topics: string, callback: IEventEmitterCallback, context?: any): this;
+    on(topics: string, callback: EventEmitterCallbackInterface, context?: any, once?: boolean): this;
+    once(topics: string, callback: EventEmitterCallbackInterface, context?: any): this;
     off(topics: string, callback?: Function, context?: any): this;
     trigger<T>(topic: string, params?: T, caller?: any): this;
     reset(): this;
