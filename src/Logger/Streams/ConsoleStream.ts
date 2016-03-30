@@ -1,4 +1,4 @@
-import {LogLevels, LogOptionsInterface, StreamInterface} from "../Logger";
+import {LOG_LEVELS, LogOptionsInterface, StreamInterface} from "../Logger";
 import BaseObject from "../../BaseObject";
 
 export interface ConsoleInterface {
@@ -20,16 +20,16 @@ export default class ConsoleStream extends BaseObject implements StreamInterface
 
         switch (options.level) {
 
-            case LogLevels.LOG:
+            case LOG_LEVELS.LOG:
                 method = 'log';
                 break;
-            case LogLevels.INFO:
+            case LOG_LEVELS.INFO:
                 method = 'info';
                 break;
-            case LogLevels.WARN:
+            case LOG_LEVELS.WARN:
                 method = 'warn';
                 break;
-            case LogLevels.ERROR:
+            case LOG_LEVELS.ERROR:
                 method = 'error';
                 break;
         }

@@ -5,7 +5,7 @@ export interface StreamInterface extends BaseObject {
     exec(options:LogOptionsInterface);
 }
 
-export enum LogLevels {
+export enum LOG_LEVELS {
     LOG,
     INFO,
     WARN,
@@ -14,14 +14,14 @@ export enum LogLevels {
 }
 
 export interface LogOptionsInterface {
-    level:LogLevels;
+    level:LOG_LEVELS;
     tag:string;
     args:any[];
     time:number;
 }
 
 export interface StreamEntryInterface {
-    level:LogLevels;
+    level:LOG_LEVELS;
     stream:StreamInterface;
 }
 
@@ -58,7 +58,7 @@ export default class Logger extends BaseObject {
      * @param stream    StreamInterface instance.
      * @param level     Minimal log level for this stream
      */
-    public addStream(key:string, stream:StreamInterface, level:LogLevels = LogLevels.LOG) {
+    public addStream(key:string, stream:StreamInterface, level:LOG_LEVELS = LOG_LEVELS.LOG) {
 
         this._streams.set(key, {
             level: level,
@@ -85,52 +85,52 @@ export default class Logger extends BaseObject {
     }
 
     /**
-     * Execute log streams with LogLevels.LOG
+     * Execute log streams with LOG_LEVELS.LOG
      *
      * @returns {void}
      */
     public log(...args) {
-        this._exec(LogLevels.LOG, args);
+        this._exec(LOG_LEVELS.LOG, args);
     }
 
     /**
-     * Execute log streams with LogLevels.INFO
+     * Execute log streams with LOG_LEVELS.INFO
      *
      * @returns {void}
      */
     public info(...args) {
-        this._exec(LogLevels.INFO, args);
+        this._exec(LOG_LEVELS.INFO, args);
     }
 
     /**
-     * Execute log streams with LogLevels.WARN
+     * Execute log streams with LOG_LEVELS.WARN
      *
      * @returns {void}
      */
     public warn(...args) {
-        this._exec(LogLevels.WARN, args);
+        this._exec(LOG_LEVELS.WARN, args);
     }
 
     /**
-     * Execute log streams with LogLevels.INFO
+     * Execute log streams with LOG_LEVELS.INFO
      *
      * @returns {void}
      */
     public error(...args) {
-        this._exec(LogLevels.ERROR, args);
+        this._exec(LOG_LEVELS.ERROR, args);
     }
 
     /**
-     * Execute log streams with LogLevels.FATAL
+     * Execute log streams with LOG_LEVELS.FATAL
      *
      * @returns {void}
      */
     public fatal(...args) {
-        this._exec(LogLevels.FATAL, args);
+        this._exec(LOG_LEVELS.FATAL, args);
     }
 
 
-    private _exec(level:LogLevels, args:any[]) {
+    private _exec(level:LOG_LEVELS, args:any[]) {
 
         var tag = this._tag || args.shift();
 
