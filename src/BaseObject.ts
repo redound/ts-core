@@ -1,6 +1,6 @@
 export default class BaseObject {
 
-    public get static() {
+    public get source() {
         return Object.getPrototypeOf(this).constructor;
     }
 }

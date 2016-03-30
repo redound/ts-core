@@ -16,7 +16,7 @@ export default class Model extends BaseObject {
 
         super();
 
-        _.defaults(this, this.static.defaults());
+        _.defaults(this, this.source.defaults());
 
         if (data) {
             this.assignAll(data);
@@ -45,12 +45,12 @@ export default class Model extends BaseObject {
 
     public getId() {
 
-        return this[this.static.primaryKey()];
+        return this[this.source.primaryKey()];
     }
 
     public assign(data?:any):this {
 
-        _.each(this.static.whitelist(), (attr:string) => {
+        _.each(this.source.whitelist(), (attr:string) => {
 
             if (!_.isUndefined(data[attr])) {
                 this[attr] = data[attr];
