@@ -35,4 +35,8 @@ export default class Size extends BaseObject {
     public halfHeight():number {
         return this.height / 2;
     }
+
+    public toString() {
+        return `[Size width: ${this.width}, height: ${this.height}]`;
+    }
 }

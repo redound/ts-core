@@ -5,4 +5,5 @@ export default class Size extends BaseObject {
     constructor(width?: number, height?: number);
     halfWidth(): number;
     halfHeight(): number;
+    toString(): string;
 }

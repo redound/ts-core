@@ -254,4 +254,8 @@ export default class Rect extends BaseObject {
 
         return this;
     }
+
+    public toString() {
+        return `[Rect origin: (${this.origin.x}, ${this.origin.y}), size: (${this.size.width}, ${this.size.height})]`;
+    }
 }

@@ -4,4 +4,5 @@ export default class Point extends BaseObject {
     y: number;
     constructor(x?: number, y?: number);
     translate(x: number, y: number): void;
+    toString(): string;
 }

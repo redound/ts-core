@@ -23,4 +23,5 @@ export default class Rect extends BaseObject {
     insetCenter(horizontal: number, vertical: number): this;
     expand(horizontal: number, vertical: number): this;
     reduce(horizontal: number, vertical: number): this;
+    toString(): string;
 }
