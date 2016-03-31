@@ -10,7 +10,7 @@ export interface ModelInterface {
 
 export default class Model extends BaseObject {
 
-    public events:EventEmitter= new EventEmitter();
+    public events:EventEmitter = new EventEmitter();
 
     constructor(data?:any) {
 
