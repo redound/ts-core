@@ -30,7 +30,7 @@ export default class Point extends BaseObject {
         this.y += y;
     }
 
-    public toString() {
+    public toString():string {
         return `[Point x: ${this.x}, y: ${this.y}]`;
     }
 }

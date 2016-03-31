@@ -36,7 +36,7 @@ export default class Size extends BaseObject {
         return this.height / 2;
     }
 
-    public toString() {
+    public toString():string {
         return `[Size width: ${this.width}, height: ${this.height}]`;
     }
 }
