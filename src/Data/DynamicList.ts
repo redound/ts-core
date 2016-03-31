@@ -1,5 +1,6 @@
 import List from "./List";
 
+
 export default class DynamicList<T> extends List<T> {
 
     public setRange(start:number, items:T[]) {

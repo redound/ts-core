@@ -1,5 +1,6 @@
 import BaseObject from "./BaseObject";
 import Dictionary from "./Data/Dictionary";
+import * as _ from "underscore";
 
 export interface IDIInjectable {
     getDI():DI;

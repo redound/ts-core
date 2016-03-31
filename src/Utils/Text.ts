@@ -1,4 +1,5 @@
 import BaseObject from "../BaseObject";
+import * as _ from "underscore";
 
 export default class Text extends BaseObject {
 

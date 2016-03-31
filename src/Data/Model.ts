@@ -1,5 +1,7 @@
 import BaseObject from "../BaseObject";
 import EventEmitter from "../Events/EventEmitter";
+import * as _ from "underscore";
+
 
 export interface ModelInterface {
     new (data?:any):Model;

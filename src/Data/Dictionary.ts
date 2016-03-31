@@ -1,5 +1,7 @@
 import BaseObject from "../BaseObject";
 import EventEmitter from "../Events/EventEmitter";
+import * as _ from "underscore";
+
 
 export const DictionaryEvents = {
     ADD: 'add',

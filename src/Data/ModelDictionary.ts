@@ -1,5 +1,7 @@
 import {ModelInterface, default as Model} from "./Model";
 import Dictionary, {DictionaryDataInterface} from "./Dictionary";
+import * as _ from "underscore";
+
 
 export default class ModelDictionary<K, V extends Model> extends Dictionary<K, V> {
 

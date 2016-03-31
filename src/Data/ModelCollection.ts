@@ -1,5 +1,7 @@
 import Model, {ModelInterface} from "./Model";
 import Collection from "./Collection";
+import * as _ from "underscore";
+
 
 export default class ModelCollection<T extends Model> extends Collection<T> {
 

@@ -1,4 +1,5 @@
 import BaseObject from "../BaseObject";
+import * as _ from "underscore";
 
 interface EventEmitterCallbackItemInterface {
     topic:string,
@@ -50,7 +51,7 @@ export class Event<T> extends BaseObject {
 
 export default class EventEmitter extends BaseObject {
 
-    protected _eventCallbacks: any;
+    protected _eventCallbacks:any;
 
     /**
      * Constructor function
