@@ -1,5 +1,6 @@
 import BaseObject from "../BaseObject";
 import EventEmitter from "../Events/EventEmitter";
+import * as _ from "underscore";
 export interface ListOperationInterface<T> {
     item: T;
     index: number;
