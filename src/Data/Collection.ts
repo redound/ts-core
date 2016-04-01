@@ -36,7 +36,7 @@ export interface CollectionReplaceParamsInterface<T> {
 
 export default class Collection<T> extends BaseObject {
 
-    public data:T[];
+    protected data:T[];
     public events:EventEmitter = new EventEmitter();
 
 

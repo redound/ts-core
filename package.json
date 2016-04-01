@@ -9,7 +9,9 @@
     "build": "tsc"
   },
   "dependencies": {},
-  "devDependencies": {},
+  "devDependencies": {
+    "underscore": "^1.8.3"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ts-core/ts-core.git"

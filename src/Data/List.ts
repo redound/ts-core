@@ -37,7 +37,7 @@ export interface ListReplaceParamsInterface<T> {
 
 export default class List<T> extends BaseObject {
 
-    public data:T[];
+    protected data:T[];
     public events:EventEmitter = new EventEmitter();
 
     constructor(data?:T[]) {

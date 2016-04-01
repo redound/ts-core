@@ -4,7 +4,7 @@ import * as _ from "underscore";
 
 export default class ModelCollection<T extends Model> extends Collection<T> {
 
-    public modelClass:ModelInterface;
+    protected modelClass:ModelInterface;
 
     constructor(modelClass:ModelInterface, data?:T[]) {
 

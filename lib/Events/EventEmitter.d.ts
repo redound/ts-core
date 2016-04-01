@@ -12,7 +12,7 @@ export declare class Event<T> extends BaseObject {
     stop(): void;
 }
 export default class EventEmitter extends BaseObject {
-    eventCallbacks: any;
+    protected eventCallbacks: any;
     constructor();
     on(topics: string, callback: EventEmitterCallbackInterface, context?: any, once?: boolean): this;
     once(topics: string, callback: EventEmitterCallbackInterface, context?: any): this;

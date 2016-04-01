@@ -1,7 +1,7 @@
 import { ModelInterface, default as Model } from "./Model";
 import Dictionary, { DictionaryDataInterface } from "./Dictionary";
 export default class ModelDictionary<K, V extends Model> extends Dictionary<K, V> {
-    modelClass: ModelInterface;
+    protected modelClass: ModelInterface;
     constructor(modelClass: ModelInterface, data?: DictionaryDataInterface);
     addManyData(data: {}[]): V[];
     addData(data: {}): V;

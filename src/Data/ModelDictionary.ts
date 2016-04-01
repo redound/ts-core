@@ -5,7 +5,7 @@ import * as _ from "underscore";
 
 export default class ModelDictionary<K, V extends Model> extends Dictionary<K, V> {
 
-    public modelClass:ModelInterface;
+    protected modelClass:ModelInterface;
 
     constructor(modelClass:ModelInterface, data?:DictionaryDataInterface) {
 

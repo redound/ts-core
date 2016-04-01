@@ -51,7 +51,7 @@ export class Event<T> extends BaseObject {
 
 export default class EventEmitter extends BaseObject {
 
-    public eventCallbacks:any;
+    protected eventCallbacks:any;
 
     /**
      * Constructor function

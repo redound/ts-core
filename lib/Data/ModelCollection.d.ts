@@ -1,7 +1,7 @@
 import Model, { ModelInterface } from "./Model";
 import Collection from "./Collection";
 export default class ModelCollection<T extends Model> extends Collection<T> {
-    modelClass: ModelInterface;
+    protected modelClass: ModelInterface;
     constructor(modelClass: ModelInterface, data?: T[]);
     addManyData(data: {}[]): T[];
     addData(data: {}): T;

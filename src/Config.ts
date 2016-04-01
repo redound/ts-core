@@ -2,8 +2,8 @@ import EventEmitter from "./Events/EventEmitter";
 
 export default class Config extends EventEmitter {
 
-    private _cache:any;
-    private _data:any;
+    private cache:any;
+    private data:any;
 
     /**
      * Load config by passing data to constructor (optional)
@@ -29,19 +29,19 @@ export default class Config extends EventEmitter {
      */
     public get(key?:string):any {
 
-        this._data = this._data || {};
-        this._cache = this._cache || {};
+        this.data = this.data || {};
+        this.cache = this.cache || {};
 
         if (!key) {
-            return this._data;
+            return this.data;
         }
 
-        if (this._cache[key]) {
-            return this._cache[key];
+        if (this.cache[key]) {
+            return this.cache[key];
         }
 
         var segs = key.split('.');
-        var root = this._data;
+        var root = this.data;
 
         for (var i = 0; i < segs.length; i++) {
 
@@ -55,7 +55,7 @@ export default class Config extends EventEmitter {
             }
         }
 
-        return this._cache[key] = root;
+        return this.cache[key] = root;
     }
 
     /**
@@ -67,12 +67,12 @@ export default class Config extends EventEmitter {
      */
     public set(key:string, value:any):this {
 
-        this._cache = this._cache || {};
-        this._data = this._data || {};
+        this.cache = this.cache || {};
+        this.data = this.data || {};
 
         var segs = key.split('.');
 
-        var root = this._data;
+        var root = this.data;
 
         for (var i = 0; i < segs.length; i++) {
 
@@ -85,7 +85,7 @@ export default class Config extends EventEmitter {
             root = root[part];
         }
 
-        this._cache[key] = root = value;
+        this.cache[key] = root = value;
 
         return this;
     }
@@ -98,7 +98,7 @@ export default class Config extends EventEmitter {
      */
     public load(value:any):this {
 
-        this._data = value;
+        this.data = value;
         return this;
     }
 
@@ -123,18 +123,18 @@ export default class Config extends EventEmitter {
 
         if (key) {
 
-            this._cache = this._cache || {};
-            this._data = this._data || {};
+            this.cache = this.cache || {};
+            this.data = this.data || {};
 
             if (!this.has(key)) {
                 return this;
             }
 
             // Clear from cache
-            delete this._cache[key];
+            delete this.cache[key];
 
             var segs = key.split('.');
-            var root = this._data;
+            var root = this.data;
 
             for (var i = 0; i < segs.length; i++) {
 
@@ -154,8 +154,8 @@ export default class Config extends EventEmitter {
             return this;
         }
 
-        this._cache = {};
-        this._data = {};
+        this.cache = {};
+        this.data = {};
 
         return this;
     }

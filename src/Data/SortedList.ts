@@ -46,9 +46,9 @@ export enum SortedListDirection {
 
 export default class SortedList<T> extends BaseObject {
 
-    public sortPredicate;
-    public sortDirection:SortedListDirection;
-    public data:T[];
+    protected sortPredicate;
+    protected sortDirection:SortedListDirection;
+    protected data:T[];
     public events:EventEmitter = new EventEmitter();
 
     /**
