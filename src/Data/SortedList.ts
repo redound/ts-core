@@ -46,9 +46,9 @@ export enum SortedListDirection {
 
 export default class SortedList<T> extends BaseObject {
 
-    protected _sortPredicate;
-    protected _sortDirection:SortedListDirection;
-    protected _data:T[];
+    public sortPredicate;
+    public sortDirection:SortedListDirection;
+    public data:T[];
     public events:EventEmitter = new EventEmitter();
 
     /**
@@ -60,9 +60,9 @@ export default class SortedList<T> extends BaseObject {
 
         super();
 
-        this._data = data || [];
-        this._sortPredicate = sortPredicate;
-        this._sortDirection = direction;
+        this.data = data || [];
+        this.sortPredicate = sortPredicate;
+        this.sortDirection = direction;
 
         this.sort();
     }
@@ -82,7 +82,7 @@ export default class SortedList<T> extends BaseObject {
      * @returns {number}
      */
     public count():number {
-        return this._data.length;
+        return this.data.length;
     }
 
     /**
@@ -94,7 +94,7 @@ export default class SortedList<T> extends BaseObject {
 
         var sortedIndex = this.sortedIndex(item);
 
-        this._data.splice(sortedIndex, 0, item);
+        this.data.splice(sortedIndex, 0, item);
 
         var addedItems = [{item: item, index: sortedIndex}];
 
@@ -104,13 +104,13 @@ export default class SortedList<T> extends BaseObject {
 
     protected sortedIndex(item:T) {
 
-        var target = _.clone(this._data);
+        var target = _.clone(this.data);
 
-        if (this._sortDirection === SortedListDirection.DESCENDING) {
+        if (this.sortDirection === SortedListDirection.DESCENDING) {
             target.reverse();
         }
 
-        return _.sortedIndex(target, item, this._sortPredicate);
+        return _.sortedIndex(target, item, this.sortPredicate);
     }
 
     /**
@@ -120,7 +120,7 @@ export default class SortedList<T> extends BaseObject {
      */
     public addMany(items:T[] = []) {
 
-        this._data = this._data.concat(items);
+        this.data = this.data.concat(items);
         this.sort();
 
         var addedItems = [];
@@ -148,7 +148,7 @@ export default class SortedList<T> extends BaseObject {
             index: this.indexOf(item)
         }];
 
-        this._data = _.without(this._data, item);
+        this.data = _.without(this.data, item);
         this.sort();
 
         this.events.trigger(SortedListEvents.REMOVE, {operations: removedItems, clear: false});
@@ -169,7 +169,7 @@ export default class SortedList<T> extends BaseObject {
             };
         });
 
-        this._data = _.difference(this._data, items);
+        this.data = _.difference(this.data, items);
         this.sort();
 
         this.events.trigger(SortedListEvents.REMOVE, {operations: removedItems, clear: false});
@@ -194,14 +194,14 @@ export default class SortedList<T> extends BaseObject {
      */
     public replaceItem(source:T, replacement:T):T {
 
-        var index = _.indexOf(this._data, source);
+        var index = _.indexOf(this.data, source);
 
         if (index < 0 || index >= this.count()) {
             return null;
         }
 
-        var currentItem = this._data[index];
-        this._data[index] = replacement;
+        var currentItem = this.data[index];
+        this.data[index] = replacement;
 
         this.sort();
 
@@ -216,14 +216,14 @@ export default class SortedList<T> extends BaseObject {
      */
     public clear() {
 
-        var removedItems = _.map(this._data, (item, index) => {
+        var removedItems = _.map(this.data, (item, index) => {
             return {
                 item: item,
                 index: index
             }
         });
 
-        this._data = [];
+        this.data = [];
         this.events.trigger<SortedListRemoveParamsInterface<T>>(SortedListEvents.REMOVE, {
             operations: removedItems,
             clear: true
@@ -238,12 +238,12 @@ export default class SortedList<T> extends BaseObject {
      * @param iterator Iteratee function.
      */
     public each(iterator:_.ListIterator<T, void>) {
-        _.each(this._data, iterator);
+        _.each(this.data, iterator);
     }
 
     public map<S>(iterator:_.ListIterator<T, any>, context?:any):SortedList<S> {
-        var data = _.map<T, S>(this._data, iterator, context);
-        return new SortedList(data, this._sortPredicate, this._sortDirection);
+        var data = _.map<T, S>(this.data, iterator, context);
+        return new SortedList(data, this.sortPredicate, this.sortDirection);
     }
 
     /**
@@ -254,7 +254,7 @@ export default class SortedList<T> extends BaseObject {
      * @returns {any[]}
      */
     public pluck(propertyName:string):any[] {
-        return _.pluck(this._data, propertyName);
+        return _.pluck(this.data, propertyName);
     }
 
     /**
@@ -272,7 +272,7 @@ export default class SortedList<T> extends BaseObject {
      * @returns {T}
      */
     public first():T {
-        return _.first(this._data);
+        return _.first(this.data);
     }
 
     /**
@@ -280,7 +280,7 @@ export default class SortedList<T> extends BaseObject {
      * @returns {T}
      */
     public last():T {
-        return _.last(this._data);
+        return _.last(this.data);
     }
 
     /**
@@ -290,7 +290,7 @@ export default class SortedList<T> extends BaseObject {
      * @returns {T}
      */
     public get(index:number):T {
-        return this._data[index];
+        return this.data[index];
     }
 
     /**
@@ -300,7 +300,7 @@ export default class SortedList<T> extends BaseObject {
      * @returns {number}
      */
     public indexOf(item:T):number {
-        return _.indexOf(this._data, item);
+        return _.indexOf(this.data, item);
     }
 
     /**
@@ -310,7 +310,7 @@ export default class SortedList<T> extends BaseObject {
      * @returns {T[]}
      */
     public find(iterator?:_.ListIterator<T, boolean>):T[] {
-        return _.filter(this._data, iterator);
+        return _.filter(this.data, iterator);
     }
 
     /**
@@ -320,7 +320,7 @@ export default class SortedList<T> extends BaseObject {
      * @returns {T}
      */
     public findFirst(iterator?:_.ListIterator<T, boolean>):T {
-        return _.find(this._data, iterator);
+        return _.find(this.data, iterator);
     }
 
     /**
@@ -336,7 +336,7 @@ export default class SortedList<T> extends BaseObject {
      * @returns {T[]}
      */
     public where(properties:{}):T[] {
-        return _.where(this._data, properties);
+        return _.where(this.data, properties);
     }
 
     /**
@@ -347,7 +347,7 @@ export default class SortedList<T> extends BaseObject {
      * @returns {T}
      */
     public whereFirst(properties:{}):T {
-        return _.findWhere(this._data, properties);
+        return _.findWhere(this.data, properties);
     }
 
     /**
@@ -357,7 +357,7 @@ export default class SortedList<T> extends BaseObject {
      * @returns {boolean}
      */
     public contains(item:T):boolean {
-        return _.contains(this._data, item);
+        return _.contains(this.data, item);
     }
 
     /**
@@ -366,7 +366,7 @@ export default class SortedList<T> extends BaseObject {
      * @returns {any[]}
      */
     public toArray():T[] {
-        return _.clone(this._data);
+        return _.clone(this.data);
     }
 
     /**
@@ -375,11 +375,11 @@ export default class SortedList<T> extends BaseObject {
      * @returns {any[]}
      */
     public all():T[] {
-        return _.clone(this._data);
+        return _.clone(this.data);
     }
 
     public clone():SortedList<T> {
-        return new SortedList<T>(_.clone(this._data), this._sortPredicate);
+        return new SortedList<T>(_.clone(this.data), this.sortPredicate);
     }
 
     /**
@@ -389,14 +389,14 @@ export default class SortedList<T> extends BaseObject {
      */
     public sort():void {
 
-        if (this._sortPredicate === null || this._sortPredicate === undefined) {
+        if (this.sortPredicate === null || this.sortPredicate === undefined) {
             return;
         }
 
-        this._data = _.sortBy(this._data, this._sortPredicate);
+        this.data = _.sortBy(this.data, this.sortPredicate);
 
-        if (this._sortDirection === SortedListDirection.DESCENDING) {
-            this._data.reverse();
+        if (this.sortDirection === SortedListDirection.DESCENDING) {
+            this.data.reverse();
         }
 
         this.events.trigger(SortedListEvents.SORT);
@@ -409,8 +409,8 @@ export default class SortedList<T> extends BaseObject {
      * @param direction Direction to sort list to (ASC&DESC)
      */
     public setSortPredicate(predicate, direction:SortedListDirection = SortedListDirection.ASCENDING) {
-        this._sortPredicate = predicate;
-        this._sortDirection = direction;
+        this.sortPredicate = predicate;
+        this.sortDirection = direction;
         this.sort();
     }
 
@@ -419,18 +419,18 @@ export default class SortedList<T> extends BaseObject {
      * @returns {any}
      */
     public getSortPredicate() {
-        return this._sortPredicate;
+        return this.sortPredicate;
     }
 
     public isAscending() {
-        return this._sortDirection === SortedListDirection.ASCENDING;
+        return this.sortDirection === SortedListDirection.ASCENDING;
     }
 
     public isDescending() {
-        return this._sortDirection === SortedListDirection.DESCENDING;
+        return this.sortDirection === SortedListDirection.DESCENDING;
     }
 
     public getSortDirection():SortedListDirection {
-        return this._sortDirection;
+        return this.sortDirection;
     }
 }

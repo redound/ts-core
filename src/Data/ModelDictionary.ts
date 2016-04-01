@@ -5,13 +5,13 @@ import * as _ from "underscore";
 
 export default class ModelDictionary<K, V extends Model> extends Dictionary<K, V> {
 
-    protected _modelClass:ModelInterface;
+    public modelClass:ModelInterface;
 
     constructor(modelClass:ModelInterface, data?:DictionaryDataInterface) {
 
         super(data);
 
-        this._modelClass = modelClass;
+        this.modelClass = modelClass;
     }
 
     public addManyData(data:{}[]):V[] {
@@ -21,7 +21,7 @@ export default class ModelDictionary<K, V extends Model> extends Dictionary<K, V
         _.each(data, (item) => {
 
             var instance = this._instantiateModel(item);
-            this.set(item[this._modelClass.primaryKey()], instance);
+            this.set(item[this.modelClass.primaryKey()], instance);
 
             addedItems.push(instance);
         });
@@ -32,7 +32,7 @@ export default class ModelDictionary<K, V extends Model> extends Dictionary<K, V
     public addData(data:{}):V {
 
         var instance = this._instantiateModel(data);
-        this.set(data[this._modelClass.primaryKey()], instance);
+        this.set(data[this.modelClass.primaryKey()], instance);
 
         return instance;
     }
@@ -52,6 +52,6 @@ export default class ModelDictionary<K, V extends Model> extends Dictionary<K, V
     }
 
     protected _instantiateModel(data:{}):V {
-        return <V>new this._modelClass(data);
+        return <V>new this.modelClass(data);
     }
 }

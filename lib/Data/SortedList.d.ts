@@ -35,9 +35,9 @@ export declare enum SortedListDirection {
     DESCENDING = 1,
 }
 export default class SortedList<T> extends BaseObject {
-    protected _sortPredicate: any;
-    protected _sortDirection: SortedListDirection;
-    protected _data: T[];
+    sortPredicate: any;
+    sortDirection: SortedListDirection;
+    data: T[];
     events: EventEmitter;
     constructor(data?: T[], sortPredicate?: any, direction?: SortedListDirection);
     length: number;

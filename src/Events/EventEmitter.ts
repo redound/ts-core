@@ -51,7 +51,7 @@ export class Event<T> extends BaseObject {
 
 export default class EventEmitter extends BaseObject {
 
-    protected _eventCallbacks:any;
+    public eventCallbacks:any;
 
     /**
      * Constructor function
@@ -62,7 +62,7 @@ export default class EventEmitter extends BaseObject {
 
         super();
 
-        this._eventCallbacks = {};
+        this.eventCallbacks = {};
     }
 
     /**
@@ -78,12 +78,12 @@ export default class EventEmitter extends BaseObject {
         _.each(topics.split(' '), (topic:string) => {
 
             // Get or create event collection
-            var callbackArray:EventEmitterCallbackItemInterface[] = this._eventCallbacks[topic];
+            var callbackArray:EventEmitterCallbackItemInterface[] = this.eventCallbacks[topic];
 
             if (!callbackArray) {
 
                 callbackArray = [];
-                this._eventCallbacks[topic] = callbackArray;
+                this.eventCallbacks[topic] = callbackArray;
             }
 
             // Push callback
@@ -121,7 +121,7 @@ export default class EventEmitter extends BaseObject {
 
         _.each(topics.split(' '), (topic:string) => {
 
-            var callbackArray = this._eventCallbacks[topic];
+            var callbackArray = this.eventCallbacks[topic];
 
             if (!callbackArray) {
                 return;
@@ -129,7 +129,7 @@ export default class EventEmitter extends BaseObject {
 
             if (!callback) {
 
-                delete this._eventCallbacks[topic];
+                delete this.eventCallbacks[topic];
                 return;
             }
 
@@ -140,10 +140,10 @@ export default class EventEmitter extends BaseObject {
             callbackArray = _.difference(callbackArray, callbacksToRemove);
 
             if (callbackArray.length == 0) {
-                delete this._eventCallbacks[topic];
+                delete this.eventCallbacks[topic];
             }
             else {
-                this._eventCallbacks[topic] = callbackArray;
+                this.eventCallbacks[topic] = callbackArray;
             }
         });
 
@@ -163,7 +163,7 @@ export default class EventEmitter extends BaseObject {
      */
     public trigger<T>(topic:string, params?:T, caller?:any):this {
 
-        var callbackArray = this._eventCallbacks[topic];
+        var callbackArray = this.eventCallbacks[topic];
 
         if (!callbackArray) {
             return;
@@ -194,7 +194,7 @@ export default class EventEmitter extends BaseObject {
      * @returns {EventEmitter}
      */
     public reset():this {
-        this._eventCallbacks = {};
+        this.eventCallbacks = {};
 
         return this;
     }

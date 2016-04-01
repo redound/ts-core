@@ -28,7 +28,7 @@ export interface CollectionReplaceParamsInterface<T> {
     replacement: T;
 }
 export default class Collection<T> extends BaseObject {
-    protected _data: T[];
+    data: T[];
     events: EventEmitter;
     constructor(data?: T[]);
     length: number;

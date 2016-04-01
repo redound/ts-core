@@ -2,16 +2,15 @@ import Model, {ModelInterface} from "./Model";
 import Collection from "./Collection";
 import * as _ from "underscore";
 
-
 export default class ModelCollection<T extends Model> extends Collection<T> {
 
-    protected _modelClass:ModelInterface;
+    public modelClass:ModelInterface;
 
     constructor(modelClass:ModelInterface, data?:T[]) {
 
         super(data);
 
-        this._modelClass = modelClass;
+        this.modelClass = modelClass;
     }
 
     public addManyData(data:{}[]) {
@@ -32,7 +31,7 @@ export default class ModelCollection<T extends Model> extends Collection<T> {
 
     public contains(item:T):boolean {
 
-        var primaryKey = this._modelClass.primaryKey();
+        var primaryKey = this.modelClass.primaryKey();
 
         var predicate = {};
         predicate[primaryKey] = item[primaryKey];
@@ -46,7 +45,7 @@ export default class ModelCollection<T extends Model> extends Collection<T> {
      * @returns {any[]}
      */
     public all():T[] {
-        return _.clone(this._data);
+        return _.clone(this.data);
     }
 
     /**
@@ -66,6 +65,6 @@ export default class ModelCollection<T extends Model> extends Collection<T> {
     }
 
     protected _instantiateModel(data:{}):T {
-        return <T>new this._modelClass(data);
+        return <T>new this.modelClass(data);
     }
 }

@@ -36,14 +36,14 @@ export interface CollectionReplaceParamsInterface<T> {
 
 export default class Collection<T> extends BaseObject {
 
-    protected _data:T[];
+    public data:T[];
     public events:EventEmitter = new EventEmitter();
 
 
     constructor(data?:T[]) {
 
         super();
-        this._data = data || [];
+        this.data = data || [];
     }
 
     /**
@@ -61,7 +61,7 @@ export default class Collection<T> extends BaseObject {
      * @returns {number}
      */
     public count():number {
-        return this._data.length;
+        return this.data.length;
     }
 
     /**
@@ -75,7 +75,7 @@ export default class Collection<T> extends BaseObject {
             return null;
         }
 
-        this._data.push(item);
+        this.data.push(item);
 
         var addedItems = [{
             item: item,
@@ -107,7 +107,7 @@ export default class Collection<T> extends BaseObject {
 
         if (itemsToAdd.length > 0) {
 
-            this._data = this._data.concat(itemsToAdd);
+            this.data = this.data.concat(itemsToAdd);
 
             var addedItems = _.map(itemsToAdd, item => {
 
@@ -136,7 +136,7 @@ export default class Collection<T> extends BaseObject {
             index: this.indexOf(item)
         }];
 
-        this._data = _.without(this._data, item);
+        this.data = _.without(this.data, item);
 
         this.events.trigger(CollectionEvents.REMOVE, {operations: removedItems, clear: false});
         this.events.trigger(CollectionEvents.CHANGE);
@@ -157,7 +157,7 @@ export default class Collection<T> extends BaseObject {
             };
         });
 
-        this._data = _.difference(this._data, items);
+        this.data = _.difference(this.data, items);
 
         this.events.trigger(CollectionEvents.REMOVE, {operations: removedItems, clear: false});
         this.events.trigger(CollectionEvents.CHANGE);
@@ -183,14 +183,14 @@ export default class Collection<T> extends BaseObject {
      */
     public replaceItem(source:T, replacement:T):T {
 
-        var index = _.indexOf(this._data, source);
+        var index = _.indexOf(this.data, source);
 
         if (index < 0 || index >= this.count()) {
             return null;
         }
 
-        var currentItem = this._data[index];
-        this._data[index] = replacement;
+        var currentItem = this.data[index];
+        this.data[index] = replacement;
 
         this.events.trigger(CollectionEvents.REPLACE, {source: source, replacement: replacement});
         this.events.trigger(CollectionEvents.CHANGE);
@@ -203,14 +203,14 @@ export default class Collection<T> extends BaseObject {
      */
     public clear() {
 
-        var removedItems = _.map(this._data, (item, index) => {
+        var removedItems = _.map(this.data, (item, index) => {
             return {
                 item: item,
                 index: index
             }
         });
 
-        this._data = [];
+        this.data = [];
 
         this.events.trigger(CollectionEvents.REMOVE, {operations: removedItems, clear: true});
         this.events.trigger(CollectionEvents.CLEAR);
@@ -223,7 +223,7 @@ export default class Collection<T> extends BaseObject {
      * @param iterator Iteratee function.
      */
     public each(iterator:_.ListIterator<T, void>) {
-        _.each(this._data, iterator);
+        _.each(this.data, iterator);
     }
 
     /**
@@ -233,7 +233,7 @@ export default class Collection<T> extends BaseObject {
      * @returns {Collection<string>|Collection}
      */
     public pluck<S>(propertyName:string):Collection<S> {
-        var data = _.pluck(_.clone(this._data), propertyName);
+        var data = _.pluck(_.clone(this.data), propertyName);
         return new Collection<S>(data);
     }
 
@@ -253,7 +253,7 @@ export default class Collection<T> extends BaseObject {
      * @returns {T[]}
      */
     public filter(iterator?:_.ListIterator<T, boolean>):T[] {
-        return _.filter(this._data, iterator);
+        return _.filter(this.data, iterator);
     }
 
     /**
@@ -263,7 +263,7 @@ export default class Collection<T> extends BaseObject {
      * @returns {number}
      */
     public indexOf(item:T):number {
-        return _.indexOf(this._data, item);
+        return _.indexOf(this.data, item);
     }
 
     /**
@@ -273,7 +273,7 @@ export default class Collection<T> extends BaseObject {
      * @returns {T}
      */
     public find(iterator?:_.ListIterator<T, boolean>):T {
-        return _.find(this._data, iterator);
+        return _.find(this.data, iterator);
     }
 
     /**
@@ -289,7 +289,7 @@ export default class Collection<T> extends BaseObject {
      * @returns {T[]}
      */
     public where(properties:{}):T[] {
-        return _.where(this._data, properties);
+        return _.where(this.data, properties);
     }
 
     /**
@@ -300,7 +300,7 @@ export default class Collection<T> extends BaseObject {
      * @returns {T}
      */
     public whereFirst(properties:{}):T {
-        return _.findWhere(this._data, properties);
+        return _.findWhere(this.data, properties);
     }
 
     /**
@@ -310,7 +310,7 @@ export default class Collection<T> extends BaseObject {
      * @returns {boolean}
      */
     public contains(item:T):boolean {
-        return _.contains(this._data, item);
+        return _.contains(this.data, item);
     }
 
     /**
@@ -320,7 +320,7 @@ export default class Collection<T> extends BaseObject {
      * @returns {Collection<S>|Collection} returns new Collection
      */
     public map<S>(iterator:_.ListIterator<T, any>, context?:any):Collection<S> {
-        var data = _.map<T, S>(_.clone(this._data), iterator, context);
+        var data = _.map<T, S>(_.clone(this.data), iterator, context);
         return new Collection<S>(data);
     }
 
@@ -331,7 +331,7 @@ export default class Collection<T> extends BaseObject {
      * @returns {Collection|Collection}
      */
     public transform(iterator:_.ListIterator<T, any>, context?:any):Collection<T> {
-        this._data = _.map<T, T>(this._data, iterator, context);
+        this.data = _.map<T, T>(this.data, iterator, context);
         return this;
     }
 
@@ -342,7 +342,7 @@ export default class Collection<T> extends BaseObject {
      * @returns {Collection} Returns new Collection
      */
     public reject(iterator:_.ListIterator<T, any>, context?:any):Collection<T> {
-        var data = _.reject<T>(_.clone(this._data), iterator, context);
+        var data = _.reject<T>(_.clone(this.data), iterator, context);
         return new Collection(data);
     }
 
@@ -352,7 +352,7 @@ export default class Collection<T> extends BaseObject {
      * @returns {any[]}
      */
     public toArray():T[] {
-        return _.clone(this._data);
+        return _.clone(this.data);
     }
 
     /**
@@ -361,10 +361,10 @@ export default class Collection<T> extends BaseObject {
      * @returns {any[]}
      */
     public all():T[] {
-        return _.clone(this._data);
+        return _.clone(this.data);
     }
 
     public clone():Collection<T> {
-        return new Collection<T>(_.clone(this._data));
+        return new Collection<T>(_.clone(this.data));
     }
 }

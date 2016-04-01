@@ -45,8 +45,8 @@ export default class Dictionary<K, V> extends BaseObject {
     private static _OBJECT_UNIQUE_ID_KEY = '__TSCore_Object_Unique_ID';
     private static _OBJECT_UNIQUE_ID_COUNTER = 1;
 
-    protected _data:DictionaryDataInterface;
-    protected _itemCount:number = 0;
+    public data:DictionaryDataInterface;
+    public itemCount:number = 0;
 
     public events:EventEmitter = new EventEmitter();
 
@@ -55,8 +55,8 @@ export default class Dictionary<K, V> extends BaseObject {
 
         super();
 
-        this._data = data || {};
-        this._itemCount = Object.keys(this._data).length;
+        this.data = data || {};
+        this.itemCount = Object.keys(this.data).length;
     }
 
     /**
@@ -90,14 +90,14 @@ export default class Dictionary<K, V> extends BaseObject {
         var alreadyExisted = this.contains(key);
 
         var keyString = this._getKeyString(key);
-        this._data[keyString] = {
+        this.data[keyString] = {
             key: keyString,
             originalKey: key,
             value: value
         };
 
         if (!alreadyExisted) {
-            this._itemCount++;
+            this.itemCount++;
         }
 
         this.events.trigger(DictionaryEvents.ADD, {key: key, value: value});
@@ -117,10 +117,10 @@ export default class Dictionary<K, V> extends BaseObject {
 
         if (foundPair) {
 
-            delete this._data[foundPair.key];
+            delete this.data[foundPair.key];
             removedItem = foundPair.value;
 
-            this._itemCount--;
+            this.itemCount--;
 
             this.events.trigger(DictionaryEvents.REMOVE, {key: key, value: removedItem});
             this.events.trigger(DictionaryEvents.CHANGE);
@@ -162,7 +162,7 @@ export default class Dictionary<K, V> extends BaseObject {
      */
     public each(iterator:DictionaryIteratorInterface<K,V>):void {
 
-        _.each(this._data, (pair) => {
+        _.each(this.data, (pair) => {
             return iterator(pair.originalKey, pair.value);
         });
     }
@@ -173,7 +173,7 @@ export default class Dictionary<K, V> extends BaseObject {
      * @returns {V[]}
      */
     public values():V[] {
-        return _.pluck(_.values(this._data), 'value');
+        return _.pluck(_.values(this.data), 'value');
     }
 
     /**
@@ -182,7 +182,7 @@ export default class Dictionary<K, V> extends BaseObject {
      * @returns {K[]}
      */
     public keys():K[] {
-        return _.pluck(_.values(this._data), 'originalKey');
+        return _.pluck(_.values(this.data), 'originalKey');
     }
 
     /**
@@ -191,7 +191,7 @@ export default class Dictionary<K, V> extends BaseObject {
      * @returns {number}
      */
     public count():number {
-        return this._itemCount;
+        return this.itemCount;
     }
 
     /**
@@ -210,8 +210,8 @@ export default class Dictionary<K, V> extends BaseObject {
      */
     public clear():void {
 
-        this._data = {};
-        this._itemCount = 0;
+        this.data = {};
+        this.itemCount = 0;
 
         this.events.trigger(DictionaryEvents.CLEAR);
         this.events.trigger(DictionaryEvents.CHANGE);
@@ -221,7 +221,7 @@ export default class Dictionary<K, V> extends BaseObject {
 
         var result = {};
 
-        _.each(_.values(this._data), (item:DictionaryKeyValuePairInterface) => {
+        _.each(_.values(this.data), (item:DictionaryKeyValuePairInterface) => {
             result[item.originalKey] = item.value;
         });
 
@@ -237,7 +237,7 @@ export default class Dictionary<K, V> extends BaseObject {
     }
 
     public clone():Dictionary<K, V> {
-        return new Dictionary<K, V>(this._data);
+        return new Dictionary<K, V>(this.data);
     }
 
 
@@ -254,7 +254,7 @@ export default class Dictionary<K, V> extends BaseObject {
         var foundPair:DictionaryKeyValuePairInterface = null;
 
         if (keyString != null && keyString != undefined) {
-            foundPair = this._data[keyString];
+            foundPair = this.data[keyString];
         }
 
         return foundPair;

@@ -12,14 +12,14 @@ export default class DynamicList<T> extends List<T> {
         var rangeStartIndex = start;
         var rangeEndIndex = start + items.length;
 
-        var dataEndIndex = Math.max(this._data.length, 0);
+        var dataEndIndex = Math.max(this.data.length, 0);
 
         for (var dataIndex = Math.min(dataEndIndex, rangeStartIndex); dataIndex < rangeEndIndex; dataIndex++) {
 
-            this._data[dataIndex] = items[dataIndex - rangeStartIndex];
+            this.data[dataIndex] = items[dataIndex - rangeStartIndex];
 
-            if (this._data[dataIndex] === undefined) {
-                this._data[dataIndex] = null;
+            if (this.data[dataIndex] === undefined) {
+                this.data[dataIndex] = null;
             }
         }
 
@@ -32,7 +32,7 @@ export default class DynamicList<T> extends List<T> {
 
         for (var dataIndex = rangeStartIndex; dataIndex < rangeEndIndex; dataIndex++) {
 
-            if (!this._data[dataIndex]) {
+            if (!this.data[dataIndex]) {
                 return false;
             }
         }
@@ -49,11 +49,11 @@ export default class DynamicList<T> extends List<T> {
 
         for (var dataIndex = rangeStartIndex; dataIndex < rangeEndIndex; dataIndex++) {
 
-            if (!this._data[dataIndex]) {
+            if (!this.data[dataIndex]) {
                 return null;
             }
 
-            items.push(this._data[dataIndex]);
+            items.push(this.data[dataIndex]);
         }
 
         return items;

@@ -32,8 +32,8 @@ export interface DictionaryKeyValuePairInterface {
 export default class Dictionary<K, V> extends BaseObject {
     private static _OBJECT_UNIQUE_ID_KEY;
     private static _OBJECT_UNIQUE_ID_COUNTER;
-    protected _data: DictionaryDataInterface;
-    protected _itemCount: number;
+    data: DictionaryDataInterface;
+    itemCount: number;
     events: EventEmitter;
     constructor(data?: DictionaryDataInterface);
     get(key: K): V;
