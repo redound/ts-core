@@ -5,12 +5,12 @@
   "main": "lib/ts-core.js",
   "scripts": {
     "test": "",
-    "postinstall": "typings install",
     "build": "tsc"
   },
-  "dependencies": {},
-  "devDependencies": {
+  "dependencies": {
     "underscore": "^1.8.3"
+  },
+  "devDependencies": {
   },
   "repository": {
     "type": "git",
