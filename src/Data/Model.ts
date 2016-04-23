@@ -12,8 +12,6 @@ export interface ModelInterface {
 
 export default class Model extends BaseObject {
 
-    public events:EventEmitter = new EventEmitter();
-
     constructor(data?:any) {
 
         super();
@@ -123,11 +121,7 @@ export default class Model extends BaseObject {
         return result;
     }
 
-    public get description() {
-        return null;
-    }
-
     public toString() {
-        return this.description;
+        return "Model";
     }
 }

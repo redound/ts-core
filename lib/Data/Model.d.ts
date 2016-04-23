@@ -1,5 +1,4 @@
 import BaseObject from "../BaseObject";
-import EventEmitter from "../Events/EventEmitter";
 export interface ModelInterface {
     new (data?: any): Model;
     primaryKey(): any;
@@ -7,7 +6,6 @@ export interface ModelInterface {
     defaults(): any;
 }
 export default class Model extends BaseObject {
-    events: EventEmitter;
     constructor(data?: any);
     set(key: string, value: any): void;
     get(key: string): any;
@@ -21,6 +19,5 @@ export default class Model extends BaseObject {
     equals(data: any): boolean;
     getDataKeys(): string[];
     toObject(recursive?: boolean): {};
-    description: any;
-    toString(): any;
+    toString(): string;
 }
