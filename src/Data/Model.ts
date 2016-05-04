@@ -98,25 +98,51 @@ export default class Model extends BaseObject {
 
         return _.filter(_.keys(this), (key) => {
 
-            return key.slice(0, 1) != '_';
+            return !/[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/.test(key.slice(0, 1));
         });
     }
 
-    public toObject(recursive:boolean = false) {
+    public toObject(recursive:boolean = false, skipObjects: any[] = []): any {
 
         var result = {};
+
+        var parse = (value) => {
+
+            return recursive ? Model.recursiveToObject(value, skipObjects.concat([this])) : value;
+        };
 
         _.each(this.getDataKeys(), (key) => {
 
             var value = this[key];
-            var parsedValue = value;
-
-            if (recursive && value instanceof Model) {
-                parsedValue = (<Model>value).toObject();
+            var parsedValue = _.isArray(value) ? _.map(value, parse) : parse(value);
+            
+            if(parsedValue != this) {
+                result[key] = _.clone(parsedValue);
             }
-
-            result[key] = parsedValue;
         });
+
+        return result;
+    }
+
+    public static recursiveToObject(data: any, skipObjects: any[] = []){
+
+        var result = data;
+
+        if (data instanceof Model) {
+
+            result = (<Model>data).toObject(true, skipObjects);
+
+            // Prevent loop
+            if(skipObjects && skipObjects.length) {
+
+                _.each(_.clone(result), (parsedFieldVal, parsedFieldKey) => {
+
+                    if (_.contains(skipObjects, parsedFieldVal)) {
+                        delete result[parsedFieldKey]
+                    }
+                });
+            }
+        }
 
         return result;
     }

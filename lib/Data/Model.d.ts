@@ -18,6 +18,7 @@ export default class Model extends BaseObject {
     merge(model: Model): void;
     equals(data: any): boolean;
     getDataKeys(): string[];
-    toObject(recursive?: boolean): {};
+    toObject(recursive?: boolean, skipObjects?: any[]): any;
+    static recursiveToObject(data: any, skipObjects?: any[]): any;
     toString(): string;
 }
