@@ -27,6 +27,9 @@ export default class DynamicList<T> extends List<T> {
 
     public containsRange(start:number, length:number):boolean {
 
+        start = start !== null ? start : 0;
+        length = length !== null ? length : this.count() - start;
+
         var rangeStartIndex = start;
         var rangeEndIndex = start + length;
 
@@ -41,6 +44,9 @@ export default class DynamicList<T> extends List<T> {
     }
 
     public getRange(start:number, length:number):T[] {
+
+        start = start !== null ? start : 0;
+        length = length !== null ? length : this.count() - start;
 
         var rangeStartIndex = start;
         var rangeEndIndex = start + length;
