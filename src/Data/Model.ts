@@ -117,7 +117,7 @@ export default class Model extends BaseObject {
             var parsedValue = _.isArray(value) ? _.map(value, parse) : parse(value);
             
             if(parsedValue != this) {
-                result[key] = _.clone(parsedValue);
+                result[key] = recursive ? _.clone(parsedValue) : parsedValue;
             }
         });
 
