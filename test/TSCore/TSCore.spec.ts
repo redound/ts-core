@@ -1,1 +1,0 @@
-/// <reference path="../../build/ts-core.d.ts" />

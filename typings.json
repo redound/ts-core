@@ -1,9 +1,10 @@
 {
   "name": "ts-core",
-  "main": "build/ts-core.d.ts",
   "version": false,
   "dependencies": {},
   "ambientDependencies": {
     "underscore": "registry:dt/underscore#1.7.0+20160316155526"
-  }
+  },
+  "main": "./lib/ts-core.d.ts",
+  "typings": []
 }
